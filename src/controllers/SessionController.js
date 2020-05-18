@@ -9,7 +9,7 @@ module.exports ={
                 username,
                 password
             })
-            .join('profile', 'users.id', 'profile.user_id')
+            .join('profile', 'users.id', '=', 'profile.user_id')
             .select('profile.first_name', 'profile.url_photo')
             .first();
 
