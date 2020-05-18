@@ -10,11 +10,15 @@ module.exports ={
                 password
             })
             .join('profile', 'users.id', '=', 'profile.user_id')
-            .select('profile.first_name', 'profile.url_photo')
+            .select('profile.first_name', 'profile.url_photo', 'user.is_active')
             .first();
 
         if (!user) {
-            return response.status(401).json({ error: "No User found with data passed." });
+            return response.status(401).json({ error: "User or password is incorrect. Try again." });
+        }
+
+        if(!user[is_active]) {
+            return response.status(403).json({ error: "This user was blocked. Contact system administrator." });
         }
 
         return response.json(user);
