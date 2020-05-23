@@ -1,25 +1,64 @@
 const express = require('express');
+const { celebrate, Segments, Joi } = require('celebrate');
 
-const OngController = require('./controllers/OngController');
+const UserController = require('./controllers/UserController');
 const IncidentController = require('./controllers/IncidentController');
 const ProfileController = require('./controllers/ProfileController');
 const SessionController = require('./controllers/SessionController');
 
-const OngValidator = require('./validators/OngValidator');
-const IncidentValidator = require('./validators/IncidentValidator');
-const ProfileValidator = require('./validators/ProfileValidator')
-
 const routes = express.Router();
 
-routes.post('/session', SessionController.create);
+routes.post('/session', celebrate({
+    [Segments.BODY]: Joi.object({
+        username: Joi.string()
+            .min(3)
+            .max(50)
+            .required(),
+        password: Joi.string()
+            .min(8)
+            .max(254)
+            .required()
+})}), SessionController.create);
+routes.delete('/session', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown()
+}), SessionController.destroy);
 
-routes.post('/ongs', OngValidator.post, OngController.create);
-routes.get('/ongs', OngController.index);
+routes.post('/users', celebrate({
+    [Segments.BODY]: Joi.object().keys({
+        email: Joi.string()
+            .required()
+            .email(),
+        username: Joi.string()
+            .min(3)
+            .max(50)
+            .required(),
+        password: Joi.string()
+            .min(8)
+            .max(254)
+            .required()
+    })
+}), UserController.create);
+
+routes.get('/users', UserController.index);
 
 routes.post('/incidents', IncidentController.create);
-routes.get('/incidents', IncidentValidator.get, IncidentController.index);
-routes.delete('/incidents/:id', IncidentValidator.delete, IncidentController.delete);
+routes.get('/incidents', celebrate({
+    [Segments.QUERY]: Joi.object().keys({
+        page: Joi.number(),
+    })
+}), IncidentController.index);
+routes.delete('/incidents/:id', celebrate({
+    [Segments.PARAMS]: Joi.object().keys({
+        id: Joi.number().required(),
+    })
+}), IncidentController.delete);
 
-routes.get('/profile', ProfileValidator.get, ProfileController.index);
+routes.get('/profile', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        authorization: Joi.string().required(),
+    }).unknown()
+}), ProfileController.index);
 
 module.exports = routes;
