@@ -9,6 +9,7 @@ const ExpenseCategoriesController = require('./controllers/ExpenseCategoriesCont
 const ExpenseTypesController = require('./controllers/ExpenseTypesController');
 const InvestmentTypesController = require('./controllers/InvestmentTypesController');
 const InvestmentCategoriesController = require('./controllers/InvestmentCategoriesController');
+const RevenueCategoriesController = require('./controllers/RevenueCategoriesController');
 
 const routes = express.Router();
 
@@ -242,6 +243,51 @@ routes.delete('/investments/categories/:id/delete', celebrate({
     })
 }), InvestmentCategoriesController.delete);
 
+
+
+//Revenue
+
+//Revenue categories
+routes.get('/revenues/categories/', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown()
+}), RevenueCategoriesController.index);
+routes.post('/revenues/categories/create', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+    [Segments.BODY]: Joi.object().keys({
+        name: Joi.string()
+            .min(3)
+            .max(100)
+            .required()
+    })
+}), RevenueCategoriesController.create);
+routes.put('/revenues/categories/:id/update', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+    [Segments.BODY]: Joi.object().keys({
+        name: Joi.string()
+            .min(3)
+            .max(100)
+            .required()
+    }),
+    [Segments.PARAMS]: Joi.object().keys({
+        id: Joi.number()
+            .required()
+    })
+}), RevenueCategoriesController.update);
+routes.delete('/revenues/categories/:id/delete', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+    [Segments.PARAMS]: Joi.object().keys({
+        id: Joi.number()
+            .required()
+    })
+}), RevenueCategoriesController.delete);
 
 
 
