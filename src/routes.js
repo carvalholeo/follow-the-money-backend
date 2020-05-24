@@ -5,7 +5,8 @@ const UserController = require('./controllers/UserController');
 const IncidentController = require('./controllers/IncidentController');
 const ProfileController = require('./controllers/ProfileController');
 const SessionController = require('./controllers/SessionController');
-const ExpensesCategoriesController = require('./controllers/ExpenseCategoriesController');
+const ExpenseCategoriesController = require('./controllers/ExpenseCategoriesController');
+const ExpenseTypesController = require('./controllers/ExpenseTypesController');
 
 const routes = express.Router();
 
@@ -71,7 +72,7 @@ routes.get('/expenses/categories/', celebrate({
     [Segments.HEADERS]: Joi.object({
         token: Joi.string().required(),
     }).unknown()
-}), ExpensesCategoriesController.index);
+}), ExpenseCategoriesController.index);
 routes.post('/expenses/categories/create', celebrate({
     [Segments.HEADERS]: Joi.object({
         token: Joi.string().required(),
@@ -82,7 +83,7 @@ routes.post('/expenses/categories/create', celebrate({
             .max(100)
             .required()
     })
-}), ExpensesCategoriesController.create);
+}), ExpenseCategoriesController.create);
 routes.put('/expenses/categories/:id/update', celebrate({
     [Segments.HEADERS]: Joi.object({
         token: Joi.string().required(),
@@ -97,7 +98,7 @@ routes.put('/expenses/categories/:id/update', celebrate({
         id: Joi.number()
             .required()
     })
-}), ExpensesCategoriesController.update);
+}), ExpenseCategoriesController.update);
 routes.delete('/expenses/categories/:id/delete', celebrate({
     [Segments.HEADERS]: Joi.object({
         token: Joi.string().required(),
@@ -106,7 +107,48 @@ routes.delete('/expenses/categories/:id/delete', celebrate({
         id: Joi.number()
             .required()
     })
-}), ExpensesCategoriesController.delete);
+}), ExpenseCategoriesController.delete);
+
+routes.get('/expenses/types/', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown()
+}), ExpenseTypesController.index);
+routes.post('/expenses/types/create', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+    [Segments.BODY]: Joi.object().keys({
+        name: Joi.string()
+            .min(3)
+            .max(100)
+            .required()
+    })
+}), ExpenseTypesController.create);
+routes.put('/expenses/types/:id/update', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+    [Segments.BODY]: Joi.object().keys({
+        name: Joi.string()
+            .min(3)
+            .max(100)
+            .required()
+    }),
+    [Segments.PARAMS]: Joi.object().keys({
+        id: Joi.number()
+            .required()
+    })
+}), ExpenseTypesController.update);
+routes.delete('/expenses/types/:id/delete', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+    [Segments.PARAMS]: Joi.object().keys({
+        id: Joi.number()
+            .required()
+    })
+}), ExpenseTypesController.delete);
 
 routes.post('/incidents', IncidentController.create);
 routes.get('/incidents', celebrate({
