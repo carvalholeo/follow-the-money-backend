@@ -94,6 +94,8 @@ module.exports = {
                 return response.status(200)
                     .json({ message: "Investment category updated successfully." });
             }
+            return response.status(400)
+                    .json({ message: "ID passed doesn't exist. Try again with a valid ID." });
         } catch (error) {
             return response.status(500)
                     .json({ message: "There was an error. The system administrator was notified and working to solve this." });
