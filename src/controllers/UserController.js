@@ -105,7 +105,7 @@ module.exports = {
 
             const user = await connection('users')
                 .where('id', '=', user_id[0].user_id)
-                .update({ email, password });
+                .update({ email, password: hash });
 
             if(user == 1) {
                 return response.status(200)
