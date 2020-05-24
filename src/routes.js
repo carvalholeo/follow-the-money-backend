@@ -41,7 +41,23 @@ routes.post('/users', celebrate({
     })
 }), UserController.create);
 
-routes.get('/users', UserController.index);
+routes.put('/profile/block', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown()
+}), UserController.block, SessionController.destroy);
+
+routes.delete('/profile/delete', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown()
+}), UserController.delete);
+
+routes.put('/profile/update', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown()
+}), UserController.update);
 
 routes.post('/incidents', IncidentController.create);
 routes.get('/incidents', celebrate({
