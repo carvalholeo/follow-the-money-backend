@@ -5,6 +5,7 @@ const UserController = require('./controllers/UserController');
 const IncidentController = require('./controllers/IncidentController');
 const ProfileController = require('./controllers/ProfileController');
 const SessionController = require('./controllers/SessionController');
+const ExpensesCategoriesController = require('./controllers/ExpenseCategoriesController');
 
 const routes = express.Router();
 
@@ -46,18 +47,66 @@ routes.put('/profile/block', celebrate({
         token: Joi.string().required(),
     }).unknown()
 }), UserController.block, SessionController.destroy);
-
 routes.delete('/profile/delete', celebrate({
     [Segments.HEADERS]: Joi.object({
         token: Joi.string().required(),
     }).unknown()
 }), UserController.delete);
-
 routes.put('/profile/update', celebrate({
     [Segments.HEADERS]: Joi.object({
         token: Joi.string().required(),
-    }).unknown()
+    }).unknown(),
+    [Segments.BODY]: Joi.object().keys({
+        email: Joi.string()
+            .required()
+            .email(),
+        password: Joi.string()
+            .min(8)
+            .max(254)
+            .required()
+    })
 }), UserController.update);
+
+routes.get('/expenses/categories/', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown()
+}), ExpensesCategoriesController.index);
+routes.post('/expenses/categories/create', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+    [Segments.BODY]: Joi.object().keys({
+        name: Joi.string()
+            .min(3)
+            .max(100)
+            .required()
+    })
+}), ExpensesCategoriesController.create);
+routes.put('/expenses/categories/:id/update', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+    [Segments.BODY]: Joi.object().keys({
+        name: Joi.string()
+            .min(3)
+            .max(100)
+            .required()
+    }),
+    [Segments.PARAMS]: Joi.object().keys({
+        id: Joi.number()
+            .required()
+    })
+}), ExpensesCategoriesController.update);
+routes.delete('/expenses/categories/:id/delete', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+    [Segments.PARAMS]: Joi.object().keys({
+        id: Joi.number()
+            .required()
+    })
+}), ExpensesCategoriesController.delete);
 
 routes.post('/incidents', IncidentController.create);
 routes.get('/incidents', celebrate({
