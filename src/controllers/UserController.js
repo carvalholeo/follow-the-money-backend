@@ -29,12 +29,18 @@ module.exports = {
             return response.status(400).json({ error: "There was an error. Probably, this user was created previously. Ask support to the system administrator." });
         }
     },
+    
     async block(request, response, next) {
         try {
             const authorization_id = request.headers.token;
             const user_id = await connection('sessions')
                 .where('authorization_id', authorization_id)
                 .select('user_id');
+
+            if (!user_id) {
+                return response.status(401)
+                    .json({ message: "Authorization token isn't valid. Login in the system and try again." });
+            }
 
             const active = await connection('users')
                 .where('id', '=', user_id[0].user_id)
@@ -58,6 +64,11 @@ module.exports = {
             const user_id = await connection('sessions')
                 .where('authorization_id', authorization_id)
                 .select('user_id');
+
+            if (!user_id) {
+                return response.status(401)
+                    .json({ message: "Authorization token isn't valid. Login in the system and try again." });
+            }
 
             const delete_user = await connection('users')
                 .where('id', '=', user_id[0].user_id)
@@ -86,6 +97,11 @@ module.exports = {
             const user_id = await connection('sessions')
                 .where('authorization_id', authorization_id)
                 .select('user_id');
+
+            if (!user_id) {
+                return response.status(401)
+                    .json({ message: "Authorization token isn't valid. Login in the system and try again." });
+            }
 
             const user = await connection('users')
                 .where('id', '=', user_id[0].user_id)
