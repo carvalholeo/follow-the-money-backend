@@ -8,6 +8,7 @@ const SessionController = require('./controllers/SessionController');
 const ExpenseCategoriesController = require('./controllers/ExpenseCategoriesController');
 const ExpenseTypesController = require('./controllers/ExpenseTypesController');
 const InvestmentTypesController = require('./controllers/InvestmentTypesController');
+const InvestmentCategoriesController = require('./controllers/InvestmentCategoriesController');
 
 const routes = express.Router();
 
@@ -198,6 +199,48 @@ routes.delete('/investments/types/:id/delete', celebrate({
             .required()
     })
 }), InvestmentTypesController.delete);
+
+//Investments categories
+routes.get('/investments/categories/', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown()
+}), InvestmentCategoriesController.index);
+routes.post('/investments/categories/create', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+    [Segments.BODY]: Joi.object().keys({
+        name: Joi.string()
+            .min(3)
+            .max(100)
+            .required()
+    })
+}), InvestmentCategoriesController.create);
+routes.put('/investments/categories/:id/update', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+    [Segments.BODY]: Joi.object().keys({
+        name: Joi.string()
+            .min(3)
+            .max(100)
+            .required()
+    }),
+    [Segments.PARAMS]: Joi.object().keys({
+        id: Joi.number()
+            .required()
+    })
+}), InvestmentCategoriesController.update);
+routes.delete('/investments/categories/:id/delete', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+    [Segments.PARAMS]: Joi.object().keys({
+        id: Joi.number()
+            .required()
+    })
+}), InvestmentCategoriesController.delete);
 
 
 
