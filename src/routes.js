@@ -11,6 +11,7 @@ const ExpensesController = require('./controllers/ExpensesController');
 const InvestmentTypesController = require('./controllers/InvestmentTypesController');
 const InvestmentCategoriesController = require('./controllers/InvestmentCategoriesController');
 const RevenueCategoriesController = require('./controllers/RevenueCategoriesController');
+const RevenuesController = require('./controllers/RevenuesController');
 
 const routes = express.Router();
 
@@ -71,6 +72,8 @@ routes.put('/profile/update', celebrate({
             .required()
     })
 }), UserController.update);
+
+
 
 //Expenses
 //Expenses categories
@@ -213,6 +216,7 @@ routes.delete('/expenses/:id/delete', celebrate({
 }), ExpensesController.delete);
 
 
+
 //Investments
 //Investments types
 routes.get('/investments/types/', celebrate({
@@ -343,6 +347,58 @@ routes.delete('/revenues/categories/:id/delete', celebrate({
     })
 }), RevenueCategoriesController.delete);
 
+//Revenues
+routes.get('/revenues', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+    [Segments.QUERY]: Joi.object().keys({
+        page: Joi.number(),
+    })
+}), RevenuesController.index);
+routes.post('/revenues/create', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+    [Segments.BODY]: Joi.object().keys({
+        source: Joi.string().max(50).required(),
+        revenue_category_id: Joi.number().required(),
+        expected_amount: Joi.number().required(),
+        paid_amount: Joi.number(),
+        expected_date: Joi.date().required(),
+        effective_date: Joi.date(),
+        reference_month: Joi.date().required(),
+        is_paid: Joi.bool().required()
+    })
+}), RevenuesController.create);
+routes.put('/revenues/:id/update', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+    [Segments.BODY]: Joi.object().keys({
+        source: Joi.string().max(50).required(),
+        revenue_category_id: Joi.number().required(),
+        expected_amount: Joi.number().required(),
+        paid_amount: Joi.number(),
+        expected_date: Joi.date().required(),
+        effective_date: Joi.date(),
+        reference_month: Joi.date().required(),
+        is_paid: Joi.bool().required()
+    }),
+    [Segments.PARAMS]: Joi.object().keys({
+        id: Joi.number()
+            .required()
+    })
+}), RevenuesController.update);
+routes.delete('/revenues/:id/delete', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+    [Segments.PARAMS]: Joi.object().keys({
+        id: Joi.number()
+            .required()
+    })
+}), RevenuesController.delete);
 
 
 
