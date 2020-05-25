@@ -7,6 +7,7 @@ const UserController = require('./controllers/UserController');
 const SessionController = require('./controllers/SessionController');
 const ExpenseCategoriesController = require('./controllers/ExpenseCategoriesController');
 const ExpenseTypesController = require('./controllers/ExpenseTypesController');
+const ExpensesController = require('./controllers/ExpensesController');
 const InvestmentTypesController = require('./controllers/InvestmentTypesController');
 const InvestmentCategoriesController = require('./controllers/InvestmentCategoriesController');
 const RevenueCategoriesController = require('./controllers/RevenueCategoriesController');
@@ -72,7 +73,6 @@ routes.put('/profile/update', celebrate({
 }), UserController.update);
 
 //Expenses
-
 //Expenses categories
 routes.get('/expenses/categories/', celebrate({
     [Segments.HEADERS]: Joi.object({
@@ -157,8 +157,63 @@ routes.delete('/expenses/types/:id/delete', celebrate({
     })
 }), ExpenseTypesController.delete);
 
-//Investments
+//Expenses
+routes.get('/expenses', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+    [Segments.QUERY]: Joi.object().keys({
+        page: Joi.number(),
+    })
+}), ExpensesController.index);
+routes.post('/expenses/create', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+    [Segments.BODY]: Joi.object().keys({
+        source: Joi.string().max(50).required(),
+        expense_type_id: Joi.number().required(),
+        expense_category_id: Joi.number().required(),
+        expected_amount: Joi.number().required(),
+        paid_amount: Joi.number(),
+        due_date: Joi.date().required(),
+        payday: Joi.date(),
+        reference_month: Joi.date().required(),
+        is_paid: Joi.bool().required()
+    })
+}), ExpensesController.create);
+routes.put('/expenses/:id/update', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+    [Segments.BODY]: Joi.object().keys({
+        source: Joi.string().max(50).required(),
+        expense_type_id: Joi.number().required(),
+        expense_category_id: Joi.number().required(),
+        expected_amount: Joi.number().required(),
+        paid_amount: Joi.number(),
+        due_date: Joi.date().required(),
+        payday: Joi.date(),
+        reference_month: Joi.date().required(),
+        is_paid: Joi.bool().required()
+    }),
+    [Segments.PARAMS]: Joi.object().keys({
+        id: Joi.number()
+            .required()
+    })
+}), ExpensesController.update);
+routes.delete('/expenses/:id/delete', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+    [Segments.PARAMS]: Joi.object().keys({
+        id: Joi.number()
+            .required()
+    })
+}), ExpensesController.delete);
 
+
+//Investments
 //Investments types
 routes.get('/investments/types/', celebrate({
     [Segments.HEADERS]: Joi.object({
@@ -246,7 +301,6 @@ routes.delete('/investments/categories/:id/delete', celebrate({
 
 
 //Revenue
-
 //Revenue categories
 routes.get('/revenues/categories/', celebrate({
     [Segments.HEADERS]: Joi.object({
