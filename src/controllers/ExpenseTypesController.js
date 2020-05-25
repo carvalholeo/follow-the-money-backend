@@ -19,6 +19,19 @@ module.exports = {
                     .json({ message: "Authorization token isn't valid. Login in the system and try again." });
             }
 
+            const [permission] = await connection('users')
+                .where({'users.id': user_id})
+                .join('permissions', 'users.permission_id', '=', 'permissions.id')
+                .select([
+                    'permissions.is_admin',
+                    'users.is_active'
+                ]);
+
+            if(!permission.is_active || !permission.is_admin) {
+                return response.status(403)
+                    .json({ message: "Your user doesn't have administrator role or is blocked. If you think that it's an error, contact system administrator to support." });
+            }
+
             const expense_added = await connection('expense_types')
                 .insert({
                 name,
@@ -50,6 +63,19 @@ module.exports = {
             if (!user_id) {
                 return response.status(401)
                     .json({ message: "Authorization token isn't valid. Login in the system and try again." });
+            }
+
+            const [permission] = await connection('users')
+                .where({'users.id': user_id})
+                .join('permissions', 'users.permission_id', '=', 'permissions.id')
+                .select([
+                    'permissions.is_admin',
+                    'users.is_active'
+                ]);
+
+            if(!permission.is_active || !permission.is_admin) {
+                return response.status(403)
+                    .json({ message: "Your user doesn't have administrator role or is blocked. If you think that it's an error, contact system administrator to support." });
             }
 
             const delete_expense_category = await connection('expense_types')
@@ -86,6 +112,19 @@ module.exports = {
                     .json({ message: "Authorization token isn't valid. Login in the system and try again." });
             }
 
+            const [permission] = await connection('users')
+                .where({'users.id': user_id})
+                .join('permissions', 'users.permission_id', '=', 'permissions.id')
+                .select([
+                    'permissions.is_admin',
+                    'users.is_active'
+                ]);
+
+            if(!permission.is_active || !permission.is_admin) {
+                return response.status(403)
+                    .json({ message: "Your user doesn't have administrator role or is blocked. If you think that it's an error, contact system administrator to support." });
+            }
+
             const update = await connection('expense_types')
                 .where('id', '=', id)
                 .update({ name, updated_at });
@@ -114,6 +153,19 @@ module.exports = {
             if (!user_id) {
                 return response.status(401)
                     .json({ message: "Authorization token isn't valid. Login in the system and try again." });
+            }
+
+            const [permission] = await connection('users')
+                .where({'users.id': user_id})
+                .join('permissions', 'users.permission_id', '=', 'permissions.id')
+                .select([
+                    'permissions.is_admin',
+                    'users.is_active'
+                ]);
+
+            if(!permission.is_active || !permission.is_admin) {
+                return response.status(403)
+                    .json({ message: "Your user doesn't have administrator role or is blocked. If you think that it's an error, contact system administrator to support." });
             }
 
             const categories = await connection('expense_types')

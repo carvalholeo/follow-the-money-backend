@@ -42,6 +42,19 @@ module.exports = {
                     .json({ message: "Authorization token isn't valid. Login in the system and try again." });
             }
 
+            const [permission] = await connection('users')
+                .where({'users.id': user_id})
+                .join('permissions', 'users.permission_id', '=', 'permissions.id')
+                .select([
+                    'permissions.is_admin',
+                    'users.is_active'
+                ]);
+
+            if(!permission.is_active) {
+                return response.status(403)
+                    .json({ message: "Your user is blocked. If you think that it's an error, contact system administrator to support." });
+            }
+
             const active = await connection('users')
                 .where('id', '=', user_id)
                 .update({is_active: 0});
@@ -68,6 +81,19 @@ module.exports = {
             if (!user_id) {
                 return response.status(401)
                     .json({ message: "Authorization token isn't valid. Login in the system and try again." });
+            }
+
+            const [permission] = await connection('users')
+                .where({'users.id': user_id})
+                .join('permissions', 'users.permission_id', '=', 'permissions.id')
+                .select([
+                    'permissions.is_admin',
+                    'users.is_active'
+                ]);
+
+            if(!permission.is_active) {
+                return response.status(403)
+                    .json({ message: "Your user is blocked. If you think that it's an error, contact system administrator to support." });
             }
 
             const delete_user = await connection('users')
@@ -103,6 +129,20 @@ module.exports = {
                     .json({ message: "Authorization token isn't valid. Login in the system and try again." });
             }
 
+            const [permission] = await connection('users')
+                .where({'users.id': user_id})
+                .join('permissions', 'users.permission_id', '=', 'permissions.id')
+                .select([
+                    'permissions.is_admin',
+                    'users.is_active'
+                ]);
+
+            if(!permission.is_active) {
+                return response.status(403)
+                    .json({ message: "Your user is blocked. If you think that it's an error, contact system administrator to support." });
+            }
+
+            
             const user = await connection('users')
                 .where('id', '=', user_id)
                 .update({ email, password: hash });
