@@ -33,7 +33,7 @@ module.exports = {
     async block(request, response, next) {
         try {
             const authorization_id = request.headers.token;
-            const user_id = await connection('sessions')
+            const [{ user_id }] = await connection('sessions')
                 .where('authorization_id', authorization_id)
                 .select('user_id');
 
@@ -43,7 +43,7 @@ module.exports = {
             }
 
             const active = await connection('users')
-                .where('id', '=', user_id[0].user_id)
+                .where('id', '=', user_id)
                 .update({is_active: 0});
 
             if (active == 1) {
@@ -61,7 +61,7 @@ module.exports = {
     async delete(request, response, next) {
         try {
             const authorization_id = request.headers.token;
-            const user_id = await connection('sessions')
+            const [{ user_id }] = await connection('sessions')
                 .where('authorization_id', authorization_id)
                 .select('user_id');
 
@@ -71,7 +71,7 @@ module.exports = {
             }
 
             const delete_user = await connection('users')
-                .where('id', '=', user_id[0].user_id)
+                .where('id', '=', user_id)
                 .del('*');
 
             if (delete_user) {
@@ -94,7 +94,7 @@ module.exports = {
             const salt = bcrypt.genSaltSync(10);
             const hash = bcrypt.hashSync(password, salt);
 
-            const user_id = await connection('sessions')
+            const [{ user_id }] = await connection('sessions')
                 .where('authorization_id', authorization_id)
                 .select('user_id');
 
@@ -104,7 +104,7 @@ module.exports = {
             }
 
             const user = await connection('users')
-                .where('id', '=', user_id[0].user_id)
+                .where('id', '=', user_id)
                 .update({ email, password: hash });
 
             if(user == 1) {

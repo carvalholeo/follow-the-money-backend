@@ -10,7 +10,7 @@ module.exports = {
             const created_at = new Date();
             const updated_at = new Date();
 
-            const user_id = await connection('sessions')
+            const [{ user_id }] = await connection('sessions')
                 .where('authorization_id', authorization_id)
                 .select('user_id');
 
@@ -51,7 +51,7 @@ module.exports = {
             const { id } = request.params;
             const authorization_id = request.headers.token;
 
-            const user_id = await connection('sessions')
+            const [{ user_id }] = await connection('sessions')
                 .where('authorization_id', authorization_id)
                 .select('user_id');
 
@@ -88,7 +88,7 @@ module.exports = {
 
             const updated_at = new Date();
 
-            const user_id = await connection('sessions')
+            const [{ user_id }] = await connection('sessions')
                 .where('authorization_id', authorization_id)
                 .select('user_id');
             
@@ -134,7 +134,7 @@ module.exports = {
             const authorization_id = request.headers.token;
             const { page = 1 } = request.query;
 
-            const user_id = await connection('sessions')
+            const [{ user_id }] = await connection('sessions')
                 .where('authorization_id', authorization_id)
                 .select('user_id');
             
