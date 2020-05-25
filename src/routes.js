@@ -3,7 +3,7 @@ const { celebrate, Segments, Joi } = require('celebrate');
 
 const UserController = require('./controllers/UserController');
 // const IncidentController = require('./controllers/IncidentController');
-// const ProfileController = require('./controllers/ProfileController');
+const ProfileController = require('./controllers/ProfileController');
 const SessionController = require('./controllers/SessionController');
 const ExpenseCategoriesController = require('./controllers/ExpenseCategoriesController');
 const ExpenseTypesController = require('./controllers/ExpenseTypesController');
@@ -15,6 +15,8 @@ const RevenuesController = require('./controllers/RevenuesController');
 
 const routes = express.Router();
 
+//Profile and login
+//Login
 routes.post('/session', celebrate({
     [Segments.BODY]: Joi.object({
         username: Joi.string()
@@ -32,6 +34,7 @@ routes.delete('/session', celebrate({
     }).unknown()
 }), SessionController.destroy);
 
+//Users (for personal use)
 routes.post('/users', celebrate({
     [Segments.BODY]: Joi.object().keys({
         email: Joi.string()
@@ -47,7 +50,6 @@ routes.post('/users', celebrate({
             .required()
     })
 }), UserController.create);
-
 routes.put('/profile/block', celebrate({
     [Segments.HEADERS]: Joi.object({
         token: Joi.string().required(),
@@ -58,7 +60,7 @@ routes.delete('/profile/delete', celebrate({
         token: Joi.string().required(),
     }).unknown()
 }), UserController.delete);
-routes.put('/profile/update', celebrate({
+routes.put('/profile/login/update', celebrate({
     [Segments.HEADERS]: Joi.object({
         token: Joi.string().required(),
     }).unknown(),
@@ -72,6 +74,45 @@ routes.put('/profile/update', celebrate({
             .required()
     })
 }), UserController.update);
+
+//Profile
+routes.post('/profile/create', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+    [Segments.BODY]: Joi.object().keys({
+        first_name: Joi.string().max(255),
+        surname: Joi.string().max(255),
+        url_photo: Joi.string().max(255),
+        birthday: Joi.date(),
+        biography: Joi.string().max(600),
+        facebook_profile: Joi.string().max(255),
+        twitter_profile: Joi.string().max(255),
+        instagram_profile: Joi.string().max(255),
+        personal_site_url: Joi.string().max(255),
+    })
+}), ProfileController.create);
+routes.put('/profile/update', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+    [Segments.BODY]: Joi.object().keys({
+        first_name: Joi.string().max(255),
+        surname: Joi.string().max(255),
+        url_photo: Joi.string().max(255),
+        birthday: Joi.date(),
+        biography: Joi.string().max(600),
+        facebook_profile: Joi.string().max(255),
+        twitter_profile: Joi.string().max(255),
+        instagram_profile: Joi.string().max(255),
+        personal_site_url: Joi.string().max(255),
+    })
+}), ProfileController.update);
+routes.get('/profile', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown(),
+}), ProfileController.index);
 
 
 
