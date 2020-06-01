@@ -6,6 +6,9 @@ const { errors } = require('celebrate');
 const cors = require('cors');
 const compression = require('compression');
 const helmet = require('helmet');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const app = express();
 
@@ -14,9 +17,7 @@ app.use(compression());
 app.use(helmet());
 app.use(cors());
 app.use(unauthenticatedRoutes);
-
 app.use(authenticatedRoutes);
-
 app.use(adminRoutes);
 app.use(errors());
 
