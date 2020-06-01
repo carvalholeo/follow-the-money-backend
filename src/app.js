@@ -6,9 +6,8 @@ const { errors } = require('celebrate');
 const cors = require('cors');
 const compression = require('compression');
 const helmet = require('helmet');
-const dotenv = require('dotenv');
+const dotenv = require('dotenv').config({ path: '../'});
 
-dotenv.config();
 
 const app = express();
 
