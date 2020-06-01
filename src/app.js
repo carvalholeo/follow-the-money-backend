@@ -1,5 +1,7 @@
 const express = require('express');
-const routes = require('./routes');
+const unauthenticatedRoutes = require('./routes/unauthenticated/routes');
+const authenticatedRoutes = require('./routes/authenticated/routes');
+const adminRoutes = require('./routes/admin/routes');
 const { errors } = require('celebrate');
 const cors = require('cors');
 const compression = require('compression');
@@ -11,7 +13,11 @@ app.use(express.json());
 app.use(compression());
 app.use(helmet());
 app.use(cors());
-app.use(routes);
+app.use(unauthenticatedRoutes);
+
+app.use(authenticatedRoutes);
+
+app.use(adminRoutes);
 app.use(errors());
 
 module.exports = app;
