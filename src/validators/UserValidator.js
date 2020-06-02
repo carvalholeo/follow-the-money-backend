@@ -11,6 +11,7 @@ module.exports =  {
             })
         };
     },
+    
     updateUser() {
         return {
             headers,
