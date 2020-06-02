@@ -5,32 +5,8 @@ module.exports = {
     async create(request, response) {
         try {
             const { name } = request.body;
-            const authorization_id = request.headers.token;
-
             const created_at = new Date();
             const updated_at = new Date();
-
-            const [{ user_id }] = await connection('sessions')
-                .where('authorization_id', authorization_id)
-                .select('user_id');
-
-            if (!user_id) {
-                return response.status(401)
-                    .json({ message: "Authorization token isn't valid. Login in the system and try again." });
-            }
-
-            const [permission] = await connection('users')
-                .where({'users.id': user_id})
-                .join('permissions', 'users.permission_id', '=', 'permissions.id')
-                .select([
-                    'permissions.is_admin',
-                    'users.is_active'
-                ]);
-
-            if(!permission.is_active || !permission.is_admin) {
-                return response.status(403)
-                    .json({ message: "Your user doesn't have administrator role or is blocked. If you think that it's an error, contact system administrator to support." });
-            }
 
             const investment_added = await connection('investment_types')
                 .insert({
@@ -54,30 +30,7 @@ module.exports = {
     async delete(request, response) {
         try {
             const { id } = request.params;
-            const authorization_id = request.headers.token;
-
-            const [{ user_id }] = await connection('sessions')
-                .where('authorization_id', authorization_id)
-                .select('user_id');
-
-            if (!user_id) {
-                return response.status(401)
-                    .json({ message: "Authorization token isn't valid. Login in the system and try again." });
-            }
-
-            const [permission] = await connection('users')
-                .where({'users.id': user_id})
-                .join('permissions', 'users.permission_id', '=', 'permissions.id')
-                .select([
-                    'permissions.is_admin',
-                    'users.is_active'
-                ]);
-
-            if(!permission.is_active || !permission.is_admin) {
-                return response.status(403)
-                    .json({ message: "Your user doesn't have administrator role or is blocked. If you think that it's an error, contact system administrator to support." });
-            }
-
+            
             const delete_investment_category = await connection('investment_types')
                 .where('id', '=', id)
                 .del('*');
@@ -99,31 +52,7 @@ module.exports = {
         try {
             const { name } = request.body;
             const { id } = request.params;
-            const authorization_id = request.headers.token;
-
             const updated_at = new Date();
-
-            const [{ user_id }] = await connection('sessions')
-                .where('authorization_id', authorization_id)
-                .select('user_id');
-            
-            if (!user_id) {
-                return response.status(401)
-                    .json({ message: "Authorization token isn't valid. Login in the system and try again." });
-            }
-
-            const [permission] = await connection('users')
-                .where({'users.id': user_id})
-                .join('permissions', 'users.permission_id', '=', 'permissions.id')
-                .select([
-                    'permissions.is_admin',
-                    'users.is_active'
-                ]);
-
-            if(!permission.is_active || !permission.is_admin) {
-                return response.status(403)
-                    .json({ message: "Your user doesn't have administrator role or is blocked. If you think that it's an error, contact system administrator to support." });
-            }
 
             const update = await connection('investment_types')
                 .where('id', '=', id)
@@ -144,30 +73,6 @@ module.exports = {
 
     async index(request, response) {
         try {
-            const authorization_id = request.headers.token;
-
-            const [{ user_id }] = await connection('sessions')
-                .where('authorization_id', authorization_id)
-                .select('user_id');
-            
-            if (!user_id) {
-                return response.status(401)
-                    .json({ message: "Authorization token isn't valid. Login in the system and try again." });
-            }
-
-            const [permission] = await connection('users')
-                .where({'users.id': user_id})
-                .join('permissions', 'users.permission_id', '=', 'permissions.id')
-                .select([
-                    'permissions.is_admin',
-                    'users.is_active'
-                ]);
-
-            if(!permission.is_active || !permission.is_admin) {
-                return response.status(403)
-                    .json({ message: "Your user doesn't have administrator role or is blocked. If you think that it's an error, contact system administrator to support." });
-            }
-
             const categories = await connection('investment_types')
                 .select('*');
 
