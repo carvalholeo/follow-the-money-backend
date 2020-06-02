@@ -33,7 +33,6 @@ routes.delete('/session', celebrate(TokenValidator), SessionController.destroy);
 routes.delete('/all', celebrate(TokenValidator), SessionController.destroyAll);
 
 //Users (for personal use)
-routes.post('/users', celebrate(UserValidator.createUser()), UserController.create);
 routes.put('/profile/block', celebrate(TokenValidator), UserController.block, SessionController.destroyAll);
 routes.delete('/profile/delete', celebrate(TokenValidator), UserController.delete);
 routes.put('/profile/login/update', celebrate(UserValidator.updateUser()), UserController.update);
