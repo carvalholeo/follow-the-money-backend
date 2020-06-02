@@ -2,10 +2,15 @@ const express = require('express');
 const { celebrate, Segments, Joi } = require('celebrate');
 const authenticatedUser = require('../../middlewares/Auth');
 const activatedUser = require('../../middlewares/Activated');
-const validSession = require('../../middlewares/ValidSessionToken')
+const validSession = require('../../middlewares/ValidSessionToken');
+
+const TokenValidator = require('../../validators/TokenValidator');
+const UserValidator = require('../../validators/UserValidator');
+const ProfileValidator = require('../../validators/ProfileValidator');
+const ExpenseValidator = require('../../validators/ExpenseValidator');
+const RevenueValidator = require('../../validators/RevenueValidator');
 
 const UserController = require('../../controllers/UserController');
-// const IncidentController = require('./controllers/IncidentController');
 const ProfileController = require('../../controllers/ProfileController');
 const SessionController = require('../../controllers/SessionController');
 const ExpensesController = require('../../controllers/ExpensesController');
@@ -24,233 +29,41 @@ routes.use(activatedUser);
 
 //Profile and login
 //Login
-routes.delete('/session', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown()
-}), SessionController.destroy);
-routes.delete('/all', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown()
-}), SessionController.destroyAll);
+routes.delete('/session', celebrate(TokenValidator), SessionController.destroy);
+routes.delete('/all', celebrate(TokenValidator), SessionController.destroyAll);
 
 //Users (for personal use)
-routes.post('/users', celebrate({
-    [Segments.BODY]: Joi.object().keys({
-        email: Joi.string()
-            .required()
-            .email(),
-        username: Joi.string()
-            .min(3)
-            .max(50)
-            .required(),
-        password: Joi.string()
-            .min(8)
-            .max(254)
-            .required()
-    })
-}), UserController.create);
-routes.put('/profile/block', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown()
-}), UserController.block, SessionController.destroyAll);
-routes.delete('/profile/delete', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown()
-}), UserController.delete);
-routes.put('/profile/login/update', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown(),
-    [Segments.BODY]: Joi.object().keys({
-        email: Joi.string()
-            .required()
-            .email(),
-        password: Joi.string()
-            .min(8)
-            .max(254)
-            .required()
-    })
-}), UserController.update);
+routes.post('/users', celebrate(UserValidator.createUser()), UserController.create);
+routes.put('/profile/block', celebrate(TokenValidator), UserController.block, SessionController.destroyAll);
+routes.delete('/profile/delete', celebrate(TokenValidator), UserController.delete);
+routes.put('/profile/login/update', celebrate(UserValidator.updateUser()), UserController.update);
 
 //Profile
-routes.post('/profile/create', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown(),
-    [Segments.BODY]: Joi.object().keys({
-        first_name: Joi.string().max(255),
-        surname: Joi.string().max(255),
-        url_photo: Joi.string().max(255),
-        birthday: Joi.date(),
-        biography: Joi.string().max(600),
-        facebook_profile: Joi.string().max(255),
-        twitter_profile: Joi.string().max(255),
-        instagram_profile: Joi.string().max(255),
-        personal_site_url: Joi.string().max(255),
-    })
-}), ProfileController.create);
-routes.put('/profile/update', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown(),
-    [Segments.BODY]: Joi.object().keys({
-        first_name: Joi.string().max(255),
-        surname: Joi.string().max(255),
-        url_photo: Joi.string().max(255),
-        birthday: Joi.date(),
-        biography: Joi.string().max(600),
-        facebook_profile: Joi.string().max(255),
-        twitter_profile: Joi.string().max(255),
-        instagram_profile: Joi.string().max(255),
-        personal_site_url: Joi.string().max(255),
-    })
-}), ProfileController.update);
-routes.get('/profile', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown(),
-}), ProfileController.index);
+routes.post('/profile/create', celebrate(ProfileValidator), ProfileController.create);
+routes.put('/profile/update', celebrate(ProfileValidator), ProfileController.update);
+routes.get('/profile', celebrate(TokenValidator), ProfileController.index);
 
 
 //Expenses
-routes.get('/expenses', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown(),
-    [Segments.QUERY]: Joi.object().keys({
-        page: Joi.number(),
-    })
-}), ExpensesController.index);
-routes.post('/expenses/create', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown(),
-    [Segments.BODY]: Joi.object().keys({
-        source: Joi.string().max(50).required(),
-        expense_type_id: Joi.number().required(),
-        expense_category_id: Joi.number().required(),
-        expected_amount: Joi.number().required(),
-        paid_amount: Joi.number(),
-        due_date: Joi.date().required(),
-        payday: Joi.date(),
-        reference_month: Joi.date().required(),
-        is_paid: Joi.bool().required()
-    })
-}), ExpensesController.create);
-routes.put('/expenses/:id/update', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown(),
-    [Segments.BODY]: Joi.object().keys({
-        source: Joi.string().max(50).required(),
-        expense_type_id: Joi.number().required(),
-        expense_category_id: Joi.number().required(),
-        expected_amount: Joi.number().required(),
-        paid_amount: Joi.number(),
-        due_date: Joi.date().required(),
-        payday: Joi.date(),
-        reference_month: Joi.date().required(),
-        is_paid: Joi.bool().required()
-    }),
-    [Segments.PARAMS]: Joi.object().keys({
-        id: Joi.number()
-            .required()
-    })
-}), ExpensesController.update);
-routes.delete('/expenses/:id/delete', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown(),
-    [Segments.PARAMS]: Joi.object().keys({
-        id: Joi.number()
-            .required()
-    })
-}), ExpensesController.delete);
-routes.get('/expenses/categories/', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown()
-}), ExpenseCategoriesController.index);
-routes.get('/expenses/types/', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown()
-}), ExpenseTypesController.index);
+routes.get('/expenses', celebrate(ExpenseValidator.getExpense()), ExpensesController.index);
+routes.post('/expenses/create', celebrate(ExpenseValidator.postExpense()), ExpensesController.create);
+routes.put('/expenses/:id/update', celebrate(ExpenseValidator.putExpense()), ExpensesController.update);
+routes.delete('/expenses/:id/delete', celebrate(ExpenseValidator.deleteExpense()), ExpensesController.delete);
+
+routes.get('/expenses/categories/', celebrate(TokenValidator), ExpenseCategoriesController.index);
+routes.get('/expenses/types/', celebrate(TokenValidator), ExpenseTypesController.index);
 
 //Investments
-routes.get('/investments/types/', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown()
-}), InvestmentTypesController.index);
-routes.get('/investments/categories/', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown()
-}), InvestmentCategoriesController.index);
+routes.get('/investments/types/', celebrate(TokenValidator), InvestmentTypesController.index);
+routes.get('/investments/categories/', celebrate(TokenValidator), InvestmentCategoriesController.index);
 
 
 //Revenues
-routes.get('/revenues', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown(),
-    [Segments.QUERY]: Joi.object().keys({
-        page: Joi.number(),
-    })
-}), RevenuesController.index);
-routes.post('/revenues/create', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown(),
-    [Segments.BODY]: Joi.object().keys({
-        source: Joi.string().max(50).required(),
-        revenue_category_id: Joi.number().required(),
-        expected_amount: Joi.number().required(),
-        paid_amount: Joi.number(),
-        expected_date: Joi.date().required(),
-        effective_date: Joi.date(),
-        reference_month: Joi.date().required(),
-        is_paid: Joi.bool().required()
-    })
-}), RevenuesController.create);
-routes.put('/revenues/:id/update', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown(),
-    [Segments.BODY]: Joi.object().keys({
-        source: Joi.string().max(50).required(),
-        revenue_category_id: Joi.number().required(),
-        expected_amount: Joi.number().required(),
-        paid_amount: Joi.number(),
-        expected_date: Joi.date().required(),
-        effective_date: Joi.date(),
-        reference_month: Joi.date().required(),
-        is_paid: Joi.bool().required()
-    }),
-    [Segments.PARAMS]: Joi.object().keys({
-        id: Joi.number()
-            .required()
-    })
-}), RevenuesController.update);
-routes.delete('/revenues/:id/delete', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown(),
-    [Segments.PARAMS]: Joi.object().keys({
-        id: Joi.number()
-            .required()
-    })
-}), RevenuesController.delete);
-routes.get('/revenues/categories/', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown()
-}), RevenueCategoriesController.index);
+routes.get('/revenues', celebrate(RevenueValidator.getRevenue()), RevenuesController.index);
+routes.post('/revenues/create', celebrate(RevenueValidator.createRevenue()), RevenuesController.create);
+routes.put('/revenues/:id/update', celebrate(RevenueValidator.updateRevenue()), RevenuesController.update);
+routes.delete('/revenues/:id/delete', celebrate(RevenueValidator.deleteRevenue()), RevenuesController.delete);
+routes.get('/revenues/categories/', celebrate(TokenValidator), RevenueCategoriesController.index);
 
 
 
