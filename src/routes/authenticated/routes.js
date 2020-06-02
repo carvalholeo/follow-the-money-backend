@@ -2,6 +2,7 @@ const express = require('express');
 const { celebrate, Segments, Joi } = require('celebrate');
 const authenticatedUser = require('../../middlewares/Auth');
 const activatedUser = require('../../middlewares/Activated');
+const validSession = require('../../middlewares/ValidSessionToken')
 
 const UserController = require('../../controllers/UserController');
 // const IncidentController = require('./controllers/IncidentController');
@@ -13,6 +14,7 @@ const RevenuesController = require('../../controllers/RevenuesController');
 const routes = express.Router();
 
 routes.use(authenticatedUser);
+routes.use(validSession);
 routes.use(activatedUser);
 
 //Profile and login
@@ -22,6 +24,11 @@ routes.delete('/session', celebrate({
         token: Joi.string().required(),
     }).unknown()
 }), SessionController.destroy);
+routes.delete('/all', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown()
+}), SessionController.destroyAll);
 
 //Users (for personal use)
 routes.post('/users', celebrate({
@@ -43,7 +50,7 @@ routes.put('/profile/block', celebrate({
     [Segments.HEADERS]: Joi.object({
         token: Joi.string().required(),
     }).unknown()
-}), UserController.block, SessionController.destroy);
+}), UserController.block, SessionController.destroyAll);
 routes.delete('/profile/delete', celebrate({
     [Segments.HEADERS]: Joi.object({
         token: Joi.string().required(),
