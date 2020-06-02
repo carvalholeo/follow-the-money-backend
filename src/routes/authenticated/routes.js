@@ -1,5 +1,7 @@
 const express = require('express');
 const { celebrate, Segments, Joi } = require('celebrate');
+const authenticatedUser = require('../../middlewares/Auth');
+const activatedUser = require('../../middlewares/Activated');
 
 const UserController = require('../../controllers/UserController');
 // const IncidentController = require('./controllers/IncidentController');
@@ -9,6 +11,9 @@ const ExpensesController = require('../../controllers/ExpensesController');
 const RevenuesController = require('../../controllers/RevenuesController');
 
 const routes = express.Router();
+
+routes.use(authenticatedUser);
+routes.use(activatedUser);
 
 //Profile and login
 //Login
