@@ -34,20 +34,20 @@ routes.delete('/all', celebrate(TokenValidator), SessionController.destroyAll);
 
 //Users (for personal use)
 routes.put('/profile/block', celebrate(TokenValidator), UserController.block, SessionController.destroyAll);
-routes.delete('/profile/delete', celebrate(TokenValidator), UserController.delete);
-routes.put('/profile/login/update', celebrate(UserValidator.updateUser()), UserController.update);
+routes.delete('/profile', celebrate(TokenValidator), UserController.delete);
+routes.put('/profile/user-data', celebrate(UserValidator.updateUser()), UserController.update);
 
 //Profile
-routes.post('/profile/create', celebrate(ProfileValidator), ProfileController.create);
-routes.put('/profile/update', celebrate(ProfileValidator), ProfileController.update);
+routes.post('/profile', celebrate(ProfileValidator), ProfileController.create);
+routes.put('/profile', celebrate(ProfileValidator), ProfileController.update);
 routes.get('/profile', celebrate(TokenValidator), ProfileController.index);
 
 
 //Expenses
 routes.get('/expenses', celebrate(ExpenseValidator.getExpense()), ExpensesController.index);
-routes.post('/expenses/create', celebrate(ExpenseValidator.postExpense()), ExpensesController.create);
-routes.put('/expenses/:id/update', celebrate(ExpenseValidator.putExpense()), ExpensesController.update);
-routes.delete('/expenses/:id/delete', celebrate(ExpenseValidator.deleteExpense()), ExpensesController.delete);
+routes.post('/expenses', celebrate(ExpenseValidator.postExpense()), ExpensesController.create);
+routes.put('/expenses/:id/', celebrate(ExpenseValidator.putExpense()), ExpensesController.update);
+routes.delete('/expenses/:id/', celebrate(ExpenseValidator.deleteExpense()), ExpensesController.delete);
 
 routes.get('/expenses/categories/', celebrate(TokenValidator), ExpenseCategoriesController.index);
 routes.get('/expenses/types/', celebrate(TokenValidator), ExpenseTypesController.index);
@@ -59,9 +59,9 @@ routes.get('/investments/categories/', celebrate(TokenValidator), InvestmentCate
 
 //Revenues
 routes.get('/revenues', celebrate(RevenueValidator.getRevenue()), RevenuesController.index);
-routes.post('/revenues/create', celebrate(RevenueValidator.createRevenue()), RevenuesController.create);
-routes.put('/revenues/:id/update', celebrate(RevenueValidator.updateRevenue()), RevenuesController.update);
-routes.delete('/revenues/:id/delete', celebrate(RevenueValidator.deleteRevenue()), RevenuesController.delete);
+routes.post('/revenues', celebrate(RevenueValidator.createRevenue()), RevenuesController.create);
+routes.put('/revenues/:id/', celebrate(RevenueValidator.updateRevenue()), RevenuesController.update);
+routes.delete('/revenues/:id/', celebrate(RevenueValidator.deleteRevenue()), RevenuesController.delete);
 routes.get('/revenues/categories/', celebrate(TokenValidator), RevenueCategoriesController.index);
 
 
