@@ -19,11 +19,6 @@ routes.use(activatedUser);
 routes.use(isAdmin);
 
 //Expenses categories
-routes.get('/expenses/categories/', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown()
-}), ExpenseCategoriesController.index);
 routes.post('/expenses/categories/create', celebrate({
     [Segments.HEADERS]: Joi.object({
         token: Joi.string().required(),
@@ -61,11 +56,6 @@ routes.delete('/expenses/categories/:id/delete', celebrate({
 }), ExpenseCategoriesController.delete);
 
 //Expenses types
-routes.get('/expenses/types/', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown()
-}), ExpenseTypesController.index);
 routes.post('/expenses/types/create', celebrate({
     [Segments.HEADERS]: Joi.object({
         token: Joi.string().required(),
@@ -103,11 +93,7 @@ routes.delete('/expenses/types/:id/delete', celebrate({
 }), ExpenseTypesController.delete);
 
 //Investments types
-routes.get('/investments/types/', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown()
-}), InvestmentTypesController.index);
+
 routes.post('/investments/types/create', celebrate({
     [Segments.HEADERS]: Joi.object({
         token: Joi.string().required(),
@@ -145,11 +131,6 @@ routes.delete('/investments/types/:id/delete', celebrate({
 }), InvestmentTypesController.delete);
 
 //Investments categories
-routes.get('/investments/categories/', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown()
-}), InvestmentCategoriesController.index);
 routes.post('/investments/categories/create', celebrate({
     [Segments.HEADERS]: Joi.object({
         token: Joi.string().required(),
@@ -187,11 +168,7 @@ routes.delete('/investments/categories/:id/delete', celebrate({
 }), InvestmentCategoriesController.delete);
 
 //Revenue categories
-routes.get('/revenues/categories/', celebrate({
-    [Segments.HEADERS]: Joi.object({
-        token: Joi.string().required(),
-    }).unknown()
-}), RevenueCategoriesController.index);
+
 routes.post('/revenues/categories/create', celebrate({
     [Segments.HEADERS]: Joi.object({
         token: Joi.string().required(),

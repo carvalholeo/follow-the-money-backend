@@ -10,6 +10,11 @@ const ProfileController = require('../../controllers/ProfileController');
 const SessionController = require('../../controllers/SessionController');
 const ExpensesController = require('../../controllers/ExpensesController');
 const RevenuesController = require('../../controllers/RevenuesController');
+const ExpenseCategoriesController = require('../../controllers/ExpenseCategoriesController');
+const ExpenseTypesController = require('../../controllers/ExpenseTypesController');
+const InvestmentTypesController = require('../../controllers/InvestmentTypesController');
+const InvestmentCategoriesController = require('../../controllers/InvestmentCategoriesController');
+const RevenueCategoriesController = require('../../controllers/RevenueCategoriesController');
 
 const routes = express.Router();
 
@@ -165,6 +170,29 @@ routes.delete('/expenses/:id/delete', celebrate({
             .required()
     })
 }), ExpensesController.delete);
+routes.get('/expenses/categories/', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown()
+}), ExpenseCategoriesController.index);
+routes.get('/expenses/types/', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown()
+}), ExpenseTypesController.index);
+
+//Investments
+routes.get('/investments/types/', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown()
+}), InvestmentTypesController.index);
+routes.get('/investments/categories/', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown()
+}), InvestmentCategoriesController.index);
+
 
 //Revenues
 routes.get('/revenues', celebrate({
@@ -218,6 +246,11 @@ routes.delete('/revenues/:id/delete', celebrate({
             .required()
     })
 }), RevenuesController.delete);
+routes.get('/revenues/categories/', celebrate({
+    [Segments.HEADERS]: Joi.object({
+        token: Joi.string().required(),
+    }).unknown()
+}), RevenueCategoriesController.index);
 
 
 
