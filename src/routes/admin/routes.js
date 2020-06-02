@@ -1,5 +1,9 @@
 const express = require('express');
 const { celebrate, Segments, Joi } = require('celebrate');
+const authenticatedUser = require('../../middlewares/Auth');
+const activatedUser = require('../../middlewares/Activated');
+const validSession = require('../../middlewares/ValidSessionToken');
+const isAdmin = require('../../middlewares/Administration');
 
 const ExpenseCategoriesController = require('../../controllers/ExpenseCategoriesController');
 const ExpenseTypesController = require('../../controllers/ExpenseTypesController');
@@ -8,6 +12,11 @@ const InvestmentCategoriesController = require('../../controllers/InvestmentCate
 const RevenueCategoriesController = require('../../controllers/RevenueCategoriesController');
 
 const routes = express.Router();
+
+routes.use(authenticatedUser);
+routes.use(validSession);
+routes.use(activatedUser);
+routes.use(isAdmin);
 
 //Expenses categories
 routes.get('/expenses/categories/', celebrate({
