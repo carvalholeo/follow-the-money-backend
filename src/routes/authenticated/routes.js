@@ -9,7 +9,6 @@ const UserValidator = require('../../validators/UserValidator');
 const ProfileValidator = require('../../validators/ProfileValidator');
 const ExpenseValidator = require('../../validators/ExpenseValidator');
 const RevenueValidator = require('../../validators/RevenueValidator');
-const MFAValidator = require('../../validators/MFAValidator');
 
 const UserController = require('../../controllers/UserController');
 const ProfileController = require('../../controllers/ProfileController');
@@ -32,8 +31,6 @@ routes.use(activatedUser);
 //Login
 routes.delete('/session', celebrate(TokenValidator), SessionController.destroy);
 routes.delete('/all', celebrate(TokenValidator), SessionController.destroyAll);
-routes.get('/session/mfa', celebrate(MFAValidator.token()), SessionController.showMFA);
-routes.post('/session/mfa', celebrate(MFAValidator.mfaRequired()), SessionController.validateMFA);
 
 //Users (for personal use)
 routes.put('/profile/block', celebrate(TokenValidator), UserController.block, SessionController.destroyAll);
