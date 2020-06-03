@@ -32,7 +32,7 @@ routes.use(activatedUser);
 //Login
 routes.delete('/session', celebrate(TokenValidator), SessionController.destroy);
 routes.delete('/all', celebrate(TokenValidator), SessionController.destroyAll);
-routes.get('/session/mfa', celebrate(TokenValidator), SessionController.showMFA);
+routes.get('/session/mfa', celebrate(MFAValidator.token()), SessionController.showMFA);
 routes.post('/session/mfa', celebrate(MFAValidator.mfaRequired()), SessionController.validateMFA);
 
 //Users (for personal use)

@@ -9,5 +9,13 @@ module.exports = {
                 mfa_code: Joi.string().min(6).max(6).required()
             })
         };
+    },
+
+    token() {
+        return {
+            [Segments.HEADERS]: Joi.object({
+                token: Joi.string().required()
+            }).unknown()
+        };
     }
 }
