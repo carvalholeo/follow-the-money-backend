@@ -18,7 +18,7 @@ module.exports ={
                 .where({
                     username
                 })
-                .select('id', 'username', 'password', 'is_active')
+                .select('id', 'username', 'password', 'is_active', 'has_mfa')
                 .first();
             
             const db_password = user.password;
@@ -50,7 +50,7 @@ module.exports ={
             });
 
             return response.status(200)
-                .json({ user: user.username, token, session: authorization_id });
+                .json({ user: user.username, token, session: authorization_id, mfa: user.has_mfa });
         } catch (error) {
             return response.status(500)
                 .json({ error: "There was an error in server. Please, try again later. For support, contact to the system administrator." });
