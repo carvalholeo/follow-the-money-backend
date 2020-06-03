@@ -4,7 +4,9 @@ const { headers } = require('./TokenValidator');
 module.exports = {
     mfaRequired() {
         return {
-            headers,
+            [Segments.HEADERS]: Joi.object({
+                session: Joi.string().required()
+            }).unknown(),
             [Segments.BODY]: Joi.object().keys({
                 mfa_code: Joi.string().min(6).max(6).required()
             })
@@ -14,7 +16,7 @@ module.exports = {
     token() {
         return {
             [Segments.HEADERS]: Joi.object({
-                token: Joi.string().required()
+                session: Joi.string().required()
             }).unknown()
         };
     }
