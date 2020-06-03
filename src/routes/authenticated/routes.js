@@ -1,5 +1,5 @@
 const express = require('express');
-const { celebrate, Segments, Joi } = require('celebrate');
+const { celebrate } = require('celebrate');
 const authenticatedUser = require('../../middlewares/Auth');
 const activatedUser = require('../../middlewares/Activated');
 const validSession = require('../../middlewares/ValidSessionToken');
