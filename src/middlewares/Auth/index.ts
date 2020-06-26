@@ -1,7 +1,8 @@
-const jwt = require('jsonwebtoken');
-const { secret } = require('../../config/auth');
+import jwt from 'jsonwebtoken';
+import options from '../../config/auth';
+import { NextFunction } from 'express';
 
-module.exports = (request, response, next) => {
+export default (request: Request, response: Response, next: NextFunction) => {
     const authHeader = request.headers.token;
 
     if(!authHeader) {
@@ -10,7 +11,7 @@ module.exports = (request, response, next) => {
 
     const parts = authHeader.split(" ");
 
-    if(!parts.lenght === 2) {
+    if(parts.lenght !== 2) {
         return response.status(401).send({ error: 'Failed to process request.' });
     }
 
@@ -20,7 +21,7 @@ module.exports = (request, response, next) => {
         return response.status(401).send({ error: 'Malformed token.' });
     }
 
-    jwt.verify(token, secret, (error, decoded) => {
+    jwt.verify(token, options.secret, (error: any, decoded: any) => {
         if(error) {
             return response.status(400).send({ error: 'Invalid token.' });
         }

@@ -1,6 +1,6 @@
-const connection = require('../database/connection');
+import connection from '../database/connection';
 
-module.exports = async function getUserId(session_token) {
+export default async function getUserId(session_token: String) {
     try {
         const [{ id }] = await connection('sessions')
             .where({ 

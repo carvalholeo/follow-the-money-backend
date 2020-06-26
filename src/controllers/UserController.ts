@@ -1,10 +1,10 @@
-const connection = require('../database/connection');
-const getUserId = require('../utils/getUserId');
-const bcrypt = require('bcryptjs');
-const SessionController = require('./SessionController');
+import connection from '../database/connection';
+import getUserId from '../utils/getUserId';
+import bcrypt from 'bcryptjs';
+import { NextFunction } from 'express';
 
-module.exports = {
-    async create(request, response) {
+export default class UserController {
+    async create(request:Request, response: Response) {
         try {
             const { email, username, password } = request.body;
             const created_at = new Date();
@@ -30,9 +30,9 @@ module.exports = {
 
             return response.status(400).json({ error: "There was an error. Probably, this user was created previously. Ask support to the system administrator." });
         }
-    },
+    }
     
-    async block(request, response, next) {
+    async block(request:Request, response: Response, next: NextFunction) {
         try {
             const user_id = await getUserId(request.headers.session);
 
@@ -48,9 +48,9 @@ module.exports = {
         } catch (error) {
             return response.status(400).json({ error: "There was an error. Probably, this user was blocked previously. Ask support to the system administrator." });
         }
-    },
+    }
     
-    async delete(request, response, next) {
+    async delete(request:Request, response: Response, next: NextFunction) {
         try {
             const user_id = await getUserId(request.headers.session);
 
@@ -68,9 +68,9 @@ module.exports = {
 
             return response.status(400).json({ error: "There was an error. Probably, this user was deleted previously. Ask support to the system administrator." });
         }
-    },
+    }
 
-    async update(request, response) {
+    async update(request:Request, response: Response) {
         try {
             const { email, password } = request.body;
             const user_id = await getUserId(request.headers.session);

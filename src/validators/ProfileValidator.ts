@@ -1,7 +1,7 @@
-const { Segments, Joi } = require('celebrate');
-const { headers } = require('./TokenValidator');
+import { Segments, Joi } from 'celebrate';
+import headers from './TokenValidator';
 
-module.exports =  {
+export default  {
     headers,
     [Segments.BODY]: Joi.object().keys({
         first_name: Joi.string().max(255),

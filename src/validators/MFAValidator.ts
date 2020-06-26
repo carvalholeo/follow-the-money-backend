@@ -1,7 +1,7 @@
-const { Segments, Joi } = require('celebrate');
-const { headers } = require('./TokenValidator');
+import { Segments, Joi } from 'celebrate';
+import headers from './TokenValidator';
 
-module.exports = {
+export default {
     mfaRequired() {
         return {
             [Segments.HEADERS]: Joi.object({

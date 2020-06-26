@@ -1,6 +1,6 @@
-const connection = require('../../database/connection');
+import connection from '../../database/connection';
 
-module.exports = async function getSecret(user_id) {
+export default async function getSecret(user_id: Number) {
     try {
         const [{secret_mfa}] = await connection('users')
             .where('id', '=', user_id)

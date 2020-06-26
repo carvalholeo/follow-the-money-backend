@@ -1,17 +1,23 @@
-const express = require('express');
-const { celebrate } = require('celebrate');
-const authenticatedUser = require('../../middlewares/Auth');
-const activatedUser = require('../../middlewares/Activated');
-const validSession = require('../../middlewares/ValidSessionToken');
-const isAdmin = require('../../middlewares/Administration');
+import express from 'express';
+import { celebrate } from 'celebrate';
+import authenticatedUser from '../../middlewares/Auth';
+import activatedUser from '../../middlewares/Activated';
+import validSession from '../../middlewares/ValidSessionToken';
+import isAdmin from '../../middlewares/Administration';
 
-const TypeAndCategoryValidator = require('../../validators/TypeAndCategoryValidator');
+import TypeAndCategoryValidator from '../../validators/TypeAndCategoryValidator';
 
-const ExpenseCategoriesController = require('../../controllers/ExpenseCategoriesController');
-const ExpenseTypesController = require('../../controllers/ExpenseTypesController');
-const InvestmentTypesController = require('../../controllers/InvestmentTypesController');
-const InvestmentCategoriesController = require('../../controllers/InvestmentCategoriesController');
-const RevenueCategoriesController = require('../../controllers/RevenueCategoriesController');
+import ExpenseCategoriesController from '../../controllers/ExpenseCategoriesController';
+import ExpenseTypesController from '../../controllers/ExpenseTypesController';
+import InvestmentTypesController from '../../controllers/InvestmentTypesController';
+import InvestmentCategoriesController from '../../controllers/InvestmentCategoriesController';
+import RevenueCategoriesController from '../../controllers/RevenueCategoriesController';
+
+const expenseCategoriesController = new ExpenseCategoriesController();
+const expenseTypesController = new ExpenseTypesController();
+const investmentTypesController = new InvestmentTypesController();
+const investmentCategoriesController = new InvestmentCategoriesController();
+const revenueCategoriesController = new RevenueCategoriesController()
 
 const routes = express.Router();
 
@@ -23,74 +29,74 @@ routes.use(isAdmin);
 //Expenses categories
 routes.post('/expenses/categories', 
     celebrate(TypeAndCategoryValidator.createTypeAndCategory()), 
-    ExpenseCategoriesController.create);
+    expenseCategoriesController.create);
 
 routes.put('/expenses/categories/:id/', 
     celebrate(TypeAndCategoryValidator.updateTypeAndCategory()), 
-    ExpenseCategoriesController.update);
+    expenseCategoriesController.update);
 
 routes.delete('/expenses/categories/:id/', 
     celebrate(TypeAndCategoryValidator.deleteTypeAndCategory()), 
-    ExpenseCategoriesController.delete);
+    expenseCategoriesController.delete);
 
 
 
 //Expenses types
 routes.post('/expenses/types', 
     celebrate(TypeAndCategoryValidator.createTypeAndCategory()), 
-    ExpenseTypesController.create);
+    expenseTypesController.create);
 
 routes.put('/expenses/types/:id/', 
     celebrate(TypeAndCategoryValidator.updateTypeAndCategory()), 
-    ExpenseTypesController.update);
+    expenseTypesController.update);
 
 routes.delete('/expenses/types/:id/', 
     celebrate(TypeAndCategoryValidator.deleteTypeAndCategory()), 
-    ExpenseTypesController.delete);
+    expenseTypesController.delete);
 
 
 
 //Investments types
 routes.post('/investments/types', 
     celebrate(TypeAndCategoryValidator.createTypeAndCategory()), 
-    InvestmentTypesController.create);
+    investmentTypesController.create);
 
 routes.put('/investments/types/:id/', 
     celebrate(TypeAndCategoryValidator.updateTypeAndCategory()), 
-    InvestmentTypesController.update);
+    investmentTypesController.update);
 
 routes.delete('/investments/types/:id/', 
     celebrate(TypeAndCategoryValidator.deleteTypeAndCategory()), 
-    InvestmentTypesController.delete);
+    investmentTypesController.delete);
 
     
 
 //Investments categories
 routes.post('/investments/categories', 
     celebrate(TypeAndCategoryValidator.createTypeAndCategory()), 
-    InvestmentCategoriesController.create);
+    investmentCategoriesController.create);
 
 routes.put('/investments/categories/:id/', 
     celebrate(TypeAndCategoryValidator.updateTypeAndCategory()), 
-    InvestmentCategoriesController.update);
+    investmentCategoriesController.update);
 
 routes.delete('/investments/categories/:id/', 
     celebrate(TypeAndCategoryValidator.deleteTypeAndCategory()), 
-    InvestmentCategoriesController.delete);
+    investmentCategoriesController.delete);
 
 
 
 //Revenue categories
 routes.post('/revenues/categories', 
     celebrate(TypeAndCategoryValidator.createTypeAndCategory()), 
-    RevenueCategoriesController.create);
+    revenueCategoriesController.create);
 
 routes.put('/revenues/categories/:id/', 
     celebrate(TypeAndCategoryValidator.updateTypeAndCategory()), 
-    RevenueCategoriesController.update);
+    revenueCategoriesController.update);
 
 routes.delete('/revenues/categories/:id/', 
     celebrate(TypeAndCategoryValidator.deleteTypeAndCategory()), 
-    RevenueCategoriesController.delete);
+    revenueCategoriesController.delete);
 
-module.exports = routes;
+export default routes;

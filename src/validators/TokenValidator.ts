@@ -1,6 +1,6 @@
-const { Segments, Joi } = require('celebrate');
+import { Segments, Joi } from 'celebrate';
 
-module.exports =  {
+export default  {
     [Segments.HEADERS]: Joi.object({
         token: Joi.string().required(),
         session: Joi.string().required(),

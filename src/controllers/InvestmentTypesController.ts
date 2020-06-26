@@ -1,66 +1,66 @@
-const connection = require('../database/connection');
-const bcrypt = require('bcryptjs');
+import connection from '../database/connection';
+import bcrypt from 'bcryptjs';
 
-module.exports = {
-    async create(request, response) {
+export default class InvestmentTypesController {
+    async create(request: Request, response: Response) {
         try {
             const { name } = request.body;
             const created_at = new Date();
             const updated_at = new Date();
 
-            const expense_added = await connection('expense_categories')
+            const investment_added = await connection('investment_types')
                 .insert({
                 name,
                 created_at,
                 updated_at
                 });
 
-            if (!expense_added) {
+            if (!investment_added) {
                 throw new Exception();
             }
 
-            return response.status(201).json({ message: 'Expense category created successfully.'});
+            return response.status(201).json({ message: 'Investment category created successfully.'});
 
         } catch (error) {
 
             return response.status(500).json({ error: "There was an error. The system administrator was notified and working to solve this." });
         }
-    },
+    }
     
-    async delete(request, response) {
+    async delete(request: Request, response: Response) {
         try {
             const { id } = request.params;
-
-            const delete_expense_category = await connection('expense_categories')
+            
+            const delete_investment_category = await connection('investment_types')
                 .where('id', '=', id)
                 .del('*');
 
-            if (delete_expense_category) {
+            if (delete_investment_category) {
                 return response.status(200)
-                    .json({ message: "Expense category deleted successfully."});
+                    .json({ message: "Investment category deleted successfully."});
             }
             return response.status(406)
-                    .json({ message: "Expense category previously deleted." });
+                    .json({ message: "Investment category previously deleted." });
             
         } catch (error) {
 
-            return response.status(400).json({ error: "There was an error. Probably, this expense category was deleted previously. Ask support to the system administrator." });
+            return response.status(400).json({ error: "There was an error. Probably, this investment category was deleted previously. Ask support to the system administrator." });
         }
-    },
+    }
 
-    async update(request, response) {
+    async update(request: Request, response: Response) {
         try {
             const { name } = request.body;
             const { id } = request.params;
             const updated_at = new Date();
 
-            const update = await connection('expense_categories')
+            const update = await connection('investment_types')
                 .where('id', '=', id)
                 .update({ name, updated_at });
 
             if(update == 1) {
                 return response.status(200)
-                    .json({ message: "Expense category updated successfully." });
+                    .json({ message: "Investment category updated successfully." });
             }
             return response.status(400)
                     .json({ message: "ID passed doesn't exist. Try again with a valid ID." });
@@ -69,15 +69,15 @@ module.exports = {
                     .json({ message: "There was an error. The system administrator was notified and working to solve this." });
         }
         
-    },
+    }
 
-    async index(request, response) {
+    async index(request: Request, response: Response) {
         try {
-            const categories = await connection('expense_categories')
+            const categories = await connection('investment_types')
                 .select('*');
 
             return response.status(200)
-                    .json({ expense_categories: categories });
+                    .json({ investment_types: categories });
         } catch (error) {
             return response.status(500)
                     .json({ message: "There was an error. The system administrator was notified and working to solve this." });

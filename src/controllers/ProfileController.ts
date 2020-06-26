@@ -1,8 +1,8 @@
-const connection = require('../database/connection');
-const getUserId = require('../utils/getUserId');
+import connection from '../database/connection';
+import getUserId from '../utils/getUserId';
 
-module.exports ={
-    async index(request, response) {
+export default class ProfileController {
+    async index(request: Request, response: Response) {
         try {
             const user_id = getUserId(request.headers.session);
 
@@ -31,9 +31,9 @@ module.exports ={
         } catch (error) {
             return response.status(500).json({ error: "There was an error. The system administrator was notified and working to solve this." });
         }
-    },
+    }
 
-    async create(request, response) {
+    async create(request: Request, response: Response) {
         try {
             const { first_name, surname, url_photo, birthday, biography, facebook_profile, twitter_profile, instagram_profile, personal_site_url } = request.body;
             const user_id = getUserId(request.headers.session);
@@ -66,9 +66,9 @@ module.exports ={
 
             return response.status(500).json({ error: "There was an error. The system administrator was notified and working to solve this." });
         }
-    },
+    }
 
-    async update(request, response) {
+    async update(request: Request, response: Response) {
         try {
             const { first_name, surname, url_photo, birthday, biography, facebook_profile, twitter_profile, instagram_profile, personal_site_url } = request.body;
             const user_id = getUserId(request.headers.session);

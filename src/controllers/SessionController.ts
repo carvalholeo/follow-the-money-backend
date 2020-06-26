@@ -1,16 +1,16 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const speakeasy = require('speakeasy');
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import speakeasy from 'speakeasy';
 
-const connection = require('../database/connection');
-const generateUniqueId = require('../utils/generateUniqueId');
-const getUserId = require('../utils/getUserId');
-const getSecret = require('../utils/MFA/getSecret');
-const getQRCode = require('../utils/MFA/generateQRCode');
-const { expires_in, secret } = require('../config/auth');
+import connection from '../database/connection';
+import generateUniqueId from '../utils/generateUniqueId';
+import getUserId from '../utils/getUserId';
+import getSecret from '../utils/MFA/getSecret';
+import options from '../config/auth';
 
-module.exports ={
-    async create(request, response) {
+
+export default class SessionController {
+    async create(request: Request, response: Response) {
         try {
             const { username, password, remember = false } = request.body;
             const { ip_address } = request.connection.remoteAddress;
@@ -34,7 +34,7 @@ module.exports ={
 
             user.password = undefined;
 
-            const time_to_expire = !remember ? expires_in : '';
+            const time_to_expire = !remember ? options.expires_in : '';
 
             if(!user.is_active) {
                 return response.status(403)
@@ -48,7 +48,7 @@ module.exports ={
                     user_agent
                 });
 
-            const token = jwt.sign({ authorization_id }, secret, {
+            const token = jwt.sign({ authorization_id }, options.secret, {
                 expiresIn: time_to_expire,
             });
             
@@ -61,12 +61,13 @@ module.exports ={
                 .json({ token, session: authorization_id });
 
         } catch (error) {
+            console.log(error);
             return response.status(500)
                 .json({ error: "There was an error in server. Please, try again later. For support, contact to the system administrator." });
         }
-    },
+    }
 
-    async destroy(request, response) {
+    async destroy(request: Request, response: Response) {
         try {
             const authorization_id = request.headers.session;
 
@@ -86,9 +87,9 @@ module.exports ={
                 .json({ message: "There was an internal error. Probably, you're now logout, but we can't ensure that. If you need to be sure it, please clean your browser data, cookies, session and cache." })
         }
         
-    },
+    }
 
-    async destroyAll(request, response) {
+    async destroyAll(request: Request, response: Response) {
         try {
             const authorization_id = request.headers.session;
             const user_id = await getUserId(authorization_id);
@@ -109,16 +110,15 @@ module.exports ={
                 .json({ message: "There was an internal error. Probably, you're now logout, but we can't ensure that. If you need to be sure it, please clean your browser data, cookies, session and cache." })
         }
         
-    },
+    }
 
-    async showMFA(request, response) {
+    async showMFA(request: Request, response: Response) {
         try {
             return response.status(501)
                 .json({ error: "Don't try hack me. Get out from here!!!1" });
 
             const user_id = await getUserId(request.headers.session);
             const mfa_secret = await getSecret(user_id);
-            const QRCode = await getQRCode(mfa_secret);
 
             console.log(QRCode);
             return response.status(100)
@@ -133,9 +133,9 @@ module.exports ={
                 .json({ error: "There was an error on the server. Please, do login again." });
         }
 
-    },
+    }
 
-    async validateMFA(request, response) {
+    async validateMFA(request: Request, response: Response) {
         try {
             const authorization_id = request.headers.session;
             const { mfa_code } = request.body;
@@ -154,7 +154,7 @@ module.exports ={
                 window: 2
             });
 
-            const token = jwt.sign({ authorization_id }, secret, {
+            const token = jwt.sign({ authorization_id }, options.secret, {
                 expiresIn: time_to_expire,
             });
 
@@ -171,5 +171,6 @@ module.exports ={
             return response.status(500)
                 .json({ error: "There was an error. The system administrator already was notified. Please, try again later." });
         }
-    },
-};
+    }
+}
+

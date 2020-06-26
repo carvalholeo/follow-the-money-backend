@@ -1,8 +1,8 @@
-const { Segments, Joi } = require('celebrate');
-const { headers } = require('./TokenValidator');
+import { Segments, Joi } from 'celebrate';
+import headers from './TokenValidator';
 
-module.exports =  {
-    getExpense() {
+export default {
+    getRevenue() {
         return {
             headers,
             [Segments.QUERY]: Joi.object().keys({
@@ -11,50 +11,49 @@ module.exports =  {
         };
     },
 
-    postExpense() {
+    createRevenue() {
         return {
             headers,
             [Segments.BODY]: Joi.object().keys({
                 source: Joi.string().max(50).required(),
-                expense_type_id: Joi.number().required(),
-                expense_category_id: Joi.number().required(),
+                revenue_category_id: Joi.number().required(),
                 expected_amount: Joi.number().required(),
                 paid_amount: Joi.number(),
-                due_date: Joi.date().required(),
-                payday: Joi.date(),
+                expected_date: Joi.date().required(),
+                effective_date: Joi.date(),
                 reference_month: Joi.date().required(),
                 is_paid: Joi.bool().required()
             })
-        }
+        };
     },
 
-    putExpense() {
+    updateRevenue() {
         return {
             headers,
             [Segments.BODY]: Joi.object().keys({
                 source: Joi.string().max(50).required(),
-                expense_type_id: Joi.number().required(),
-                expense_category_id: Joi.number().required(),
+                revenue_category_id: Joi.number().required(),
                 expected_amount: Joi.number().required(),
                 paid_amount: Joi.number(),
-                due_date: Joi.date().required(),
-                payday: Joi.date(),
+                expected_date: Joi.date().required(),
+                effective_date: Joi.date(),
                 reference_month: Joi.date().required(),
                 is_paid: Joi.bool().required()
             }),
             [Segments.PARAMS]: Joi.object().keys({
-                id: Joi.number().required()
+                id: Joi.number()
+                    .required()
             })
-        }
+        };
     },
-    
-    deleteExpense() {
+
+    deleteRevenue() {
         return {
             headers,
             [Segments.PARAMS]: Joi.object().keys({
-                id: Joi.number().required()
+                id: Joi.number()
+                    .required()
             })
-        }
+        };
     }
 }
-

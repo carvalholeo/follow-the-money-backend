@@ -1,7 +1,8 @@
-const connection = require('../../database/connection');
-const getUserId = require('../../utils/getUserId');
+import connection from '../../database/connection';
+import getUserId from '../../utils/getUserId';
+import { NextFunction } from 'express';
 
-module.exports = async (request, response, next) => {
+export default async (request: Request, response: Response, next: NextFunction) => {
     try {
         const id = await getUserId(request.headers.session);
     

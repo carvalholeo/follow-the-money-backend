@@ -1,9 +1,9 @@
-const connection = require('../database/connection');
-const bcrypt = require('bcryptjs');
-const getUserId = require('../utils/getUserId');
+import connection from '../database/connection';
+import bcrypt from 'bcryptjs';
+import getUserId from '../utils/getUserId';
 
-module.exports = {
-    async create(request, response) {
+export default class EspensesController {
+    async create(request: Request, response: Response) {
         try {
             const { source, expense_type_id, expense_category_id, expected_amount, paid_amount, due_date, payday, reference_month, is_paid } = request.body;
             const user_id = getUserId(request.headers.session);
@@ -36,9 +36,9 @@ module.exports = {
 
             return response.status(500).json({ error: "There was an error. The system administrator was notified and working to solve this." });
         }
-    },
+    }
     
-    async delete(request, response) {
+    async delete(request: Request, response: Response) {
         try {
             const { id } = request.params;
             const user_id = getUserId(request.headers.session);
@@ -61,9 +61,9 @@ module.exports = {
 
             return response.status(400).json({ error: "There was an error. Probably, this expense was deleted previously. Ask support to the system administrator." });
         }
-    },
+    }
 
-    async update(request, response) {
+    async update(request: Request, response: Response) {
         try {
             const { source, expense_type_id, expense_category_id, expected_amount, paid_amount, due_date, payday, reference_month, is_paid } = request.body;
             const { id } = request.params;
@@ -99,9 +99,9 @@ module.exports = {
                     .json({ message: "There was an error. The system administrator was notified and working to solve this." });
         }
         
-    },
+    }
 
-    async index(request, response) {
+    async index(request: Request, response: Response) {
         try {
             const user_id = getUserId(request.headers.session);
             const { page = 1 } = request.query;
