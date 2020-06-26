@@ -1,7 +1,8 @@
+import { Request, Response, NextFunction } from 'express';
+import bcrypt from 'bcryptjs';
+
 import connection from '../database/connection';
 import getUserId from '../utils/getUserId';
-import bcrypt from 'bcryptjs';
-import { NextFunction } from 'express';
 
 export default class UserController {
     async create(request:Request, response: Response) {

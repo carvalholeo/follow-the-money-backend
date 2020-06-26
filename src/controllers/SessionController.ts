@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import speakeasy from 'speakeasy';
+import { Request, Response } from 'express';
 
 import connection from '../database/connection';
 import generateUniqueId from '../utils/generateUniqueId';

@@ -1,3 +1,5 @@
+import { Request, Response } from 'express';
+
 import connection from '../database/connection';
 import getUserId from '../utils/getUserId';
 

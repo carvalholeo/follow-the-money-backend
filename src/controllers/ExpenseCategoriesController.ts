@@ -1,5 +1,6 @@
+import { Request, Response } from 'express';
+
 import connection from '../database/connection';
-import bcrypt from 'bcryptjs';
 
 export default class ExpenseCategoriesController {
     async create(request: Request, response: Response) {

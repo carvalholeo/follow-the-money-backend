@@ -1,5 +1,6 @@
+import { Request, Response } from 'express';
+
 import connection from '../database/connection';
-import bcrypt from 'bcryptjs';
 import getUserId from '../utils/getUserId';
 
 export default class RevenuesController {
