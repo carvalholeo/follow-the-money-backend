@@ -1,6 +1,7 @@
+import Knex from 'knex';
 
-exports.up = function(knex) {
-  return knex.schema.createTable('sessions', function(table) {
+export async function up(knex: Knex) {
+  return knex.schema.createTable('sessions', table => {
     table.string('authorization_id', 34)
       .notNullable();
 
@@ -27,6 +28,6 @@ exports.up = function(knex) {
   });
 };
 
-exports.down = function(knex) {
+export async function down(knex: Knex) {
   return knex.schema.dropTable('sessions');
 };

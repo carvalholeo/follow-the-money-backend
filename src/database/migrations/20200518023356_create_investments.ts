@@ -1,6 +1,7 @@
+import Knex from 'knex';
 
-exports.up = function(knex) {
-  return knex.schema.createTable('investments', function(table) {
+export async function up(knex: Knex) {
+  return knex.schema.createTable('investments', table => {
     table.increments('id')
       .primary();
 
@@ -21,7 +22,7 @@ exports.up = function(knex) {
     table.string('source')
       .defaultTo('Salário');
 
-    table.datetime('investment_date')
+    table.dateTime('investment_date')
       .notNullable();
 
     table.float('quantity')
@@ -69,6 +70,6 @@ exports.up = function(knex) {
   });
 };
 
-exports.down = function(knex) {
+export async function down(knex: Knex) {
   return knex.schema.dropTable('investments')
 };

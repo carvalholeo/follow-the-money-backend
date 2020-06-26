@@ -1,6 +1,7 @@
+import Knex from 'knex';
 
-exports.up = function(knex) {
-  return knex.schema.createTable('expense_categories', function(table) {
+export async function up(knex: Knex) {
+  return knex.schema.createTable('expense_categories', table => {
     table.increments('id')
       .primary();
 
@@ -9,8 +10,8 @@ exports.up = function(knex) {
       
     table.timestamps();
   });
-};
+}
 
-exports.down = function(knex) {
+export async function down(knex: Knex) {
   return knex.schema.dropTable('expense_categories');
 };

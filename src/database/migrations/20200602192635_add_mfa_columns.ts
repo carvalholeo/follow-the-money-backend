@@ -1,6 +1,7 @@
+import Knex from 'knex';
 
-exports.up = function(knex) {
-  return knex.schema.table('users', function(table) {
+export async function up(knex: Knex) {
+  return knex.schema.table('users', table => {
     table.boolean('has_mfa')
         .nullable()
         .defaultTo(false)
@@ -13,7 +14,7 @@ exports.up = function(knex) {
   });
 };
 
-exports.down = function(knex) {
+export async function down(knex: Knex) {
   return knex.schema.table('users', function(table) {
     table.dropColumns('has_mfa', 'secret_mfa');
   });

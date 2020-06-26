@@ -1,6 +1,7 @@
+import Knex from 'knex';
 
-exports.up = function(knex) {
-  return knex.schema.createTable('expenses', function(table) {
+export async function up(knex: Knex) {
+  return knex.schema.createTable('expenses', table => {
     table.increments('id')
       .primary();
 
@@ -58,6 +59,6 @@ exports.up = function(knex) {
   });
 };
 
-exports.down = function(knex) {
+export async function down(knex: Knex) {
   return knex.schema.dropTable('expenses');
 };
