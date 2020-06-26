@@ -1,36 +1,14 @@
 const connection = require('../database/connection');
 const bcrypt = require('bcryptjs');
+const getUserId = require('../utils/getUserId');
 
 module.exports = {
     async create(request, response) {
         try {
             const { source, expense_type_id, expense_category_id, expected_amount, paid_amount, due_date, payday, reference_month, is_paid } = request.body;
-            const authorization_id = request.headers.token;
-
+            const user_id = getUserId(request.headers.session);
             const created_at = new Date();
             const updated_at = new Date();
-
-            const [{ user_id }] = await connection('sessions')
-                .where('authorization_id', authorization_id)
-                .select('user_id');
-
-            if (!user_id) {
-                return response.status(401)
-                    .json({ message: "Authorization token isn't valid. Login in the system and try again." });
-            }
-
-            const [permission] = await connection('users')
-                .where({'users.id': user_id})
-                .join('permissions', 'users.permission_id', '=', 'permissions.id')
-                .select([
-                    'permissions.is_admin',
-                    'users.is_active'
-                ]);
-
-            if(!permission.is_active) {
-                return response.status(403)
-                    .json({ message: "Your user is blocked. If you think that it's an error, contact system administrator to support." });
-            }
 
             const expenses_added = await connection('expenses')
                 .insert({
@@ -63,29 +41,7 @@ module.exports = {
     async delete(request, response) {
         try {
             const { id } = request.params;
-            const authorization_id = request.headers.token;
-
-            const [{ user_id }] = await connection('sessions')
-                .where('authorization_id', authorization_id)
-                .select('user_id');
-
-            if (!user_id) {
-                return response.status(401)
-                    .json({ message: "Authorization token isn't valid. Login in the system and try again." });
-            }
-
-            const [permission] = await connection('users')
-                .where({'users.id': user_id})
-                .join('permissions', 'users.permission_id', '=', 'permissions.id')
-                .select([
-                    'permissions.is_admin',
-                    'users.is_active'
-                ]);
-
-            if(!permission.is_active) {
-                return response.status(403)
-                    .json({ message: "Your user is blocked. If you think that it's an error, contact system administrator to support." });
-            }
+            const user_id = getUserId(request.headers.session);
 
             const delete_expenses = await connection('expenses')
                 .where({
@@ -111,31 +67,8 @@ module.exports = {
         try {
             const { source, expense_type_id, expense_category_id, expected_amount, paid_amount, due_date, payday, reference_month, is_paid } = request.body;
             const { id } = request.params;
-            const authorization_id = request.headers.token;
-
+            const user_id = getUserId(request.headers.session);
             const updated_at = new Date();
-
-            const [{ user_id }] = await connection('sessions')
-                .where('authorization_id', authorization_id)
-                .select('user_id');
-            
-            if (!user_id) {
-                return response.status(401)
-                    .json({ message: "Authorization token isn't valid. Login in the system and try again." });
-            }
-
-            const [permission] = await connection('users')
-                .where({'users.id': user_id})
-                .join('permissions', 'users.permission_id', '=', 'permissions.id')
-                .select([
-                    'permissions.is_admin',
-                    'users.is_active'
-                ]);
-
-            if(!permission.is_active) {
-                return response.status(403)
-                    .json({ message: "Your user is blocked. If you think that it's an error, contact system administrator to support." });
-            }
 
             const update = await connection('expenses')
                 .where({
@@ -170,31 +103,9 @@ module.exports = {
 
     async index(request, response) {
         try {
-            const authorization_id = request.headers.token;
+            const user_id = getUserId(request.headers.session);
             const { page = 1 } = request.query;
 
-            const [{ user_id }] = await connection('sessions')
-                .where('authorization_id', authorization_id)
-                .select('user_id');
-            
-            if (!user_id) {
-                return response.status(401)
-                    .json({ message: "Authorization token isn't valid. Login in the system and try again." });
-            }
-
-            const [permission] = await connection('users')
-                .where({'users.id': user_id})
-                .join('permissions', 'users.permission_id', '=', 'permissions.id')
-                .select([
-                    'permissions.is_admin',
-                    'users.is_active'
-                ]);
-
-            if(!permission.is_active) {
-                return response.status(403)
-                    .json({ message: "Your user is blocked. If you think that it's an error, contact system administrator to support." });
-            }
-            
             const [count] = await connection('expenses')
                 .where({ user_id })
                 .count();
@@ -221,10 +132,8 @@ module.exports = {
             
             response.header('X-Total-Count', count['count(*)']);
 
-            return response.status(200)
-                    .json({ expenses });
+            return response.status(200).json({ expenses });
         } catch (error) {
-            console.log(error);
             return response.status(500)
                     .json({ message: "There was an error. The system administrator was notified and working to solve this." });
         }

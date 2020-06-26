@@ -1,5 +1,7 @@
 const connection = require('../database/connection');
+const getUserId = require('../utils/getUserId');
 const bcrypt = require('bcryptjs');
+const SessionController = require('./SessionController');
 
 module.exports = {
     async create(request, response) {
@@ -32,28 +34,7 @@ module.exports = {
     
     async block(request, response, next) {
         try {
-            const authorization_id = request.headers.token;
-            const [{ user_id }] = await connection('sessions')
-                .where('authorization_id', authorization_id)
-                .select('user_id');
-
-            if (!user_id) {
-                return response.status(401)
-                    .json({ message: "Authorization token isn't valid. Login in the system and try again." });
-            }
-
-            const [permission] = await connection('users')
-                .where({'users.id': user_id})
-                .join('permissions', 'users.permission_id', '=', 'permissions.id')
-                .select([
-                    'permissions.is_admin',
-                    'users.is_active'
-                ]);
-
-            if(!permission.is_active) {
-                return response.status(403)
-                    .json({ message: "Your user is blocked. If you think that it's an error, contact system administrator to support." });
-            }
+            const user_id = await getUserId(request.headers.session);
 
             const active = await connection('users')
                 .where('id', '=', user_id)
@@ -64,37 +45,14 @@ module.exports = {
                 return response.status(200)
                     .json({ message: "Your user was blocked successfully. To unblock, contact system administrator. You're now logout."});
             }
-            
         } catch (error) {
-
             return response.status(400).json({ error: "There was an error. Probably, this user was blocked previously. Ask support to the system administrator." });
         }
     },
     
     async delete(request, response, next) {
         try {
-            const authorization_id = request.headers.token;
-            const [{ user_id }] = await connection('sessions')
-                .where('authorization_id', authorization_id)
-                .select('user_id');
-
-            if (!user_id) {
-                return response.status(401)
-                    .json({ message: "Authorization token isn't valid. Login in the system and try again." });
-            }
-
-            const [permission] = await connection('users')
-                .where({'users.id': user_id})
-                .join('permissions', 'users.permission_id', '=', 'permissions.id')
-                .select([
-                    'permissions.is_admin',
-                    'users.is_active'
-                ]);
-
-            if(!permission.is_active) {
-                return response.status(403)
-                    .json({ message: "Your user is blocked. If you think that it's an error, contact system administrator to support." });
-            }
+            const user_id = await getUserId(request.headers.session);
 
             const delete_user = await connection('users')
                 .where('id', '=', user_id)
@@ -115,33 +73,10 @@ module.exports = {
     async update(request, response) {
         try {
             const { email, password } = request.body;
-            const authorization_id = request.headers.token;
+            const user_id = await getUserId(request.headers.session);
 
             const salt = bcrypt.genSaltSync(10);
             const hash = bcrypt.hashSync(password, salt);
-
-            const [{ user_id }] = await connection('sessions')
-                .where('authorization_id', authorization_id)
-                .select('user_id');
-
-            if (!user_id) {
-                return response.status(401)
-                    .json({ message: "Authorization token isn't valid. Login in the system and try again." });
-            }
-
-            const [permission] = await connection('users')
-                .where({'users.id': user_id})
-                .join('permissions', 'users.permission_id', '=', 'permissions.id')
-                .select([
-                    'permissions.is_admin',
-                    'users.is_active'
-                ]);
-
-            if(!permission.is_active) {
-                return response.status(403)
-                    .json({ message: "Your user is blocked. If you think that it's an error, contact system administrator to support." });
-            }
-
             
             const user = await connection('users')
                 .where('id', '=', user_id)
