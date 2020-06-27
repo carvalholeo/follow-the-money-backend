@@ -1,34 +1,41 @@
 import path from 'path';
 // Update with your config settings.
 
-export default {
+module.exports = {
 
   development: {
-    client: 'sqlite3',
+    client: 'mysql',
     connection: {
-      filename: path.resolve(__dirname, 'src', 'database', 'database.sqlite'),
+      host : '127.0.0.1',
+      database: 'ftm',
+      user:     'root',
+      password: ''
     },
     migrations: {
       directory: path.resolve(__dirname, 'src', 'database', 'migrations'),
+      extension: 'ts',
       tableName: 'knex_migrations'
     },
+    pool: {
+      min: 1,
+      max: 10
+    },
     seeds: {
-        directory: path.resolve(__dirname, 'src', 'database', 'seeds')
+      directory: path.resolve(__dirname, 'src', 'database', 'seeds'),
+      extension: 'ts'
     },
     useNullAsDefault: true,
+    acquireConnectionTimeout: 10000,
   },
 
   test: {
     client: 'sqlite3',
     connection: {
-      filename: path.resolve(__dirname, 'src', 'database', 'database.sqlite'),
+      filename: './src/database/test.sqlite'
     },
     migrations: {
-      directory: path.resolve(__dirname, 'src', 'database', 'migrations'),
+      directory: './src/database/migrations',
       tableName: 'knex_migrations'
-    },
-    seeds: {
-        directory: path.resolve(__dirname, 'src', 'database', 'seeds')
     },
     useNullAsDefault: true,
   },
@@ -38,22 +45,19 @@ export default {
     version: 10,
     connection: {
       host : '127.0.0.1',
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
+      database: 'ftm',
+      user:     'root',
+      password: ''
+    },
+    migrations: {
+      directory: './src/database/migrations',
+      tableName: 'knex_migrations'
     },
     pool: {
       min: 1,
       max: 10
     },
     acquireConnectionTimeout: 10000,
-    migrations: {
-      directory: path.resolve(__dirname, 'src', 'database', 'migrations'),
-      tableName: 'knex_migrations'
-    },
-    seeds: {
-        directory: path.resolve(__dirname, 'src', 'database', 'seeds')
-    }
   },
 
   production: {
@@ -70,11 +74,8 @@ export default {
     },
     acquireConnectionTimeout: 10000,
     migrations: {
-      directory: path.resolve(__dirname, 'src', 'database', 'migrations'),
+      directory: './src/database/migrations',
       tableName: 'knex_migrations'
-    },
-    seeds: {
-        directory: path.resolve(__dirname, 'src', 'database', 'seeds')
     }
   }
 
