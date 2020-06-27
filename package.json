@@ -25,6 +25,7 @@
     "helmet": "^3.23.3",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.0",
+    "log4js": "^6.3.0",
     "mysql": "^2.18.1",
     "mysql2": "^2.1.0",
     "speakeasy": "^2.0.0",
