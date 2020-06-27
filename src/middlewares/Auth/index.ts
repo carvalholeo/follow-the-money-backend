@@ -1,6 +1,7 @@
+import { Request, Response, NextFunction } from 'express';
+
 import jwt from 'jsonwebtoken';
 import options from '../../config/auth';
-import { Request, Response, NextFunction } from 'express';
 
 export default (request: Request, response: Response, next: NextFunction) => {
     const authHeader = String(request.headers.token);

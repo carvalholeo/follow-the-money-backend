@@ -1,6 +1,9 @@
-import connection from '../../database/connection';
-import getUserId from '../../utils/getUserId';
 import { Request, Response, NextFunction } from 'express';
+
+import connection from '../../database/connection';
+import Logger from '../../utils/Logger';
+
+const logger = new Logger();
 
 export default async (request: Request, response: Response, next: NextFunction) => {
     try {
@@ -17,6 +20,7 @@ export default async (request: Request, response: Response, next: NextFunction) 
     
         next();
     } catch (error) {
+        logger.makeLog('ValidateSessionMiddleware', error);
         return response.status(500)
             .json({ error: 'There was an error on server. Try again later.' });
     }
