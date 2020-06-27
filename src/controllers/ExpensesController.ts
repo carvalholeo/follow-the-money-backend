@@ -2,6 +2,9 @@ import { Request, Response } from 'express';
 
 import connection from '../database/connection';
 import getUserId from '../utils/getUserId';
+import Logger from '../utils/Logger';
+
+const logger = new Logger();
 
 export default class EspensesController {
     async create(request: Request, response: Response) {
@@ -34,7 +37,7 @@ export default class EspensesController {
             return response.status(201).json({ message: 'Expense added successfully.'});
 
         } catch (error) {
-
+            logger.makeLog('CreateExpense', error);
             return response.status(500).json({ error: "There was an error. The system administrator was notified and working to solve this." });
         }
     }
@@ -59,7 +62,7 @@ export default class EspensesController {
                     .json({ message: "Expenses previously deleted." });
             
         } catch (error) {
-
+            logger.makeLog('DeleteExpense', error);
             return response.status(400).json({ error: "There was an error. Probably, this expense was deleted previously. Ask support to the system administrator." });
         }
     }
@@ -89,17 +92,17 @@ export default class EspensesController {
                     updated_at
                     });
 
-            if(update == 1) {
+            if(update === 1) {
                 return response.status(200)
                     .json({ message: "Expense updated successfully." });
             }
             return response.status(400)
                     .json({ message: "ID passed doesn't exist. Try again with a valid ID." });
         } catch (error) {
+            logger.makeLog('UpdateExpense', error);
             return response.status(500)
                     .json({ message: "There was an error. The system administrator was notified and working to solve this." });
         }
-        
     }
 
     async index(request: Request, response: Response) {
@@ -135,6 +138,7 @@ export default class EspensesController {
 
             return response.status(200).json({ expenses });
         } catch (error) {
+            logger.makeLog('GetExpenses', error);
             return response.status(500)
                     .json({ message: "There was an error. The system administrator was notified and working to solve this." });
         }

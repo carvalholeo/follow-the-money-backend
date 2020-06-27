@@ -2,6 +2,9 @@ import { Request, Response } from 'express';
 
 import connection from '../database/connection';
 import getUserId from '../utils/getUserId';
+import Logger from '../utils/Logger';
+
+const logger = new Logger();
 
 export default class RevenuesController {
     async create(request: Request, response: Response) {
@@ -33,7 +36,7 @@ export default class RevenuesController {
             return response.status(201).json({ message: 'Revenue added successfully.'});
 
         } catch (error) {
-
+            logger.makeLog('CreateRevenue', error);
             return response.status(500).json({ error: "There was an error. The system administrator was notified and working to solve this." });
         }
     }
@@ -58,7 +61,7 @@ export default class RevenuesController {
                     .json({ message: "Expenses previously deleted." });
             
         } catch (error) {
-
+            logger.makeLog('DeleteRevenue', error);
             return response.status(400).json({ error: "There was an error. Probably, this revenue was deleted previously. Ask support to the system administrator." });
         }
     }
@@ -95,6 +98,7 @@ export default class RevenuesController {
             return response.status(400)
                     .json({ message: "ID passed doesn't exist. Try again with a valid ID." });
         } catch (error) {
+            logger.makeLog('UpdateRevenue', error);
             return response.status(500)
                     .json({ message: "There was an error. The system administrator was notified and working to solve this." });
         }
@@ -134,6 +138,7 @@ export default class RevenuesController {
             return response.status(200).json({ revenues });
 
         } catch (error) {
+            logger.makeLog('GetRevenues', error);
             return response.status(500)
                     .json({ message: "There was an error. The system administrator was notified and working to solve this." });
         }

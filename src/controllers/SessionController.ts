@@ -8,6 +8,9 @@ import generateUniqueId from '../utils/generateUniqueId';
 import getUserId from '../utils/getUserId';
 import getSecret from '../utils/MFA/getSecret';
 import options from '../config/auth';
+import Logger from '../utils/Logger';
+
+const logger = new Logger();
 
 
 export default class SessionController {
@@ -62,7 +65,7 @@ export default class SessionController {
                 .json({ token, session: authorization_id });
 
         } catch (error) {
-            console.log(error);
+            logger.makeLog('CreateSession', error);
             return response.status(500)
                 .json({ error: "There was an error in server. Please, try again later. For support, contact to the system administrator." });
         }
@@ -84,6 +87,7 @@ export default class SessionController {
             return response.status(200)
                 .json({ message: "Loggout successfully." }); 
         } catch (error) {
+            logger.makeLog('DestroyOneSession', error);
             return response.status(500)
                 .json({ message: "There was an internal error. Probably, you're now logout, but we can't ensure that. If you need to be sure it, please clean your browser data, cookies, session and cache." })
         }
@@ -99,7 +103,7 @@ export default class SessionController {
                 .where('user_id', '=', user_id)
                 .del('*');
 
-            if (authorization_deleted.length == 0) {
+            if (authorization_deleted.length === 0) {
                 return response.status(417)
                     .json({ error: "Token passed is invalid. Try again with a valid token." });
             }
@@ -107,6 +111,7 @@ export default class SessionController {
             return response.status(200)
                 .json({ message: "Loggout successfully on all sessions (include this)." }); 
         } catch (error) {
+            logger.makeLog('DestroyAllSession', error);
             return response.status(500)
                 .json({ message: "There was an internal error. Probably, you're now logout, but we can't ensure that. If you need to be sure it, please clean your browser data, cookies, session and cache." })
         }
@@ -127,7 +132,7 @@ export default class SessionController {
                 });
 
         } catch (error) {
-            console.log(error);
+            logger.makeLog('ShowMFASession', error);
             return response.status(500)
                 .json({ error: "There was an error on the server. Please, do login again." });
         }
@@ -167,6 +172,7 @@ export default class SessionController {
 
 
         } catch (error) {
+            logger.makeLog('ValidateMFACode', error);
             return response.status(500)
                 .json({ error: "There was an error. The system administrator already was notified. Please, try again later." });
         }

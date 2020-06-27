@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
 
 import connection from '../database/connection';
+import Logger from '../utils/Logger';
+
+const logger = new Logger();
 
 export default class ExpenseCategoriesController {
     async create(request: Request, response: Response) {
@@ -23,7 +26,7 @@ export default class ExpenseCategoriesController {
             return response.status(201).json({ message: 'Expense category created successfully.'});
 
         } catch (error) {
-
+            logger.makeLog('CreateExpenseCategory', error);
             return response.status(500).json({ error: "There was an error. The system administrator was notified and working to solve this." });
         }
     }
@@ -44,7 +47,7 @@ export default class ExpenseCategoriesController {
                     .json({ message: "Expense category previously deleted." });
             
         } catch (error) {
-
+            logger.makeLog('DeleteExpenseCategory', error);
             return response.status(400).json({ error: "There was an error. Probably, this expense category was deleted previously. Ask support to the system administrator." });
         }
     }
@@ -59,13 +62,14 @@ export default class ExpenseCategoriesController {
                 .where('id', '=', id)
                 .update({ name, updated_at });
 
-            if(update == 1) {
+            if(update === 1) {
                 return response.status(200)
                     .json({ message: "Expense category updated successfully." });
             }
             return response.status(400)
                     .json({ message: "ID passed doesn't exist. Try again with a valid ID." });
         } catch (error) {
+            logger.makeLog('UpdateExpenseCategory', error);
             return response.status(500)
                     .json({ message: "There was an error. The system administrator was notified and working to solve this." });
         }
@@ -80,6 +84,7 @@ export default class ExpenseCategoriesController {
             return response.status(200)
                     .json({ expense_categories: categories });
         } catch (error) {
+            logger.makeLog('GetExpenseCategories', error);
             return response.status(500)
                     .json({ message: "There was an error. The system administrator was notified and working to solve this." });
         }

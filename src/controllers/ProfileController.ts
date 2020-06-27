@@ -2,6 +2,9 @@ import { Request, Response } from 'express';
 
 import connection from '../database/connection';
 import getUserId from '../utils/getUserId';
+import Logger from '../utils/Logger';
+
+const logger = new Logger();
 
 export default class ProfileController {
     async index(request: Request, response: Response) {
@@ -31,6 +34,7 @@ export default class ProfileController {
             return response.status(200).json({ profile });
 
         } catch (error) {
+            logger.makeLog('GetProfile', error);
             return response.status(500).json({ error: "There was an error. The system administrator was notified and working to solve this." });
         }
     }
@@ -65,7 +69,7 @@ export default class ProfileController {
             return response.status(201).json({ message: 'Profile created successfully.'});
 
         } catch (error) {
-
+            logger.makeLog('CreateProfile', error);
             return response.status(500).json({ error: "There was an error. The system administrator was notified and working to solve this." });
         }
     }
@@ -98,7 +102,7 @@ export default class ProfileController {
             return response.status(200).json({ message: 'Profile updated successfully.'});
 
         } catch (error) {
-            
+            logger.makeLog('UpdateProfile', error);
             return response.status(500).json({ error: "There was an error. The system administrator was notified and working to solve this." });
         }
     }
