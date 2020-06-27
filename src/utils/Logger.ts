@@ -12,7 +12,7 @@ class Logger {
                 error: {
                     type: "file", 
                     filename: errorFile,
-                    maxLogSize: 1000000,
+                    maxLogSize: 100000,
                     backups: 10,
                     encoding: "utf-8",
                     compress: true,
