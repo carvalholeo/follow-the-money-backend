@@ -5,11 +5,13 @@ export async function up(knex: Knex) {
     table.boolean('has_mfa')
         .nullable()
         .defaultTo(false)
+        //@ts-ignore
         .after('permission_id');
 
     table.string('secret_mfa')
         .nullable()
         .defaultTo(null)
+        //@ts-ignore
         .after('has_mfa');
   });
 };
