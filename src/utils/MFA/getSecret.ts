@@ -6,7 +6,7 @@ export default async function getSecret(user_id: Number) {
             .where('id', '=', user_id)
             .select('secret_mfa');
  
-        return secret_mfa;
+        return String(secret_mfa);
     } catch (error) {
         throw error;
     }

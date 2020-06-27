@@ -12,7 +12,7 @@ export default async function getUserId(session_token: String) {
             .join('users', 'users.id', '=', 'sessions.user_id')
             .select('users.id');
             
-        return id;
+        return Number(id);
     } catch (error) {
         logger.makeLog('GetUserIdUtils', error);
         throw error;
