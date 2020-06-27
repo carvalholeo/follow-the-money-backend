@@ -1,4 +1,7 @@
 import connection from '../database/connection';
+import Logger from './Logger';
+
+const logger = new Logger();
 
 export default async function getUserId(session_token: String) {
     try {
@@ -11,6 +14,7 @@ export default async function getUserId(session_token: String) {
             
         return id;
     } catch (error) {
+        logger.makeLog('GetUserIdUtils', error);
         throw error;
     }
     
