@@ -1,10 +1,10 @@
 import connection from '../../database/connection';
 import getUserId from '../../utils/getUserId';
-import { NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
 export default async (request: Request, response: Response, next: NextFunction) => {
     try {
-        const id = await getUserId(request.headers.session);
+        const id = await getUserId(String(request.headers.session));
     
         const [activated] = await connection('users')
             .where('id', id)

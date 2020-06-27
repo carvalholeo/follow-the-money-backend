@@ -1,10 +1,10 @@
 import connection from '../../database/connection';
 import getUserId from '../../utils/getUserId';
-import { NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
 export default async (request: Request, response: Response, next: NextFunction) => {
     try {
-        const token = request.headers.session;
+        const token = String(request.headers.session);
     
         const [is_valid] = await connection('sessions')
             .where('authorization_id', token)

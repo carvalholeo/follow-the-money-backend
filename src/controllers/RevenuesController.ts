@@ -7,7 +7,7 @@ export default class RevenuesController {
     async create(request: Request, response: Response) {
         try {
             const { source, revenue_category_id, expected_amount, paid_amount, expected_date, effective_date, reference_month, is_paid } = request.body;
-            const user_id = getUserId(request.headers.session);
+            const user_id = getUserId(String(request.headers.session));
             const created_at = new Date();
             const updated_at = new Date();
 
@@ -27,7 +27,7 @@ export default class RevenuesController {
                 });
 
             if (!revenues_added) {
-                throw new Exception();
+                throw "Error on create a new revenue.";
             }
 
             return response.status(201).json({ message: 'Revenue added successfully.'});
@@ -41,7 +41,7 @@ export default class RevenuesController {
     async delete(request: Request, response: Response) {
         try {
             const { id } = request.params;
-            const user_id = getUserId(request.headers.session);
+            const user_id = getUserId(String(request.headers.session));
 
             const delete_revenue = await connection('revenues')
                 .where({
@@ -67,7 +67,7 @@ export default class RevenuesController {
         try {
             const { source, revenue_category_id, expected_amount, paid_amount, expected_date, effective_date, reference_month, is_paid } = request.body;
             const { id } = request.params;
-            const user_id = getUserId(request.headers.session);
+            const user_id = getUserId(String(request.headers.session));
             const updated_at = new Date();
 
             const update = await connection('revenues')
@@ -85,11 +85,10 @@ export default class RevenuesController {
                     reference_month,
                     is_paid,
                     user_id,
-                    created_at,
                     updated_at
                 });
 
-            if(update == 1) {
+            if(update === 1) {
                 return response.status(200)
                     .json({ message: "Revenue updated successfully." });
             }
@@ -104,7 +103,7 @@ export default class RevenuesController {
 
     async index(request: Request, response: Response) {
         try {
-            const user_id = getUserId(request.headers.session);
+            const user_id = getUserId(String(request.headers.session));
             const { page = 1 } = request.query;
 
             
@@ -116,7 +115,7 @@ export default class RevenuesController {
                 .where({ user_id })
                 .join('revenue_categories', 'revenue_categories.id', '=', 'revenues.revenue_category_id')
                 .limit(25)
-                .offset((page - 1) * 25)
+                .offset((Number(page) - 1) * 25)
                 .select([
                     'revenues.source',
                     'revenue_categories.name',

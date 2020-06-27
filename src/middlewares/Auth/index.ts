@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
 import options from '../../config/auth';
-import { NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
 export default (request: Request, response: Response, next: NextFunction) => {
-    const authHeader = request.headers.token;
+    const authHeader = String(request.headers.token);
 
     if(!authHeader) {
         return response.status(401).send({ error: 'No token provided.' });
@@ -11,7 +11,7 @@ export default (request: Request, response: Response, next: NextFunction) => {
 
     const parts = authHeader.split(" ");
 
-    if(parts.lenght !== 2) {
+    if(parts.length !== 2) {
         return response.status(401).send({ error: 'Failed to process request.' });
     }
 
@@ -26,7 +26,7 @@ export default (request: Request, response: Response, next: NextFunction) => {
             return response.status(400).send({ error: 'Invalid token.' });
         }
 
-        request.username = decoded.username;
+        request.body.username = decoded.username;
 
         return next();
     });

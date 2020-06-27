@@ -6,7 +6,7 @@ import getUserId from '../utils/getUserId';
 export default class ProfileController {
     async index(request: Request, response: Response) {
         try {
-            const user_id = getUserId(request.headers.session);
+            const user_id = getUserId(String(request.headers.session));
 
             const profile = await connection('profile')
                 .where({ 'user_id': user_id })
@@ -25,7 +25,7 @@ export default class ProfileController {
                 ]);
 
             if (!profile) {
-                throw new Exception();    
+                throw "Error on get this profile.";    
             }
 
             return response.status(200).json({ profile });
@@ -38,7 +38,7 @@ export default class ProfileController {
     async create(request: Request, response: Response) {
         try {
             const { first_name, surname, url_photo, birthday, biography, facebook_profile, twitter_profile, instagram_profile, personal_site_url } = request.body;
-            const user_id = getUserId(request.headers.session);
+            const user_id = getUserId(String(request.headers.session));
             const created_at = new Date();
             const updated_at = new Date();
 
@@ -59,7 +59,7 @@ export default class ProfileController {
                 });
 
             if (!profile_added) {
-                throw new Exception();
+                throw "Error on create this profile";
             }
 
             return response.status(201).json({ message: 'Profile created successfully.'});
@@ -73,7 +73,7 @@ export default class ProfileController {
     async update(request: Request, response: Response) {
         try {
             const { first_name, surname, url_photo, birthday, biography, facebook_profile, twitter_profile, instagram_profile, personal_site_url } = request.body;
-            const user_id = getUserId(request.headers.session);
+            const user_id = getUserId(String(request.headers.session));
             const updated_at = new Date();
 
             const update = await connection('profile')
@@ -91,8 +91,8 @@ export default class ProfileController {
                     updated_at
                 });
 
-            if (update != 1) {
-                throw new Exception();
+            if (update !== 1) {
+                throw "Error on update this profile.";
             }
 
             return response.status(200).json({ message: 'Profile updated successfully.'});

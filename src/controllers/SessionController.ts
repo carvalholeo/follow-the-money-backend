@@ -14,8 +14,8 @@ export default class SessionController {
     async create(request: Request, response: Response) {
         try {
             const { username, password, remember = false } = request.body;
-            const { ip_address } = request.connection.remoteAddress;
-            const { user_agent } = request.headers["user-agent"];
+            const ip_address = request.connection.remoteAddress;
+            const user_agent = request.headers["user-agent"];
             const authorization_id = generateUniqueId();
 
             const user = await connection('users')
@@ -70,7 +70,7 @@ export default class SessionController {
 
     async destroy(request: Request, response: Response) {
         try {
-            const authorization_id = request.headers.session;
+            const authorization_id = String(request.headers.session);
 
             const authorization_deleted = await connection('sessions')
                 .where('authorization_id', authorization_id)
@@ -93,7 +93,7 @@ export default class SessionController {
     async destroyAll(request: Request, response: Response) {
         try {
             const authorization_id = request.headers.session;
-            const user_id = await getUserId(authorization_id);
+            const user_id = await getUserId(String(authorization_id));
 
             const authorization_deleted = await connection('sessions')
                 .where('user_id', '=', user_id)
@@ -118,14 +118,12 @@ export default class SessionController {
             return response.status(501)
                 .json({ error: "Don't try hack me. Get out from here!!!1" });
 
-            const user_id = await getUserId(request.headers.session);
+            const user_id = await getUserId(String(request.headers.session));
             const mfa_secret = await getSecret(user_id);
 
-            console.log(QRCode);
             return response.status(100)
                 .json({ 
-                    message: "Please, do the Two-factor authentication to enter the system.",
-                    QRCode
+                    message: "Please, do the Two-factor authentication to enter the system."
                 });
 
         } catch (error) {
@@ -140,7 +138,7 @@ export default class SessionController {
         try {
             const authorization_id = request.headers.session;
             const { mfa_code } = request.body;
-            const user_id = await getUserId(authorization_id);
+            const user_id = await getUserId(String(authorization_id));
             const mfa_secret = await getSecret(user_id);
 
             const token_otp = speakeasy.totp({
@@ -156,7 +154,7 @@ export default class SessionController {
             });
 
             const token = jwt.sign({ authorization_id }, options.secret, {
-                expiresIn: time_to_expire,
+                expiresIn: options.expires_in,
             });
 
             if(tokenValidated) {

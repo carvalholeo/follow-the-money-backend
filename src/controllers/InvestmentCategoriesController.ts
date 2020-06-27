@@ -17,7 +17,7 @@ export default class InvestmentCategoriesController {
                 });
 
             if (!investment_added) {
-                throw new Exception();
+                throw "Error on create a new investment category.";
             }
 
             return response.status(201).json({ message: 'Investment category created successfully.'});

@@ -7,7 +7,7 @@ export default class EspensesController {
     async create(request: Request, response: Response) {
         try {
             const { source, expense_type_id, expense_category_id, expected_amount, paid_amount, due_date, payday, reference_month, is_paid } = request.body;
-            const user_id = getUserId(request.headers.session);
+            const user_id = getUserId(String(request.headers.session));
             const created_at = new Date();
             const updated_at = new Date();
 
@@ -28,7 +28,7 @@ export default class EspensesController {
                 });
 
             if (!expenses_added) {
-                throw new Exception();
+                throw "Error on create a new expense.";
             }
 
             return response.status(201).json({ message: 'Expense added successfully.'});
@@ -42,7 +42,7 @@ export default class EspensesController {
     async delete(request: Request, response: Response) {
         try {
             const { id } = request.params;
-            const user_id = getUserId(request.headers.session);
+            const user_id = getUserId(String(request.headers.session));
 
             const delete_expenses = await connection('expenses')
                 .where({
@@ -68,7 +68,7 @@ export default class EspensesController {
         try {
             const { source, expense_type_id, expense_category_id, expected_amount, paid_amount, due_date, payday, reference_month, is_paid } = request.body;
             const { id } = request.params;
-            const user_id = getUserId(request.headers.session);
+            const user_id = getUserId(String(request.headers.session));
             const updated_at = new Date();
 
             const update = await connection('expenses')
@@ -104,7 +104,7 @@ export default class EspensesController {
 
     async index(request: Request, response: Response) {
         try {
-            const user_id = getUserId(request.headers.session);
+            const user_id = getUserId(String(request.headers.session));
             const { page = 1 } = request.query;
 
             const [count] = await connection('expenses')
@@ -116,7 +116,7 @@ export default class EspensesController {
                 .join('expense_types', 'expense_types.id', '=', 'expenses.expense_type_id')
                 .join('expense_categories', 'expense_categories.id', '=', 'expenses.expense_category_id')
                 .limit(25)
-                .offset((page - 1) * 25)
+                .offset((Number(page) - 1) * 25)
                 .select([
                     'expenses.source',
                     'expense_types.name',

@@ -17,7 +17,7 @@ export default class ExpenseCategoriesController {
                 });
 
             if (!expense_added) {
-                throw new Exception();
+                throw "Error on create a new expense category."
             }
 
             return response.status(201).json({ message: 'Expense category created successfully.'});

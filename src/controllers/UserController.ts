@@ -35,13 +35,13 @@ export default class UserController {
     
     async block(request:Request, response: Response, next: NextFunction) {
         try {
-            const user_id = await getUserId(request.headers.session);
+            const user_id = await getUserId(String(request.headers.session));
 
             const active = await connection('users')
                 .where('id', '=', user_id)
                 .update({is_active: 0});
 
-            if (active == 1) {
+            if (active === 1) {
                 next();
                 return response.status(200)
                     .json({ message: "Your user was blocked successfully. To unblock, contact system administrator. You're now logout."});
@@ -53,7 +53,7 @@ export default class UserController {
     
     async delete(request:Request, response: Response, next: NextFunction) {
         try {
-            const user_id = await getUserId(request.headers.session);
+            const user_id = await getUserId(String(request.headers.session));
 
             const delete_user = await connection('users')
                 .where('id', '=', user_id)
@@ -74,7 +74,7 @@ export default class UserController {
     async update(request:Request, response: Response) {
         try {
             const { email, password } = request.body;
-            const user_id = await getUserId(request.headers.session);
+            const user_id = await getUserId(String(request.headers.session));
 
             const salt = bcrypt.genSaltSync(10);
             const hash = bcrypt.hashSync(password, salt);

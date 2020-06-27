@@ -17,7 +17,7 @@ export default class RevenueCategoriesController {
                 });
 
             if (!revenue_added) {
-                throw new Exception();
+                throw "Error on create a new revenue category.";
             }
 
             return response.status(201).json({ message: 'Revenue category created successfully.'});
