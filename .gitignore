@@ -4,3 +4,4 @@ src/database/*.sqlite
 .env
 .vscode/
 dist/
+coverage/
