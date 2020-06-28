@@ -4,7 +4,7 @@
   "description": "Package made in TypeScript, using Express, Node, and Knex, for personal financial control.",
   "main": "dist/src/server.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test jest",
+    "test": "cross-env NODE_ENV=test jest --coverage && coveralls < coverage/lcov.info",
     "start": "cross-env NODE_ENV=production nodemon dist/src/server.js",
     "dev": "cross-env NODE_ENV=development ts-node-dev --transpileOnly --ignore-watch node_modules src/server.ts",
     "build": "tsc --removecomments --types --outDir dist/",
@@ -49,6 +49,7 @@
     "@types/mocha": "^7.0.2",
     "@types/speakeasy": "^2.0.5",
     "@types/supertest": "^2.0.9",
+    "coveralls": "^3.1.0",
     "jest": "^26.1.0",
     "nodemon": "^2.0.4",
     "supertest": "^4.0.2",
