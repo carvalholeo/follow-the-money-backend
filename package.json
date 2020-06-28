@@ -5,9 +5,9 @@
   "main": "dist/src/server.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test jest --no-cache",
-    "start": "nodemon dist/src/server.js",
-    "dev": "ts-node-dev --transpileOnly --ignore-watch node_modules src/server.ts",
-    "build": "tsc  --removecomments --types --outDir dist/",
+    "start": "cross-env NODE_ENV=production nodemon dist/src/server.js",
+    "dev": "cross-env NODE_ENV=development ts-node-dev --transpileOnly --ignore-watch node_modules src/server.ts",
+    "build": "tsc --removecomments --types --outDir dist/",
     "knex:latest": "knex --knexfile knexfile.ts migrate:latest",
     "knex:rollback": "knex --knexfile knexfile.ts migrate:rollback",
     "knex:seed": "knex --knexfile knexfile.ts seed:run"
