@@ -6,18 +6,22 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    steps:
-    
-    - uses: actions/checkout@v1
 
-    - name: Use Node.js 10.x
+    steps:
+      strategy:
+        matrix:
+          node-version: [10.x, 12.x, 14.x]
+
+    - uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
-        node-version: 12.x
+        node-version: ${{ matrix.node-version }}
 
-    - name: npm install, run tests
+    - name: npm ci, run tests
       run: |
-        npm install
+        npm ci
         npm run test
 
     - name: Coveralls
