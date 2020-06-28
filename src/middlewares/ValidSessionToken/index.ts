@@ -13,12 +13,12 @@ export default async (request: Request, response: Response, next: NextFunction) 
             .where('authorization_id', token)
             .select('*');
     
-        if(!is_valid) {
-            return response.status(401)
-                    .json({ message: "Authorization token isn't valid. Login in the system and try again." });
+        if(is_valid) {
+            next();
         }
+        return response.status(401)
+                .json({ message: "Authorization token isn't valid. Login in the system and try again." });
     
-        next();
     } catch (error) {
         logger.makeLog('ValidateSessionMiddleware', error);
         return response.status(500)

@@ -1,5 +1,4 @@
 import { Segments, Joi } from 'celebrate';
-import headers from './TokenValidator';
 
 export default {
     mfaRequired() {

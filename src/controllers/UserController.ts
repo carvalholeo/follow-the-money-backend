@@ -44,11 +44,12 @@ export default class UserController {
                 .where('id', '=', user_id)
                 .update({is_active: 0});
 
-            if (active === 1) {
-                next();
-                return response.status(200)
-                    .json({ message: "Your user was blocked successfully. To unblock, contact system administrator. You're now logout."});
-            }
+            if (active !== 1) {
+                throw `Cannot block user ${user_id}`;
+            } 
+            next();
+            return response.status(200)
+                .json({ message: "Your user was blocked successfully. To unblock, contact system administrator. You're now logout."});
         } catch (error) {
             logger.makeLog('BlockUser', error);
             return response.status(400).json({ error: "There was an error. Probably, this user was blocked previously. Ask support to the system administrator." });
@@ -63,11 +64,13 @@ export default class UserController {
                 .where('id', '=', user_id)
                 .del('*');
 
-            if (delete_user) {
-                next();
-                return response.status(200)
-                    .json({ message: "Your user was deleted successfully. All your data also were deleted and we're unable to recover it. You're now logout from all of the sessions and devices."});
+            if (!delete_user) {
+                throw `Cannot delete user ${user_id}`;
+                
             }
+            next();
+            return response.status(200)
+                .json({ message: "Your user was deleted successfully. All your data also were deleted and we're unable to recover it. You're now logout from all of the sessions and devices."});
             
         } catch (error) {
             logger.makeLog('DeleteUser', error);
@@ -87,10 +90,11 @@ export default class UserController {
                 .where('id', '=', user_id)
                 .update({ email, password: hash });
 
-            if(user === 1) {
-                return response.status(200)
-                    .json({ message: "User data updated successfully."});
+            if(user !== 1) {
+                throw `Cannot update user ${user_id}`;
             }
+            return response.status(200)
+                .json({ message: "User data updated successfully."});
         } catch (error) {
             logger.makeLog('UpdateUser', error);
             return response.status(400)

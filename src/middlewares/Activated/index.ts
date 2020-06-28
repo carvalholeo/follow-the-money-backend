@@ -14,12 +14,11 @@ export default async (request: Request, response: Response, next: NextFunction) 
             .where('id', id)
             .select('is_active');
     
-        if(!activated.is_active) {
-            return response.status(403)
-                .json({ message: "Your user is blocked. If you think that it's an error, contact system administrator to support." });
+        if(activated.is_active) {
+            next();
         }
-    
-        next();
+        return response.status(403)
+            .json({ message: "Your user is blocked. If you think that it's an error, contact system administrator to support." });
     } catch (error) {
         logger.makeLog('ActivatedMiddleware', error);
         return response.status(500)

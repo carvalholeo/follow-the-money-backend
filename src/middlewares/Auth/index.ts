@@ -5,18 +5,16 @@ import options from '../../config/auth';
 
 export default (request: Request, response: Response, next: NextFunction) => {
     const authHeader = String(request.headers.token);
+    const parts = authHeader.split(" ");
+    const [scheme, token] = parts;
 
     if(!authHeader) {
         return response.status(401).send({ error: 'No token provided.' });
     }
 
-    const parts = authHeader.split(" ");
-
     if(parts.length !== 2) {
         return response.status(401).send({ error: 'Failed to process request.' });
     }
-
-    const [scheme, token] = parts;
 
     if(!/Bearer/i.test(scheme)) {
         return response.status(401).send({ error: 'Malformed token.' });
