@@ -1,8 +1,8 @@
 {
-  "name": "backend",
+  "name": "follow-the-money",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Package made in TypeScript, using Express, Node, and Knex, for personal financial control.",
+  "main": "dist/src/server.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test jest",
     "start": "nodemon dist/src/server.js",
@@ -12,9 +12,9 @@
     "knex:rollback": "knex --knexfile knexfile.ts migrate:rollback",
     "knex:seed": "knex --knexfile knexfile.ts seed:run"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["financial control", "money", "api"],
+  "author": "Leo Carvalho",
+  "license": "AGPL",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "celebrate": "^12.1.1",
