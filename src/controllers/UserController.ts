@@ -28,11 +28,17 @@ export default class UserController {
           updated_at
         });
 
-      return response.status(201).json({ message: "User created successfully."});
+      return response
+        .status(201)
+        .json({ message: "User created successfully."});
 
     } catch (error) {
+
       logger.makeLog("CreateUser", error);
-      return response.status(400).json({ error: "There was an error. Probably, this user was created previously. Ask support to the system administrator." });
+
+      return response
+        .status(400)
+        .json({ error: "There was an error. Probably, this user was created previously. Ask support to the system administrator." });
     }
   }
     
@@ -45,14 +51,23 @@ export default class UserController {
         .update({is_active: 0});
 
       if (active !== 1) {
+
         throw `Cannot block user ${user_id}`;
-      } 
+      }
+
       next();
-      return response.status(200)
+
+      return response
+        .status(200)
         .json({ message: "Your user was blocked successfully. To unblock, contact system administrator. You're now logout."});
+
     } catch (error) {
+
       logger.makeLog("BlockUser", error);
-      return response.status(400).json({ error: "There was an error. Probably, this user was blocked previously. Ask support to the system administrator." });
+
+      return response
+        .status(400)
+        .json({ error: "There was an error. Probably, this user was blocked previously. Ask support to the system administrator." });
     }
   }
     
@@ -65,16 +80,23 @@ export default class UserController {
         .del("*");
 
       if (!delete_user) {
+
         throw `Cannot delete user ${user_id}`;
-                
       }
+
       next();
-      return response.status(200)
+
+      return response
+        .status(200)
         .json({ message: "Your user was deleted successfully. All your data also were deleted and we're unable to recover it. You're now logout from all of the sessions and devices."});
             
     } catch (error) {
+
       logger.makeLog("DeleteUser", error);
-      return response.status(400).json({ error: "There was an error. Probably, this user was deleted previously. Ask support to the system administrator." });
+
+      return response
+        .status(400)
+        .json({ error: "There was an error. Probably, this user was deleted previously. Ask support to the system administrator." });
     }
   }
 
@@ -91,13 +113,20 @@ export default class UserController {
         .update({ email, password: hash });
 
       if(user !== 1) {
+
         throw `Cannot update user ${user_id}`;
       }
-      return response.status(200)
+
+      return response
+        .status(200)
         .json({ message: "User data updated successfully."});
+
     } catch (error) {
+
       logger.makeLog("UpdateUser", error);
-      return response.status(400)
+
+      return response
+        .status(400)
         .json({ message: "There was an error. The system administrator was notified and working to solve this." });
     }
         

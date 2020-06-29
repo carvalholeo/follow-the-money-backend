@@ -31,14 +31,21 @@ export default class EspensesController {
         });
 
       if (!expenses_added) {
+
         throw "Error on create a new expense.";
       }
 
-      return response.status(201).json({ message: "Expense added successfully."});
+      return response
+        .status(201)
+        .json({ message: "Expense added successfully."});
 
     } catch (error) {
+
       logger.makeLog("CreateExpense", error);
-      return response.status(500).json({ error: "There was an error. The system administrator was notified and working to solve this." });
+
+      return response
+        .status(500)
+        .json({ error: "There was an error. The system administrator was notified and working to solve this." });
     }
   }
     
@@ -55,15 +62,23 @@ export default class EspensesController {
         .del("*");
 
       if (delete_expenses) {
-        return response.status(200)
+
+        return response
+          .status(200)
           .json({ message: "Expenses deleted successfully."});
       }
-      return response.status(406)
+
+      return response
+        .status(406)
         .json({ message: "Expenses previously deleted." });
             
     } catch (error) {
+      
       logger.makeLog("DeleteExpense", error);
-      return response.status(400).json({ error: "There was an error. Probably, this expense was deleted previously. Ask support to the system administrator." });
+
+      return response
+        .status(400)
+        .json({ error: "There was an error. Probably, this expense was deleted previously. Ask support to the system administrator." });
     }
   }
 
@@ -93,14 +108,22 @@ export default class EspensesController {
         });
 
       if(update === 1) {
-        return response.status(200)
+
+        return response
+          .status(200)
           .json({ message: "Expense updated successfully." });
       }
-      return response.status(400)
+
+      return response
+        .status(400)
         .json({ message: "ID passed doesn't exist. Try again with a valid ID." });
+
     } catch (error) {
+
       logger.makeLog("UpdateExpense", error);
-      return response.status(500)
+
+      return response
+        .status(500)
         .json({ message: "There was an error. The system administrator was notified and working to solve this." });
     }
   }
@@ -136,10 +159,16 @@ export default class EspensesController {
             
       response.header("X-Total-Count", count["count(*)"]);
 
-      return response.status(200).json({ expenses });
+      return response
+        .status(200)
+        .json({ expenses });
+
     } catch (error) {
+
       logger.makeLog("GetExpenses", error);
-      return response.status(500)
+
+      return response
+        .status(500)
         .json({ message: "There was an error. The system administrator was notified and working to solve this." });
     }
         

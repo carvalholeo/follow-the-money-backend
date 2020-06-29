@@ -28,14 +28,21 @@ export default class ProfileController {
         ]);
 
       if (!profile) {
+
         throw "Error on get this profile.";    
       }
 
-      return response.status(200).json({ profile });
+      return response
+        .status(200)
+        .json({ profile });
 
     } catch (error) {
+
       logger.makeLog("GetProfile", error);
-      return response.status(500).json({ error: "There was an error. The system administrator was notified and working to solve this." });
+
+      return response
+        .status(500)
+        .json({ error: "There was an error. The system administrator was notified and working to solve this." });
     }
   }
 
@@ -63,14 +70,21 @@ export default class ProfileController {
         });
 
       if (!profile_added) {
+
         throw "Error on create this profile";
       }
 
-      return response.status(201).json({ message: "Profile created successfully."});
+      return response
+        .status(201)
+        .json({ message: "Profile created successfully."});
 
     } catch (error) {
+
       logger.makeLog("CreateProfile", error);
-      return response.status(500).json({ error: "There was an error. The system administrator was notified and working to solve this." });
+
+      return response
+        .status(500)
+        .json({ error: "There was an error. The system administrator was notified and working to solve this." });
     }
   }
 
@@ -96,14 +110,21 @@ export default class ProfileController {
         });
 
       if (update !== 1) {
+
         throw "Error on update this profile.";
       }
 
-      return response.status(200).json({ message: "Profile updated successfully."});
+      return response
+        .status(200)
+        .json({ message: "Profile updated successfully."});
 
     } catch (error) {
+
       logger.makeLog("UpdateProfile", error);
-      return response.status(500).json({ error: "There was an error. The system administrator was notified and working to solve this." });
+
+      return response
+        .status(500)
+        .json({ error: "There was an error. The system administrator was notified and working to solve this." });
     }
   }
 }

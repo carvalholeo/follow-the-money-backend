@@ -20,14 +20,21 @@ export default class RevenueCategoriesController {
         });
 
       if (!revenue_added) {
+
         throw "Error on create a new revenue category.";
       }
 
-      return response.status(201).json({ message: "Revenue category created successfully."});
+      return response
+        .status(201)
+        .json({ message: "Revenue category created successfully."});
 
     } catch (error) {
+
       logger.makeLog("CreateRevenueCategory", error);
-      return response.status(500).json({ error: "There was an error. The system administrator was notified and working to solve this." });
+
+      return response
+        .status(500)
+        .json({ error: "There was an error. The system administrator was notified and working to solve this." });
     }
   }
     
@@ -40,15 +47,23 @@ export default class RevenueCategoriesController {
         .del("*");
 
       if (delete_revenue_category) {
-        return response.status(200)
+
+        return response
+          .status(200)
           .json({ message: "Revenue category deleted successfully."});
       }
-      return response.status(406)
+
+      return response
+        .status(406)
         .json({ message: "Revenue category previously deleted." });
             
     } catch (error) {
+
       logger.makeLog("DeleteRevenueCategory", error);
-      return response.status(400).json({ error: "There was an error. Probably, this revenue category was deleted previously. Ask support to the system administrator." });
+
+      return response
+        .status(400)
+        .json({ error: "There was an error. Probably, this revenue category was deleted previously. Ask support to the system administrator." });
     }
   }
 
@@ -64,17 +79,24 @@ export default class RevenueCategoriesController {
         .update({ name, updated_at });
 
       if(update === 1) {
-        return response.status(200)
+
+        return response
+          .status(200)
           .json({ message: "Revenue category updated successfully." });
       }
-      return response.status(400)
+
+      return response
+        .status(400)
         .json({ message: "ID passed doesn't exist. Try again with a valid ID." });
+
     } catch (error) {
+
       logger.makeLog("UpdateRevenueCategory", error);
-      return response.status(500)
+
+      return response
+        .status(500)
         .json({ message: "There was an error. The system administrator was notified and working to solve this." });
-    }
-        
+    } 
   }
 
   async index(request: Request, response: Response): Promise<Response> {
@@ -82,11 +104,16 @@ export default class RevenueCategoriesController {
       const categories = await connection("revenue_categories")
         .select("*");
 
-      return response.status(200)
+      return response
+        .status(200)
         .json({ revenue_categories: categories });
+
     } catch (error) {
+
       logger.makeLog("GetRevenueCategories", error);
-      return response.status(500)
+
+      return response
+        .status(500)
         .json({ message: "There was an error. The system administrator was notified and working to solve this." });
     }
         

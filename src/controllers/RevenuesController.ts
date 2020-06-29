@@ -30,14 +30,21 @@ export default class RevenuesController {
         });
 
       if (!revenues_added) {
+
         throw "Error on create a new revenue.";
       }
 
-      return response.status(201).json({ message: "Revenue added successfully."});
+      return response
+        .status(201)
+        .json({ message: "Revenue added successfully."});
 
     } catch (error) {
+
       logger.makeLog("CreateRevenue", error);
-      return response.status(500).json({ error: "There was an error. The system administrator was notified and working to solve this." });
+
+      return response
+        .status(500)
+        .json({ error: "There was an error. The system administrator was notified and working to solve this." });
     }
   }
     
@@ -54,15 +61,23 @@ export default class RevenuesController {
         .del("*");
 
       if (delete_revenue) {
-        return response.status(200)
+
+        return response
+          .status(200)
           .json({ message: "Revenue deleted successfully."});
       }
-      return response.status(406)
+
+      return response
+        .status(406)
         .json({ message: "Expenses previously deleted." });
             
     } catch (error) {
+
       logger.makeLog("DeleteRevenue", error);
-      return response.status(400).json({ error: "There was an error. Probably, this revenue was deleted previously. Ask support to the system administrator." });
+
+      return response
+        .status(400)
+        .json({ error: "There was an error. Probably, this revenue was deleted previously. Ask support to the system administrator." });
     }
   }
 
@@ -92,14 +107,22 @@ export default class RevenuesController {
         });
 
       if(update === 1) {
-        return response.status(200)
+
+        return response
+          .status(200)
           .json({ message: "Revenue updated successfully." });
       }
-      return response.status(400)
+
+      return response
+        .status(400)
         .json({ message: "ID passed doesn't exist. Try again with a valid ID." });
+
     } catch (error) {
+
       logger.makeLog("UpdateRevenue", error);
-      return response.status(500)
+
+      return response
+        .status(500)
         .json({ message: "There was an error. The system administrator was notified and working to solve this." });
     }
         
@@ -110,7 +133,6 @@ export default class RevenuesController {
       const user_id = getUserId(String(request.headers.session));
       const { page = 1 } = request.query;
 
-            
       const [count] = await connection("revenues")
         .where({ user_id })
         .count();
@@ -135,11 +157,16 @@ export default class RevenuesController {
             
       response.header("X-Total-Count", count["count(*)"]);
 
-      return response.status(200).json({ revenues });
+      return response
+        .status(200)
+        .json({ revenues });
 
     } catch (error) {
+
       logger.makeLog("GetRevenues", error);
-      return response.status(500)
+
+      return response
+        .status(500)
         .json({ message: "There was an error. The system administrator was notified and working to solve this." });
     }
         
