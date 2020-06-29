@@ -14,7 +14,7 @@ const logger = new Logger();
 
 
 export default class SessionController {
-  async create(request: Request, response: Response) {
+  async create(request: Request, response: Response): Promise<Response> {
     try {
       const { username, password, remember = false } = request.body;
       const ip_address = request.connection.remoteAddress;
@@ -71,7 +71,7 @@ export default class SessionController {
     }
   }
 
-  async destroy(request: Request, response: Response) {
+  async destroy(request: Request, response: Response): Promise<Response> {
     try {
       const authorization_id = String(request.headers.session);
 
@@ -94,7 +94,7 @@ export default class SessionController {
         
   }
 
-  async destroyAll(request: Request, response: Response) {
+  async destroyAll(request: Request, response: Response): Promise<Response> {
     try {
       const authorization_id = request.headers.session;
       const user_id = await getUserId(String(authorization_id));
@@ -118,7 +118,7 @@ export default class SessionController {
         
   }
 
-  async showMFA(request: Request, response: Response) {
+  async showMFA(request: Request, response: Response): Promise<Response> {
     try {
       return response.status(501)
         .json({ error: "Don't try hack me. Get out from here!!!1" });
@@ -139,7 +139,7 @@ export default class SessionController {
 
   }
 
-  async validateMFA(request: Request, response: Response) {
+  async validateMFA(request: Request, response: Response): Promise<Response> {
     try {
       const authorization_id = request.headers.session;
       const { mfa_code } = request.body;

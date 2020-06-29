@@ -5,7 +5,7 @@ import Logger from "../utils/Logger";
 
 const logger = new Logger();
 export default class ExpenseTypesController {
-  async create(request: Request, response: Response) {
+  async create(request: Request, response: Response): Promise<Response> {
     try {
       const { name } = request.body;
       const created_at = new Date();
@@ -30,7 +30,7 @@ export default class ExpenseTypesController {
     }
   }
     
-  async delete(request: Request, response: Response) {
+  async delete(request: Request, response: Response): Promise<Response> {
     try {
       const { id } = request.params;
 
@@ -51,7 +51,7 @@ export default class ExpenseTypesController {
     }
   }
 
-  async update(request: Request, response: Response) {
+  async update(request: Request, response: Response): Promise<Response> {
     try {
       const { name } = request.body;
       const { id } = request.params;
@@ -75,7 +75,7 @@ export default class ExpenseTypesController {
         
   }
 
-  async index(request: Request, response: Response) {
+  async index(request: Request, response: Response): Promise<Response> {
     try {
       const categories = await connection("expense_types")
         .select("*");

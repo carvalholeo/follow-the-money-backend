@@ -3,7 +3,7 @@ import Logger from "./Logger";
 
 const logger = new Logger();
 
-export default async function getUserId(session_token: string) {
+export default async function getUserId(session_token: string): Promise<number> {
   try {
     const [{ id }] = await connection("sessions")
       .where({ 

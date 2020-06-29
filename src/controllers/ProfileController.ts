@@ -7,7 +7,7 @@ import Logger from "../utils/Logger";
 const logger = new Logger();
 
 export default class ProfileController {
-  async index(request: Request, response: Response) {
+  async index(request: Request, response: Response): Promise<Response> {
     try {
       const user_id = getUserId(String(request.headers.session));
 
@@ -39,7 +39,7 @@ export default class ProfileController {
     }
   }
 
-  async create(request: Request, response: Response) {
+  async create(request: Request, response: Response): Promise<Response> {
     try {
       const { first_name, surname, url_photo, birthday, biography, facebook_profile, twitter_profile, instagram_profile, personal_site_url } = request.body;
       const user_id = getUserId(String(request.headers.session));
@@ -74,7 +74,7 @@ export default class ProfileController {
     }
   }
 
-  async update(request: Request, response: Response) {
+  async update(request: Request, response: Response): Promise<Response> {
     try {
       const { first_name, surname, url_photo, birthday, biography, facebook_profile, twitter_profile, instagram_profile, personal_site_url } = request.body;
       const user_id = getUserId(String(request.headers.session));

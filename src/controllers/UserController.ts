@@ -8,7 +8,7 @@ import Logger from "../utils/Logger";
 const logger = new Logger();
 
 export default class UserController {
-  async create(request:Request, response: Response) {
+  async create(request:Request, response: Response): Promise<Response> {
     try {
       const { email, username, password } = request.body;
       const created_at = new Date();
@@ -36,7 +36,7 @@ export default class UserController {
     }
   }
     
-  async block(request:Request, response: Response, next: NextFunction) {
+  async block(request:Request, response: Response, next: NextFunction): Promise<Response> {
     try {
       const user_id = await getUserId(String(request.headers.session));
 
@@ -56,7 +56,7 @@ export default class UserController {
     }
   }
     
-  async delete(request:Request, response: Response, next: NextFunction) {
+  async delete(request:Request, response: Response, next: NextFunction): Promise<Response> {
     try {
       const user_id = await getUserId(String(request.headers.session));
 
@@ -78,7 +78,7 @@ export default class UserController {
     }
   }
 
-  async update(request:Request, response: Response) {
+  async update(request:Request, response: Response): Promise<Response> {
     try {
       const { email, password } = request.body;
       const user_id = await getUserId(String(request.headers.session));

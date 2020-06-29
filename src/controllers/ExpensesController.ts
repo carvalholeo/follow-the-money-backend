@@ -7,7 +7,7 @@ import Logger from "../utils/Logger";
 const logger = new Logger();
 
 export default class EspensesController {
-  async create(request: Request, response: Response) {
+  async create(request: Request, response: Response): Promise<Response> {
     try {
       const { source, expense_type_id, expense_category_id, expected_amount, paid_amount, due_date, payday, reference_month, is_paid } = request.body;
       const user_id = getUserId(String(request.headers.session));
@@ -42,7 +42,7 @@ export default class EspensesController {
     }
   }
     
-  async delete(request: Request, response: Response) {
+  async delete(request: Request, response: Response): Promise<Response> {
     try {
       const { id } = request.params;
       const user_id = getUserId(String(request.headers.session));
@@ -67,7 +67,7 @@ export default class EspensesController {
     }
   }
 
-  async update(request: Request, response: Response) {
+  async update(request: Request, response: Response): Promise<Response> {
     try {
       const { source, expense_type_id, expense_category_id, expected_amount, paid_amount, due_date, payday, reference_month, is_paid } = request.body;
       const { id } = request.params;
@@ -105,7 +105,7 @@ export default class EspensesController {
     }
   }
 
-  async index(request: Request, response: Response) {
+  async index(request: Request, response: Response): Promise<Response> {
     try {
       const user_id = getUserId(String(request.headers.session));
       const { page = 1 } = request.query;

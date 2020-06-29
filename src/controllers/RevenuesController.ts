@@ -7,7 +7,7 @@ import Logger from "../utils/Logger";
 const logger = new Logger();
 
 export default class RevenuesController {
-  async create(request: Request, response: Response) {
+  async create(request: Request, response: Response): Promise<Response> {
     try {
       const { source, revenue_category_id, expected_amount, paid_amount, expected_date, effective_date, reference_month, is_paid } = request.body;
       const user_id = getUserId(String(request.headers.session));
@@ -41,7 +41,7 @@ export default class RevenuesController {
     }
   }
     
-  async delete(request: Request, response: Response) {
+  async delete(request: Request, response: Response): Promise<Response> {
     try {
       const { id } = request.params;
       const user_id = getUserId(String(request.headers.session));
@@ -66,7 +66,7 @@ export default class RevenuesController {
     }
   }
 
-  async update(request: Request, response: Response) {
+  async update(request: Request, response: Response): Promise<Response> {
     try {
       const { source, revenue_category_id, expected_amount, paid_amount, expected_date, effective_date, reference_month, is_paid } = request.body;
       const { id } = request.params;
@@ -105,7 +105,7 @@ export default class RevenuesController {
         
   }
 
-  async index(request: Request, response: Response) {
+  async index(request: Request, response: Response): Promise<Response> {
     try {
       const user_id = getUserId(String(request.headers.session));
       const { page = 1 } = request.query;

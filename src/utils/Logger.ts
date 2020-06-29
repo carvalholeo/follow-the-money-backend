@@ -2,7 +2,7 @@ import { configure, getLogger } from "log4js";
 import path from "path";
 
 class Logger {
-  makeLog(category: string, message: string) {
+  makeLog(category: string, message: string): void {
     const errorFile = path.resolve(__dirname, "logs", "error", "error.log");
     const logger = getLogger(category.toString());
     logger.error(message);
