@@ -16,15 +16,20 @@ export default async (request: Request, response: Response, next: NextFunction) 
       .select("permissions.is_admin");
     
     if(!is_admin.is_admin) {
-      return response.status(403)
+      
+      return response
+        .status(403)
         .json({ message: "Your user doesn't have administrator role. If you think that it's an error, contact system administrator to support." });
     }
 
     next();
     
   } catch (error) {
+
     logger.makeLog("AdminMiddleware", error);
-    return response.status(500)
+
+    return response
+      .status(500)
       .json({ error: "There was an error on server. Try again later." });
   }
 }

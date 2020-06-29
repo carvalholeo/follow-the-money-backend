@@ -14,15 +14,19 @@ export default async (request: Request, response: Response, next: NextFunction) 
       .select("*");
     
     if(!is_valid) {
-      return response.status(401)
+      return response
+        .status(401)
         .json({ message: "Authorization token isn't valid. Login in the system and try again." });
     }
 
     next();
 
   } catch (error) {
+
     logger.makeLog("ValidateSessionMiddleware", error);
-    return response.status(500)
+
+    return response
+      .status(500)
       .json({ error: "There was an error on server. Try again later." });
   }
 }

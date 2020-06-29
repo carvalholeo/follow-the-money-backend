@@ -15,7 +15,9 @@ export default async (request: Request, response: Response, next: NextFunction) 
       .select("is_active");
     
     if(!activated.is_active) {
-      return response.status(403)
+
+      return response
+        .status(403)
         .json({ message: "Your user is blocked. If you think that it's an error, contact system administrator to support." });
     }
 
@@ -24,7 +26,9 @@ export default async (request: Request, response: Response, next: NextFunction) 
   } catch (error) {
 
     logger.makeLog("ActivatedMiddleware", error);
-    return response.status(500)
+
+    return response
+      .status(500)
       .json({ error: "There was an error on server. Try again later." });
   }
 }

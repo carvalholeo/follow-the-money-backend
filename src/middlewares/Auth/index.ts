@@ -10,24 +10,40 @@ export default (request: Request, response: Response, next: NextFunction) => {
   const [scheme, token] = parts;
 
   if(!authHeader) {
-    return response.status(401).send({ error: "No token provided." });
+
+    return response
+      .status(401)
+      .send({ error: "No token provided." });
   }
 
   if(parts.length !== 2) {
-    return response.status(401).send({ error: "Failed to process request." });
+
+    return response
+      .status(401)
+      .send({ error: "Failed to process request." });
   }
 
   if(!/Bearer/i.test(scheme)) {
-    return response.status(401).send({ error: "Malformed token." });
+
+    return response
+      .status(401)
+      .send({ error: "Malformed token." });
   }
 
   jwt.verify(token, options.secret, (error: any, decoded: any) => {
+
     if(error) {
-      return response.status(400).send({ error: "Invalid token." });
+
+      return response
+        .status(400)
+        .send({ error: "Invalid token." });
     }
 
     if(sessionToken !== decoded.authorization_id) {
-      return response.status(401).send({ error: "Session key isn't valid to the token provided." });
+      
+      return response
+        .status(401)
+        .send({ error: "Session key isn't valid to the token provided." });
     }
 
     next();
