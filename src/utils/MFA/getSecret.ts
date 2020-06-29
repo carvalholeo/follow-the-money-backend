@@ -1,6 +1,6 @@
 import connection from "../../database/connection";
 
-export default async function getSecret(user_id: number) {
+export default async function getSecret(user_id: number): Promise<string> {
   try {
     const [{secret_mfa}] = await connection("users")
       .where("id", "=", user_id)
