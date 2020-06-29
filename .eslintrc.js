@@ -35,6 +35,8 @@ module.exports = {
       "object": true
     }],
     "prefer-numeric-literals": 2,
+    "require-await": 2,
+    "dot-location": ["error", "property"]
   },
   "globals": {
     "Promise": "off"
