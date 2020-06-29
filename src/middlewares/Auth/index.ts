@@ -5,6 +5,7 @@ import options from "../../config/auth";
 
 export default (request: Request, response: Response, next: NextFunction) => {
   const authHeader = String(request.headers.token);
+  const sessionToken = String(request.headers.session);
   const parts = authHeader.split(" ");
   const [scheme, token] = parts;
 
@@ -25,8 +26,10 @@ export default (request: Request, response: Response, next: NextFunction) => {
       return response.status(400).send({ error: "Invalid token." });
     }
 
-    request.body.username = decoded.username;
+    if(sessionToken !== decoded.authorization_id) {
+      return response.status(401).send({ error: "Session key isn't valid to the token provided." });
+    }
 
-    return next();
+    next();
   });
 }
