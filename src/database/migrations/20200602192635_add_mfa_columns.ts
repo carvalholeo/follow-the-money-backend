@@ -1,7 +1,7 @@
 import Knex from "knex";
 
-export async function up(knex: Knex) {
-  return knex.schema.table("users", table => {
+export async function up(knex: Knex): Promise<void> {
+  return await knex.schema.table("users", table => {
     table.boolean("has_mfa")
       .nullable()
       .defaultTo(false)
@@ -16,8 +16,8 @@ export async function up(knex: Knex) {
   });
 }
 
-export async function down(knex: Knex) {
-  return knex.schema.table("users", function(table) {
+export async function down(knex: Knex): Promise<void> {
+  return await knex.schema.table("users", function(table) {
     table.dropColumns("has_mfa", "secret_mfa");
   });
 }

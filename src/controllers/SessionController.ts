@@ -79,7 +79,7 @@ export default class SessionController {
         .where("authorization_id", authorization_id)
         .del("*"); 
 
-      if (authorization_deleted.length == 0) {
+      if (authorization_deleted.length === 0) {
         return response.status(417)
           .json({ error: "Token passed is invalid. Try again with a valid token." });
       }
