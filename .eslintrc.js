@@ -21,7 +21,7 @@ module.exports = {
     "curly": "error",
     "quotes": ["error", "double"],
     "strict": 2,
-    "camelcase": 2,
+    "camelcase": 0,
     "indent": ["error", 2],
     "comma-spacing": ["error", { "before": false, "after": true }],
     "init-declarations": ["error", "never", { "ignoreForLoopInit": true }],
