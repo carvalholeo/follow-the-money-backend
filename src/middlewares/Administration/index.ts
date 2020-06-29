@@ -15,11 +15,12 @@ export default async (request: Request, response: Response, next: NextFunction) 
       .join("permissions", "permissions.id", "=", "users.permission_id")
       .select("permissions.is_admin");
     
-    if(is_admin.is_admin) {
-      next();
+    if(!is_admin.is_admin) {
+      return response.status(403)
+        .json({ message: "Your user doesn't have administrator role. If you think that it's an error, contact system administrator to support." });
     }
-    return response.status(403)
-      .json({ message: "Your user doesn't have administrator role. If you think that it's an error, contact system administrator to support." });
+
+    next();
     
   } catch (error) {
     logger.makeLog("AdminMiddleware", error);
