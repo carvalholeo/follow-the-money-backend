@@ -1,105 +1,105 @@
-import { Request, Response, NextFunction } from 'express';
-import bcrypt from 'bcryptjs';
+import { Request, Response, NextFunction } from "express";
+import bcrypt from "bcryptjs";
 
-import connection from '../database/connection';
-import getUserId from '../utils/getUserId';
-import Logger from '../utils/Logger';
+import connection from "../database/connection";
+import getUserId from "../utils/getUserId";
+import Logger from "../utils/Logger";
 
 const logger = new Logger();
 
 export default class UserController {
-    async create(request:Request, response: Response) {
-        try {
-            const { email, username, password } = request.body;
-            const created_at = new Date();
-            const updated_at = new Date();
+  async create(request:Request, response: Response) {
+    try {
+      const { email, username, password } = request.body;
+      const created_at = new Date();
+      const updated_at = new Date();
 
-            const salt = bcrypt.genSaltSync(10);
-            const hash = bcrypt.hashSync(password, salt);
+      const salt = bcrypt.genSaltSync(10);
+      const hash = bcrypt.hashSync(password, salt);
 
-            await connection('users')
-                .insert({
-                email,
-                username,
-                password: hash,
-                is_active: 1,
-                permission_id: 1,
-                created_at,
-                updated_at
-                });
+      await connection("users")
+        .insert({
+          email,
+          username,
+          password: hash,
+          is_active: 1,
+          permission_id: 1,
+          created_at,
+          updated_at
+        });
 
-            return response.status(201).json({ message: 'User created successfully.'});
+      return response.status(201).json({ message: "User created successfully."});
 
-        } catch (error) {
-            logger.makeLog('CreateUser', error);
-            return response.status(400).json({ error: "There was an error. Probably, this user was created previously. Ask support to the system administrator." });
-        }
+    } catch (error) {
+      logger.makeLog("CreateUser", error);
+      return response.status(400).json({ error: "There was an error. Probably, this user was created previously. Ask support to the system administrator." });
     }
+  }
     
-    async block(request:Request, response: Response, next: NextFunction) {
-        try {
-            const user_id = await getUserId(String(request.headers.session));
+  async block(request:Request, response: Response, next: NextFunction) {
+    try {
+      const user_id = await getUserId(String(request.headers.session));
 
-            const active = await connection('users')
-                .where('id', '=', user_id)
-                .update({is_active: 0});
+      const active = await connection("users")
+        .where("id", "=", user_id)
+        .update({is_active: 0});
 
-            if (active !== 1) {
-                throw `Cannot block user ${user_id}`;
-            } 
-            next();
-            return response.status(200)
-                .json({ message: "Your user was blocked successfully. To unblock, contact system administrator. You're now logout."});
-        } catch (error) {
-            logger.makeLog('BlockUser', error);
-            return response.status(400).json({ error: "There was an error. Probably, this user was blocked previously. Ask support to the system administrator." });
-        }
+      if (active !== 1) {
+        throw `Cannot block user ${user_id}`;
+      } 
+      next();
+      return response.status(200)
+        .json({ message: "Your user was blocked successfully. To unblock, contact system administrator. You're now logout."});
+    } catch (error) {
+      logger.makeLog("BlockUser", error);
+      return response.status(400).json({ error: "There was an error. Probably, this user was blocked previously. Ask support to the system administrator." });
     }
+  }
     
-    async delete(request:Request, response: Response, next: NextFunction) {
-        try {
-            const user_id = await getUserId(String(request.headers.session));
+  async delete(request:Request, response: Response, next: NextFunction) {
+    try {
+      const user_id = await getUserId(String(request.headers.session));
 
-            const delete_user = await connection('users')
-                .where('id', '=', user_id)
-                .del('*');
+      const delete_user = await connection("users")
+        .where("id", "=", user_id)
+        .del("*");
 
-            if (!delete_user) {
-                throw `Cannot delete user ${user_id}`;
+      if (!delete_user) {
+        throw `Cannot delete user ${user_id}`;
                 
-            }
-            next();
-            return response.status(200)
-                .json({ message: "Your user was deleted successfully. All your data also were deleted and we're unable to recover it. You're now logout from all of the sessions and devices."});
+      }
+      next();
+      return response.status(200)
+        .json({ message: "Your user was deleted successfully. All your data also were deleted and we're unable to recover it. You're now logout from all of the sessions and devices."});
             
-        } catch (error) {
-            logger.makeLog('DeleteUser', error);
-            return response.status(400).json({ error: "There was an error. Probably, this user was deleted previously. Ask support to the system administrator." });
-        }
+    } catch (error) {
+      logger.makeLog("DeleteUser", error);
+      return response.status(400).json({ error: "There was an error. Probably, this user was deleted previously. Ask support to the system administrator." });
     }
+  }
 
-    async update(request:Request, response: Response) {
-        try {
-            const { email, password } = request.body;
-            const user_id = await getUserId(String(request.headers.session));
+  async update(request:Request, response: Response) {
+    try {
+      const { email, password } = request.body;
+      const user_id = await getUserId(String(request.headers.session));
 
-            const salt = bcrypt.genSaltSync(10);
-            const hash = bcrypt.hashSync(password, salt);
+      const salt = bcrypt.genSaltSync(10);
+      const hash = bcrypt.hashSync(password, salt);
             
-            const user = await connection('users')
-                .where('id', '=', user_id)
-                .update({ email, password: hash });
+      const user = await connection("users")
+        .where("id", "=", user_id)
+        .update({ email, password: hash });
 
-            if(user !== 1) {
-                throw `Cannot update user ${user_id}`;
-            }
-            return response.status(200)
-                .json({ message: "User data updated successfully."});
-        } catch (error) {
-            logger.makeLog('UpdateUser', error);
-            return response.status(400)
-                    .json({ message: "There was an error. The system administrator was notified and working to solve this." });
-        }
+      if(user !== 1) {
+        throw `Cannot update user ${user_id}`;
+      }
+      return response.status(200)
+        .json({ message: "User data updated successfully."});
+    } catch (error) {
+      logger.makeLog("UpdateUser", error);
+      return response.status(400)
+        .json({ message: "There was an error. The system administrator was notified and working to solve this." });
+    }
         
-    }
+  }
 }

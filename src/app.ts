@@ -1,10 +1,10 @@
-import express from 'express';
-import { errors } from 'celebrate';
-import cors from 'cors';
-import compression from 'compression';
-import helmet from 'helmet';
+import express from "express";
+import { errors } from "celebrate";
+import cors from "cors";
+import compression from "compression";
+import helmet from "helmet";
 
-import routes from './routes/routes';
+import routes from "./routes/routes";
 
 const app = express();
 

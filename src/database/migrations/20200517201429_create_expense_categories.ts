@@ -1,11 +1,11 @@
-import Knex from 'knex';
+import Knex from "knex";
 
 export async function up(knex: Knex) {
-  return knex.schema.createTable('expense_categories', table => {
-    table.increments('id')
+  return knex.schema.createTable("expense_categories", table => {
+    table.increments("id")
       .primary();
 
-    table.string('name', 100)
+    table.string("name", 100)
       .notNullable();
       
     table.timestamps();
@@ -13,5 +13,5 @@ export async function up(knex: Knex) {
 }
 
 export async function down(knex: Knex) {
-  return knex.schema.dropTable('expense_categories');
-};
+  return knex.schema.dropTable("expense_categories");
+}

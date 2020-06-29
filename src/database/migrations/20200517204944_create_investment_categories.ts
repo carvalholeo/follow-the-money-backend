@@ -1,18 +1,18 @@
 
-import Knex from 'knex';
+import Knex from "knex";
 
 export async function up(knex: Knex) {
-    return knex.schema.createTable('investment_categories', table => {
-        table.increments('id')
-          .primary();
+  return knex.schema.createTable("investment_categories", table => {
+    table.increments("id")
+      .primary();
 
-        table.string('name', 100)
-          .notNullable();
+    table.string("name", 100)
+      .notNullable();
           
-        table.timestamps();
-      });
-};
+    table.timestamps();
+  });
+}
 
 export async function down(knex: Knex) {
-  return knex.schema.dropTable('investment_categories');
-};
+  return knex.schema.dropTable("investment_categories");
+}
