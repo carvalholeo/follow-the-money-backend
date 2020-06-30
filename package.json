@@ -4,7 +4,7 @@
   "description": "Package made in TypeScript, using Express, Node, and Knex, for personal financial control.",
   "main": "dist/src/server.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test jest --coverage --no-cache || exit 0",
+    "test": "jest --coverage --no-cache",
     "start": "cross-env NODE_ENV=production nodemon dist/src/server.js",
     "dev": "cross-env NODE_ENV=development ts-node-dev --transpileOnly --ignore-watch node_modules src/server.ts",
     "build": "tsc --removecomments --types --outDir dist/",
