@@ -5,6 +5,7 @@ module.exports = {
 
   development: {
     client: "mysql",
+    version: 10,
     connection: {
       host : "127.0.0.1",
       database: "ftm",
@@ -16,13 +17,13 @@ module.exports = {
       extension: "ts",
       tableName: "knex_migrations"
     },
-    pool: {
-      min: 1,
-      max: 10
-    },
     seeds: {
       directory: path.resolve(__dirname, "src", "database", "seeds"),
       extension: "ts"
+    },
+    pool: {
+      min: 1,
+      max: 10
     },
     useNullAsDefault: true,
     acquireConnectionTimeout: 10000,
@@ -31,13 +32,23 @@ module.exports = {
   test: {
     client: "sqlite3",
     connection: {
-      filename: "./src/database/test.sqlite"
+      filename: path.resolve(__dirname, "src", "database", "test.sqlite")
     },
     migrations: {
-      directory: "./src/database/migrations",
+      directory: path.resolve(__dirname, "src", "database", "migrations"),
+      extension: "ts",
       tableName: "knex_migrations"
     },
+    seeds: {
+      directory: path.resolve(__dirname, "src", "database", "seeds"),
+      extension: "ts"
+    },
+    pool: {
+      min: 1,
+      max: 10
+    },
     useNullAsDefault: true,
+    acquireConnectionTimeout: 10000,
   },
 
   staging: {
@@ -50,13 +61,19 @@ module.exports = {
       password: ""
     },
     migrations: {
-      directory: "./src/database/migrations",
+      directory: path.resolve(__dirname, "src", "database", "migrations"),
+      extension: "ts",
       tableName: "knex_migrations"
+    },
+    seeds: {
+      directory: path.resolve(__dirname, "src", "database", "seeds"),
+      extension: "ts"
     },
     pool: {
       min: 1,
       max: 10
     },
+    useNullAsDefault: true,
     acquireConnectionTimeout: 10000,
   },
 
@@ -68,15 +85,21 @@ module.exports = {
       user:     "username",
       password: "password"
     },
+    migrations: {
+      directory: path.resolve(__dirname, "src", "database", "migrations"),
+      extension: "ts",
+      tableName: "knex_migrations"
+    },
+    seeds: {
+      directory: path.resolve(__dirname, "src", "database", "seeds"),
+      extension: "ts"
+    },
     pool: {
       min: 1,
       max: 10
     },
+    useNullAsDefault: true,
     acquireConnectionTimeout: 10000,
-    migrations: {
-      directory: "./src/database/migrations",
-      tableName: "knex_migrations"
-    }
   }
 
 };
