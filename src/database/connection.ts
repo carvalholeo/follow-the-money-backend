@@ -1,4 +1,5 @@
 import knex from "knex";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const configuration = require("../../knexfile");
 
 const config = process.env.NODE_ENV === "test" 

@@ -9,8 +9,8 @@ module.exports = {
     connection: {
       host : "127.0.0.1",
       database: "ftm",
-      user:     "root",
-      password: ""
+      user:     "ftm",
+      password: "6v47CHqsCJBj0kkZ"
     },
     migrations: {
       directory: path.resolve(__dirname, "src", "database", "migrations"),
