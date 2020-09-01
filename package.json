@@ -14,8 +14,7 @@
     "sonar": "node sonar",
     "knex:latest": "knex --knexfile knexfile.ts migrate:latest",
     "knex:rollback": "knex --knexfile knexfile.ts migrate:rollback",
-    "knex:seed": "knex --knexfile knexfile.ts seed:run",
-    "knex": "npm run knex:rollback && npm run knex:latest && npm run knex:seed"
+    "knex:seed": "knex --knexfile knexfile.ts seed:run"
   },
   "keywords": [
     "financial control",
