@@ -136,6 +136,7 @@ export default class RevenuesController {
       const [count] = await connection("revenues")
         .where({ user_id })
         .count();
+      const contador = count["count(*)"] as string;
 
       const revenues = await connection("revenues")
         .where({ user_id })
@@ -155,7 +156,7 @@ export default class RevenuesController {
           "revenues.updated_at"
         ]);
             
-      response.header("X-Total-Count", count["count(*)"]);
+      response.header("X-Total-Count", contador);
 
       return response
         .status(200)

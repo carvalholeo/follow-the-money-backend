@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 
 import connection from "../database/connection";
 import getUserId from "../utils/getUserId";
@@ -13,9 +13,9 @@ export default class UserController {
       const { email, username, password } = request.body;
       const created_at = new Date();
       const updated_at = new Date();
+      const salt = Number(process.env.BCRYPT_ROUNDS);
 
-      const salt = bcrypt.genSaltSync(10);
-      const hash = bcrypt.hashSync(password, salt);
+      const hash = await bcrypt.hash(password, salt);
 
       await connection("users")
         .insert({
@@ -88,7 +88,9 @@ export default class UserController {
 
       return response
         .status(200)
-        .json({ message: "Your user was deleted successfully. All your data also were deleted and we're unable to recover it. You're now logout from all of the sessions and devices."});
+        .json({ message: "Your user was deleted successfully. " +
+        "All your data also were deleted and we're unable to recover it. " +
+        "You're now logout from all of the sessions and devices."});
             
     } catch (error) {
 
@@ -104,9 +106,9 @@ export default class UserController {
     try {
       const { email, password } = request.body;
       const user_id = await getUserId(String(request.headers.session));
+      const salt = Number(process.env.BCRYPT_ROUNDS);
 
-      const salt = bcrypt.genSaltSync(10);
-      const hash = bcrypt.hashSync(password, salt);
+      const hash = await bcrypt.hash(password, salt);
             
       const user = await connection("users")
         .where("id", "=", user_id)

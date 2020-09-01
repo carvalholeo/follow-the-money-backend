@@ -1,4 +1,4 @@
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import speakeasy from "speakeasy";
 import { Request, Response } from "express";
@@ -29,7 +29,7 @@ export default class SessionController {
         .first();
             
       const db_password = user.password;
-      const password_compare = bcrypt.compareSync(password, db_password);
+      const password_compare = await bcrypt.compare(password, db_password);
 
       if (!user || !password_compare) {
 
@@ -208,4 +208,3 @@ export default class SessionController {
     }
   }
 }
-

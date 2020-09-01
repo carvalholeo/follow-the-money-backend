@@ -47,7 +47,7 @@ export default  {
       })
     }
   },
-    
+
   deleteExpense() {
     return {
       headers,
@@ -57,4 +57,3 @@ export default  {
     }
   }
 }
-

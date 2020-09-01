@@ -6,7 +6,7 @@ import Logger from "../utils/Logger";
 
 const logger = new Logger();
 
-export default class EspensesController {
+export default class ExpensesController {
   async create(request: Request, response: Response): Promise<Response> {
     try {
       const { source, expense_type_id, expense_category_id, expected_amount, paid_amount, due_date, payday, reference_month, is_paid } = request.body;
@@ -136,7 +136,8 @@ export default class EspensesController {
       const [count] = await connection("expenses")
         .where({ user_id })
         .count();
-
+      const contador = count["count(*)"] as string;
+      
       const expenses = await connection("expenses")
         .where({ user_id })
         .join("expense_types", "expense_types.id", "=", "expenses.expense_type_id")
@@ -156,8 +157,8 @@ export default class EspensesController {
           "expenses.created_at",
           "expenses.updated_at"
         ]);
-            
-      response.header("X-Total-Count", count["count(*)"]);
+        
+      response.header("X-Total-Count", contador);
 
       return response
         .status(200)

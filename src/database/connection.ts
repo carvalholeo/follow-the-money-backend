@@ -1,12 +1,9 @@
 import knex from "knex";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const configuration = require("../../knexfile");
+const environment = process.env.NODE_ENV || "development";
 
-const config = process.env.NODE_ENV === "test" 
-  ? configuration.test 
-  : process.env.NODE_ENV === "development"
-    ? configuration.development
-    : configuration.production;
+const config = configuration[environment];
 
 const connection = knex(config);
 

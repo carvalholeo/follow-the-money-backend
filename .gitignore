@@ -1,8 +1,10 @@
+coverage/
+dist/
 node_modules/
+.idea/
+.vscode/
+.scannerwork/
+
 package-lock.json
 src/database/*.sqlite
 .env
-.vscode/
-.idea/
-dist/
-coverage/

@@ -11,14 +11,13 @@ export default async function getUserId(session_token: string): Promise<number> 
       })
       .join("users", "users.id", "=", "sessions.user_id")
       .select("users.id");
-            
+
     return Number(id);
 
   } catch (error) {
 
     logger.makeLog("GetUserIdUtils", error);
-    
+
     throw error;
-  }
-    
+  }   
 }

@@ -3,6 +3,9 @@ import { errors } from "celebrate";
 import cors from "cors";
 import compression from "compression";
 import helmet from "helmet";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 import routes from "./routes/routes";
 

@@ -11,7 +11,7 @@ export default {
       })
     };
   },
-    
+
   updateUser() {
     return {
       headers,
@@ -37,5 +37,4 @@ export default {
       })
     };
   }
-
 }

@@ -1,17 +1,22 @@
 import path from "path";
-// Update with your config settings.
+
+const database = process.env.DB_DATABASE || "ftm";
+const username = process.env.DB_USER || "root";
+const password = process.env.DB_PASSWORD || "";
+const client = process.env.DB_CLIENT || "mysql";
+const host = process.env.DB_HOST || "localhost";
+const port = Number(process.env.DB_PORT) || 3306;
+const poolMin = Number(process.env.DB_POOL_MIN) || 0;
+const poolMax = Number(process.env.DB_POOL_MAX) || 5;
+const nullAsDefault = process.env.DB_USE_NULL_AS_DEFAULT || true;
+const acquireConnectionTimeout = Number(process.env.DB_ACQUIRE_CONNECTION_TIMEOUT) || 10000;
+const connectionString =  `${client}://${username}:${password}@${host}:${port}/${database}`
 
 module.exports = {
 
   development: {
-    client: "mysql",
-    version: 10,
-    connection: {
-      host : "127.0.0.1",
-      database: "ftm",
-      user:     "ftm",
-      password: "6v47CHqsCJBj0kkZ"
-    },
+    client: client,
+    connection: connectionString,
     migrations: {
       directory: path.resolve(__dirname, "src", "database", "migrations"),
       extension: "ts",
@@ -22,18 +27,16 @@ module.exports = {
       extension: "ts"
     },
     pool: {
-      min: 1,
-      max: 10
+      min: poolMin,
+      max: poolMax
     },
-    useNullAsDefault: true,
-    acquireConnectionTimeout: 10000,
+    useNullAsDefault: nullAsDefault,
+    acquireConnectionTimeout: acquireConnectionTimeout,
   },
 
   test: {
-    client: "sqlite3",
-    connection: {
-      filename: path.resolve(__dirname, "src", "database", "test.sqlite")
-    },
+    client: client,
+    connection: connectionString,
     migrations: {
       directory: path.resolve(__dirname, "src", "database", "migrations"),
       extension: "ts",
@@ -44,22 +47,16 @@ module.exports = {
       extension: "ts"
     },
     pool: {
-      min: 1,
-      max: 10
+      min: poolMin,
+      max: poolMax
     },
-    useNullAsDefault: true,
-    acquireConnectionTimeout: 10000,
+    useNullAsDefault: nullAsDefault,
+    acquireConnectionTimeout: acquireConnectionTimeout,
   },
 
   staging: {
-    client: "mysql",
-    version: 10,
-    connection: {
-      host : "127.0.0.1",
-      database: "ftm",
-      user:     "root",
-      password: ""
-    },
+    client: client,
+    connection: connectionString,
     migrations: {
       directory: path.resolve(__dirname, "src", "database", "migrations"),
       extension: "ts",
@@ -70,21 +67,16 @@ module.exports = {
       extension: "ts"
     },
     pool: {
-      min: 1,
-      max: 10
+      min: poolMin,
+      max: poolMax
     },
-    useNullAsDefault: true,
-    acquireConnectionTimeout: 10000,
+    useNullAsDefault: nullAsDefault,
+    acquireConnectionTimeout: acquireConnectionTimeout,
   },
 
   production: {
-    client: "mysql",
-    connection: {
-      host : "127.0.0.1",
-      database: "my_db",
-      user:     "username",
-      password: "password"
-    },
+    client: client,
+    connection: connectionString,
     migrations: {
       directory: path.resolve(__dirname, "src", "database", "migrations"),
       extension: "ts",
@@ -95,11 +87,10 @@ module.exports = {
       extension: "ts"
     },
     pool: {
-      min: 1,
-      max: 10
+      min: poolMin,
+      max: poolMax
     },
-    useNullAsDefault: true,
-    acquireConnectionTimeout: 10000,
+    useNullAsDefault: nullAsDefault,
+    acquireConnectionTimeout: acquireConnectionTimeout,
   }
-
 };
