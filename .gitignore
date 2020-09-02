@@ -5,7 +5,6 @@ node_modules/
 .vscode/
 .scannerwork/
 
-package-lock.json
 src/database/*.sqlite
 .env
 .env.test
