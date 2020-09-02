@@ -1,13 +1,17 @@
 import connection from "../../database/connection";
+import Logger from "../Logger";
 
-export default async function getSecret(user_id: number): Promise<string> {
-  try {
-    const [{secret_mfa}] = await connection("users")
-      .where("id", "=", user_id)
-      .select("secret_mfa");
- 
-    return String(secret_mfa);
-  } catch (error) {
-    throw error;
-  }
+export default function getSecret(userId: number): Promise<string> {
+
+  return connection("users")
+    .where("id", "=", userId)
+    .select("secret_mfa")
+    .then(async ( [{ response }] ) => {
+      return await response as string
+    })
+    .catch(error => {
+      const logger = new Logger();
+      logger.makeLog("error", error);
+      throw error;
+    });
 }
