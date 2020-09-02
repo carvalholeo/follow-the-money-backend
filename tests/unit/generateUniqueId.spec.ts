@@ -1,4 +1,3 @@
-import "../config/environment";
 import generateUniqueId from "../../src/utils/generateUniqueId";
 
 describe("Generate Unique Id", () => {
