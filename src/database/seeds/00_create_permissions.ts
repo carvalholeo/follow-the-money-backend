@@ -1,10 +1,10 @@
 import * as Knex from "knex";
 
-export async function seed(knex: Knex): Promise<void> {
+export function seed(knex: Knex): Promise<void> {
   // Inserts seed entries
   const dateTime = new Date();
 
-  return await knex("permissions")
+  return knex("permissions")
     .insert([
       { 
         name: "Customer",
