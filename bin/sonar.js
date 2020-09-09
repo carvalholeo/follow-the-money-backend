@@ -1,7 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+// eslint-disable-next-line strict
+"use strict";
 const scanner = require("sonarqube-scanner");
-const dotenv = require("dotenv").config();
-dotenv.config();
+const dotenv = require("dotenv");
+const path = require("path");
+
+const environmentVariables = path.resolve(__dirname, "..", ".env");
+dotenv.config({
+  path: environmentVariables
+});
 
 const serverUrl = process.env.SONAR_SERVER_URL;
 const loginToken = process.env.SONAR_TOKEN;
