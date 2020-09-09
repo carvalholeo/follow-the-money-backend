@@ -3,12 +3,8 @@
 "use strict";
 const scanner = require("sonarqube-scanner");
 const dotenv = require("dotenv");
-const path = require("path");
 
-const environmentVariables = path.resolve(__dirname, "..", ".env");
-dotenv.config({
-  path: environmentVariables
-});
+dotenv.config();
 
 const serverUrl = process.env.SONAR_SERVER_URL;
 const loginToken = process.env.SONAR_TOKEN;
