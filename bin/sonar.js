@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const scanner = require("sonarqube-scanner");
-const dotenv = require("dotenv");
+const dotenv = require("dotenv").config();
 dotenv.config();
 
 const serverUrl = process.env.SONAR_SERVER_URL;

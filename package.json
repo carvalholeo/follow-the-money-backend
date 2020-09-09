@@ -11,7 +11,8 @@
     "dev": "ts-node-dev --transpile-only --ignore-watch node_modules --respawn src/server.ts",
     "build": "tsc --removecomments --types --outDir dist/",
     "postbuild": "cpy .env.example dist --dot --parents && cp dist/.env.example dist/.env",
-    "sonar": "node sonar",
+    "sonar": "node ./bin/sonar",
+    "key:generate": "node ./bin/keyGenerate",
     "knex:latest": "knex --knexfile knexfile.ts migrate:latest",
     "knex:rollback": "knex --knexfile knexfile.ts migrate:rollback",
     "knex:seed": "knex --knexfile knexfile.ts seed:run"
