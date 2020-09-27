@@ -20,36 +20,16 @@ const userController = new UserController();
 
 const routes = express.Router();
 
-
-
 routes.use(authenticatedUser);
 routes.use(validSession);
 routes.use(activatedUser);
 
-
-routes.delete("/",
-  celebrate(TokenValidator),
-  userController.delete);
-
-routes.put("/block",
-  celebrate(TokenValidator),
-  userController.block,
-  sessionController.destroyAll);
-
-routes.put("/user-data",
-  celebrate(UserValidator.updateUser()),
-  userController.update);
-
-routes.post("/",
-  celebrate(ProfileValidator),
-  profileController.create);
-
-routes.put("/",
-  celebrate(ProfileValidator),
-  profileController.update);
-
-routes.get("/",
-  celebrate(TokenValidator),
-  profileController.index);
+routes
+  .delete("/", celebrate(TokenValidator), userController.delete)
+  .put("/block", celebrate(TokenValidator), userController.block, sessionController.destroyAll)
+  .put("/user-data", celebrate(UserValidator.updateUser()), userController.update)
+  .post("/", celebrate(ProfileValidator), profileController.create)
+  .put("/", celebrate(ProfileValidator), profileController.update)
+  .get("/", celebrate(TokenValidator), profileController.index);
 
 export default routes;

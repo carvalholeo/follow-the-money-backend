@@ -15,30 +15,17 @@ const sessionController = new SessionController();
 
 const routes = express.Router();
 
-routes.post("/",
-  celebrate(UserValidator.loginUser()),
-  sessionController.create);
-
-routes.get("/mfa",
-  celebrate(MFAValidator.token()),
-  sessionController.showMFA);
-
-routes.post("/mfa",
-  celebrate(MFAValidator.mfaRequired()),
-  sessionController.validateMFA);
-
+routes
+  .post("/", celebrate(UserValidator.loginUser()), sessionController.create)
+  .get("/mfa", celebrate(MFAValidator.token()), sessionController.showMFA)
+  .post("/mfa", celebrate(MFAValidator.mfaRequired()), sessionController.validateMFA);
 
 routes.use(authenticatedUser);
 routes.use(validSession);
 routes.use(activatedUser);
 
-routes.delete("/",
-  celebrate(TokenValidator),
-  sessionController.destroy);
-
-routes.delete("/all",
-  celebrate(TokenValidator),
-  sessionController.destroyAll);
-
+routes
+  .delete("/", celebrate(TokenValidator), sessionController.destroy)
+  .delete("/all", celebrate(TokenValidator), sessionController.destroyAll);
 
 export default routes;

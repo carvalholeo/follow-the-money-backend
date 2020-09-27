@@ -22,39 +22,18 @@ routes.use(authenticatedUser);
 routes.use(validSession);
 routes.use(activatedUser);
 
-routes.get("/",
-  celebrate(RevenueValidator.getRevenue()),
-  revenuesController.index);
-
-routes.post("/",
-  celebrate(RevenueValidator.createRevenue()),
-  revenuesController.create);
-
-routes.put("/:id/",
-  celebrate(RevenueValidator.updateRevenue()),
-  revenuesController.update);
-
-routes.delete("/:id/",
-  celebrate(RevenueValidator.deleteRevenue()),
-  revenuesController.delete);
-
-routes.get("/categories/",
-  celebrate(TokenValidator),
-  revenueCategoriesController.index);
-
+routes
+  .get("/", celebrate(RevenueValidator.getRevenue()), revenuesController.index)
+  .post("/", celebrate(RevenueValidator.createRevenue()), revenuesController.create)
+  .put("/:id/", celebrate(RevenueValidator.updateRevenue()), revenuesController.update)
+  .delete("/:id/", celebrate(RevenueValidator.deleteRevenue()), revenuesController.delete)
+  .get("/categories/", celebrate(TokenValidator), revenueCategoriesController.index);
 
 routes.use(isAdmin);
 
-routes.post("/categories",
-  celebrate(TypeAndCategoryValidator.createTypeAndCategory()),
-  revenueCategoriesController.create);
-
-routes.put("/categories/:id/",
-  celebrate(TypeAndCategoryValidator.updateTypeAndCategory()),
-  revenueCategoriesController.update);
-
-routes.delete("/categories/:id/",
-  celebrate(TypeAndCategoryValidator.deleteTypeAndCategory()),
-  revenueCategoriesController.delete);
+routes
+  .post("/categories", celebrate(TypeAndCategoryValidator.createTypeAndCategory()), revenueCategoriesController.create)
+  .put("/categories/:id/", celebrate(TypeAndCategoryValidator.updateTypeAndCategory()), revenueCategoriesController.update)
+  .delete("/categories/:id/", celebrate(TypeAndCategoryValidator.deleteTypeAndCategory()), revenueCategoriesController.delete);
 
 export default routes;

@@ -9,8 +9,6 @@ const userController = new UserController();
 
 const routes = express.Router();
 
-routes.post("/",
-  celebrate(UserValidator.createUser()),
-  userController.create);
+routes.post("/", celebrate(UserValidator.createUser()), userController.create);
 
 export default routes;
