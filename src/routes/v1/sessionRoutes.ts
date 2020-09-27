@@ -13,19 +13,19 @@ import SessionController from "../../controllers/SessionController";
 
 const sessionController = new SessionController();
 
-const routes = express.Router();
+const sessionRoutes = express.Router();
 
-routes
-  .post("/", celebrate(UserValidator.loginUser()), sessionController.create)
+sessionRoutes
   .get("/mfa", celebrate(MFAValidator.token()), sessionController.showMFA)
+  .post("/", celebrate(UserValidator.loginUser()), sessionController.create)
   .post("/mfa", celebrate(MFAValidator.mfaRequired()), sessionController.validateMFA);
 
-routes.use(authenticatedUser);
-routes.use(validSession);
-routes.use(activatedUser);
+sessionRoutes.use(authenticatedUser);
+sessionRoutes.use(validSession);
+sessionRoutes.use(activatedUser);
 
-routes
+sessionRoutes
   .delete("/", celebrate(TokenValidator), sessionController.destroy)
   .delete("/all", celebrate(TokenValidator), sessionController.destroyAll);
 
-export default routes;
+export default sessionRoutes;

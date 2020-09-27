@@ -7,8 +7,8 @@ import UserController from "../../controllers/UserController";
 
 const userController = new UserController();
 
-const routes = express.Router();
+const usersRoutes = express.Router();
 
-routes.post("/", celebrate(UserValidator.createUser()), userController.create);
+usersRoutes.post("/", celebrate(UserValidator.createUser()), userController.create);
 
-export default routes;
+export default usersRoutes;

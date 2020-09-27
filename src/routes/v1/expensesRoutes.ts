@@ -18,13 +18,13 @@ const expensesController = new ExpensesController();
 const expenseCategoriesController = new ExpenseCategoriesController();
 const expenseTypesController = new ExpenseTypesController();
 
-const routes = express.Router();
+const expensesRoutes = express.Router();
 
-routes.use(authenticatedUser);
-routes.use(validSession);
-routes.use(activatedUser);
+expensesRoutes.use(authenticatedUser);
+expensesRoutes.use(validSession);
+expensesRoutes.use(activatedUser);
 
-routes
+expensesRoutes
   .get("/", celebrate(ExpenseValidator.getExpense()), expensesController.index)
   .get("/categories", celebrate(TokenValidator), expenseCategoriesController.index)
   .get("/types", celebrate(TokenValidator), expenseTypesController.index)
@@ -33,9 +33,9 @@ routes
   .delete("/:id", celebrate(ExpenseValidator.deleteExpense()), expensesController.delete);
 
 
-routes.use(isAdmin);
+expensesRoutes.use(isAdmin);
 
-routes
+expensesRoutes
   .post("/categories", celebrate(TypeAndCategoryValidator.createTypeAndCategory()), expenseCategoriesController.create)
   .post("/types", celebrate(TypeAndCategoryValidator.createTypeAndCategory()), expenseTypesController.create)
   .put("/categories/:id/", celebrate(TypeAndCategoryValidator.updateTypeAndCategory()), expenseCategoriesController.update)
@@ -44,4 +44,4 @@ routes
   .delete("/types/:id/", celebrate(TypeAndCategoryValidator.deleteTypeAndCategory()), expenseTypesController.delete);
 
 
-export default routes;
+export default expensesRoutes;

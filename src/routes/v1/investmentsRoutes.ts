@@ -15,25 +15,24 @@ import TokenValidator from "../../validators/TokenValidator";
 const investmentCategoriesController = new InvestmentCategoriesController();
 const investmentTypesController = new InvestmentTypesController();
 
-const routes = express.Router();
+const investmentsRoutes = express.Router();
 
-routes.use(authenticatedUser);
-routes.use(validSession);
-routes.use(activatedUser);
+investmentsRoutes.use(authenticatedUser);
+investmentsRoutes.use(validSession);
+investmentsRoutes.use(activatedUser);
 
-
-routes
+investmentsRoutes
   .get("/categories/", celebrate(TokenValidator), investmentCategoriesController.index)
   .get("/types/", celebrate(TokenValidator), investmentTypesController.index);
 
-routes.use(isAdmin);
+investmentsRoutes.use(isAdmin);
 
-routes
+investmentsRoutes
   .post("/types", celebrate(TypeAndCategoryValidator.createTypeAndCategory()), investmentTypesController.create)
-  .put("/types/:id/", celebrate(TypeAndCategoryValidator.updateTypeAndCategory()), investmentTypesController.update)
-  .delete("/types/:id/", celebrate(TypeAndCategoryValidator.deleteTypeAndCategory()), investmentTypesController.delete)
   .post("/categories", celebrate(TypeAndCategoryValidator.createTypeAndCategory()), investmentCategoriesController.create)
+  .put("/types/:id/", celebrate(TypeAndCategoryValidator.updateTypeAndCategory()), investmentTypesController.update)
   .put("/categories/:id/", celebrate(TypeAndCategoryValidator.updateTypeAndCategory()), investmentCategoriesController.update)
+  .delete("/types/:id/", celebrate(TypeAndCategoryValidator.deleteTypeAndCategory()), investmentTypesController.delete)
   .delete("/categories/:id/", celebrate(TypeAndCategoryValidator.deleteTypeAndCategory()), investmentCategoriesController.delete);
 
-export default routes;
+export default investmentsRoutes;

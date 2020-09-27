@@ -18,18 +18,19 @@ const profileController = new ProfileController();
 const sessionController = new SessionController();
 const userController = new UserController();
 
-const routes = express.Router();
+const profileRoutes = express.Router();
 
-routes.use(authenticatedUser);
-routes.use(validSession);
-routes.use(activatedUser);
+profileRoutes.use(authenticatedUser);
+profileRoutes.use(validSession);
+profileRoutes.use(activatedUser);
 
-routes
+profileRoutes
   .delete("/", celebrate(TokenValidator), userController.delete)
   .put("/block", celebrate(TokenValidator), userController.block, sessionController.destroyAll)
   .put("/user-data", celebrate(UserValidator.updateUser()), userController.update)
-  .post("/", celebrate(ProfileValidator), profileController.create)
   .put("/", celebrate(ProfileValidator), profileController.update)
+  .post("/", celebrate(ProfileValidator), profileController.create)
   .get("/", celebrate(TokenValidator), profileController.index);
 
-export default routes;
+export default profileRoutes;
+
