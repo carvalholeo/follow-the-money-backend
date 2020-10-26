@@ -1,17 +1,17 @@
-import { Router } from "express";
+import { Router } from 'express';
 
-import activatedUser from "../../middlewares/Activated";
-import authenticatedUser from "../../middlewares/Auth";
-import isAdmin from "../../middlewares/Administration";
-import validSession from "../../middlewares/ValidSessionToken";
+import activatedUser from '../../middlewares/Activated';
+import authenticatedUser from '../../middlewares/Auth';
+import isAdmin from '../../middlewares/Administration';
+import validSession from '../../middlewares/ValidSessionToken';
 
-import RevenueValidator from "../../validators/RevenueValidator";
-import TokenValidator from "../../validators/TokenValidator";
-import TypeAndCategoryValidator from "../../validators/TypeAndCategoryValidator";
+import RevenueValidator from '../../validators/RevenueValidator';
+import TokenValidator from '../../validators/TokenValidator';
+import TypeAndCategoryValidator from '../../validators/TypeAndCategoryValidator';
 
-import RevenuesController from "../../controllers/RevenuesController";
-import RevenueCategoriesController from "../../controllers/RevenueCategoriesController";
-import ErrorValidation from "../../middlewares/ErrorValidation";
+import RevenuesController from '../../controllers/RevenuesController';
+import RevenueCategoriesController from '../../controllers/RevenueCategoriesController';
+import ErrorValidation from '../../middlewares/ErrorValidation';
 
 const revenuesController = new RevenuesController();
 const revenueCategoriesController = new RevenueCategoriesController();
@@ -23,23 +23,23 @@ revenuesRoutes.use(validSession);
 revenuesRoutes.use(activatedUser);
 
 revenuesRoutes
-  .get("/",
+  .get('/',
     RevenueValidator.getRevenue,
     ErrorValidation,
     revenuesController.index)
-  .get("/categories/",
+  .get('/categories/',
     TokenValidator,
     ErrorValidation,
     revenueCategoriesController.index)
-  .post("/",
+  .post('/',
     RevenueValidator.createRevenue,
     ErrorValidation,
     revenuesController.create)
-  .put("/:id/",
+  .put('/:id/',
     RevenueValidator.updateRevenue,
     ErrorValidation,
     revenuesController.update)
-  .delete("/:id/",
+  .delete('/:id/',
     RevenueValidator.deleteRevenue,
     ErrorValidation,
     revenuesController.delete);
@@ -47,15 +47,15 @@ revenuesRoutes
 revenuesRoutes.use(isAdmin);
 
 revenuesRoutes
-  .post("/categories",
+  .post('/categories',
     TypeAndCategoryValidator.createTypeAndCategory,
     ErrorValidation,
     revenueCategoriesController.create)
-  .put("/categories/:id/",
+  .put('/categories/:id/',
     TypeAndCategoryValidator.updateTypeAndCategory,
     ErrorValidation,
     revenueCategoriesController.update)
-  .delete("/categories/:id/",
+  .delete('/categories/:id/',
     TypeAndCategoryValidator.deleteTypeAndCategory,
     ErrorValidation,
     revenueCategoriesController.delete);

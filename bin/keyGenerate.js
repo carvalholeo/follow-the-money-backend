@@ -1,7 +1,7 @@
 // eslint-disable-next-line strict
-"use strict";
+'use strict';
 
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
 
 function keyGenerate() {
   const salt = bcrypt.genSaltSync(512);

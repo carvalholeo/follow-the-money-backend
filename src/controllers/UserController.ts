@@ -1,9 +1,9 @@
-import { Request, Response, NextFunction } from "express";
-import bcrypt from "bcrypt";
+import { Request, Response, NextFunction } from 'express';
+import bcrypt from 'bcrypt';
 
-import connection from "../database/connection";
-import getUserId from "../utils/getUserId";
-import Logger from "../utils/Logger";
+import connection from '../database/connection';
+import getUserId from '../utils/getUserId';
+import Logger from '../utils/Logger';
 
 const logger = new Logger();
 
@@ -17,7 +17,7 @@ export default class UserController {
 
       const hash = await bcrypt.hash(password, salt);
 
-      await connection("users")
+      await connection('users')
         .insert({
           email,
           username,
@@ -30,15 +30,15 @@ export default class UserController {
 
       return response
         .status(201)
-        .json({ message: "User created successfully."});
+        .json({ message: 'User created successfully.'});
 
     } catch (error) {
 
-      logger.makeLog("CreateUser", error);
+      logger.makeLog('CreateUser', error);
 
       return response
         .status(400)
-        .json({ error: "There was an error. Probably, this user was created previously. Ask support to the system administrator." });
+        .json({ error: 'There was an error. Probably, this user was created previously. Ask support to the system administrator.' });
     }
   }
     
@@ -46,8 +46,8 @@ export default class UserController {
     try {
       const user_id = await getUserId(String(request.headers.session));
 
-      const active = await connection("users")
-        .where("id", "=", user_id)
+      const active = await connection('users')
+        .where('id', '=', user_id)
         .update({is_active: 0});
 
       if (active !== 1) {
@@ -59,15 +59,15 @@ export default class UserController {
 
       return response
         .status(200)
-        .json({ message: "Your user was blocked successfully. To unblock, contact system administrator. You're now logout."});
+        .json({ message: 'Your user was blocked successfully. To unblock, contact system administrator. You\'re now logout.'});
 
     } catch (error) {
 
-      logger.makeLog("BlockUser", error);
+      logger.makeLog('BlockUser', error);
 
       return response
         .status(400)
-        .json({ error: "There was an error. Probably, this user was blocked previously. Ask support to the system administrator." });
+        .json({ error: 'There was an error. Probably, this user was blocked previously. Ask support to the system administrator.' });
     }
   }
     
@@ -75,9 +75,9 @@ export default class UserController {
     try {
       const user_id = await getUserId(String(request.headers.session));
 
-      const delete_user = await connection("users")
-        .where("id", "=", user_id)
-        .del("*");
+      const delete_user = await connection('users')
+        .where('id', '=', user_id)
+        .del('*');
 
       if (!delete_user) {
 
@@ -88,17 +88,17 @@ export default class UserController {
 
       return response
         .status(200)
-        .json({ message: "Your user was deleted successfully. " +
-        "All your data also were deleted and we're unable to recover it. " +
-        "You're now logout from all of the sessions and devices."});
+        .json({ message: 'Your user was deleted successfully. ' +
+        'All your data also were deleted and we\'re unable to recover it. ' +
+        'You\'re now logout from all of the sessions and devices.'});
             
     } catch (error) {
 
-      logger.makeLog("DeleteUser", error);
+      logger.makeLog('DeleteUser', error);
 
       return response
         .status(400)
-        .json({ error: "There was an error. Probably, this user was deleted previously. Ask support to the system administrator." });
+        .json({ error: 'There was an error. Probably, this user was deleted previously. Ask support to the system administrator.' });
     }
   }
 
@@ -110,8 +110,8 @@ export default class UserController {
 
       const hash = await bcrypt.hash(password, salt);
             
-      const user = await connection("users")
-        .where("id", "=", user_id)
+      const user = await connection('users')
+        .where('id', '=', user_id)
         .update({ email, password: hash });
 
       if(user !== 1) {
@@ -121,15 +121,15 @@ export default class UserController {
 
       return response
         .status(200)
-        .json({ message: "User data updated successfully."});
+        .json({ message: 'User data updated successfully.'});
 
     } catch (error) {
 
-      logger.makeLog("UpdateUser", error);
+      logger.makeLog('UpdateUser', error);
 
       return response
         .status(400)
-        .json({ message: "There was an error. The system administrator was notified and working to solve this." });
+        .json({ message: 'There was an error. The system administrator was notified and working to solve this.' });
     }
         
   }

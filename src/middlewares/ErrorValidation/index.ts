@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import { validationResult } from "express-validator";
+import { NextFunction, Request, Response } from 'express';
+import { validationResult } from 'express-validator';
 
 /**
  * @description Validate if Express Validators returned some error. If yes, breaks up the request chain. Else, delivery the request to the next middleware or to the controller.

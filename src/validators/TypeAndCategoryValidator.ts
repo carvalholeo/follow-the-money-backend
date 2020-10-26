@@ -1,10 +1,10 @@
-import { body, param } from "express-validator";
-import TokenValidator from "./TokenValidator";
+import { body, param } from 'express-validator';
+import TokenValidator from './TokenValidator';
 
 export default {
   createTypeAndCategory: [
     ...TokenValidator,
-    body("name")
+    body('name')
       .isString()
       .trim()
       .notEmpty({ ignore_whitespace: true })
@@ -13,21 +13,21 @@ export default {
 
   updateTypeAndCategory: [
     ...TokenValidator,
-    body("name")
+    body('name')
       .isString()
       .trim()
       .notEmpty({ ignore_whitespace: true })
       .isLength({ min: 3, max: 100 }),
 
-    param("id")
+    param('id')
       .isInt({ min: 1 })
       .notEmpty({ ignore_whitespace: true }),
   ],
 
   deleteTypeAndCategory: [
     ...TokenValidator,
-    param("id")
+    param('id')
       .isInt({ min: 1 })
       .notEmpty({ ignore_whitespace: true }),
   ],
-}
+};

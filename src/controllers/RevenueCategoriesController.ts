@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
-import connection from "../database/connection";
-import Logger from "../utils/Logger";
+import connection from '../database/connection';
+import Logger from '../utils/Logger';
 
 const logger = new Logger();
 
@@ -12,7 +12,7 @@ export default class RevenueCategoriesController {
       const created_at = new Date();
       const updated_at = new Date();
 
-      const revenue_added = await connection("revenue_categories")
+      const revenue_added = await connection('revenue_categories')
         .insert({
           name,
           created_at,
@@ -21,20 +21,20 @@ export default class RevenueCategoriesController {
 
       if (!revenue_added) {
 
-        throw "Error on create a new revenue category.";
+        throw 'Error on create a new revenue category.';
       }
 
       return response
         .status(201)
-        .json({ message: "Revenue category created successfully."});
+        .json({ message: 'Revenue category created successfully.'});
 
     } catch (error) {
 
-      logger.makeLog("CreateRevenueCategory", error);
+      logger.makeLog('CreateRevenueCategory', error);
 
       return response
         .status(500)
-        .json({ error: "There was an error. The system administrator was notified and working to solve this." });
+        .json({ error: 'There was an error. The system administrator was notified and working to solve this.' });
     }
   }
     
@@ -42,28 +42,28 @@ export default class RevenueCategoriesController {
     try {
       const { id } = request.params;
 
-      const delete_revenue_category = await connection("revenue_categories")
-        .where("id", "=", id)
-        .del("*");
+      const delete_revenue_category = await connection('revenue_categories')
+        .where('id', '=', id)
+        .del('*');
 
       if (delete_revenue_category) {
 
         return response
           .status(200)
-          .json({ message: "Revenue category deleted successfully."});
+          .json({ message: 'Revenue category deleted successfully.'});
       }
 
       return response
         .status(406)
-        .json({ message: "Revenue category previously deleted." });
+        .json({ message: 'Revenue category previously deleted.' });
             
     } catch (error) {
 
-      logger.makeLog("DeleteRevenueCategory", error);
+      logger.makeLog('DeleteRevenueCategory', error);
 
       return response
         .status(400)
-        .json({ error: "There was an error. Probably, this revenue category was deleted previously. Ask support to the system administrator." });
+        .json({ error: 'There was an error. Probably, this revenue category was deleted previously. Ask support to the system administrator.' });
     }
   }
 
@@ -74,35 +74,35 @@ export default class RevenueCategoriesController {
 
       const updated_at = new Date();
 
-      const update = await connection("revenue_categories")
-        .where("id", "=", id)
+      const update = await connection('revenue_categories')
+        .where('id', '=', id)
         .update({ name, updated_at });
 
       if(update === 1) {
 
         return response
           .status(200)
-          .json({ message: "Revenue category updated successfully." });
+          .json({ message: 'Revenue category updated successfully.' });
       }
 
       return response
         .status(400)
-        .json({ message: "ID passed doesn't exist. Try again with a valid ID." });
+        .json({ message: 'ID passed doesn\'t exist. Try again with a valid ID.' });
 
     } catch (error) {
 
-      logger.makeLog("UpdateRevenueCategory", error);
+      logger.makeLog('UpdateRevenueCategory', error);
 
       return response
         .status(500)
-        .json({ message: "There was an error. The system administrator was notified and working to solve this." });
+        .json({ message: 'There was an error. The system administrator was notified and working to solve this.' });
     } 
   }
 
   async index(request: Request, response: Response): Promise<Response> {
     try {
-      const categories = await connection("revenue_categories")
-        .select("*");
+      const categories = await connection('revenue_categories')
+        .select('*');
 
       return response
         .status(200)
@@ -110,11 +110,11 @@ export default class RevenueCategoriesController {
 
     } catch (error) {
 
-      logger.makeLog("GetRevenueCategories", error);
+      logger.makeLog('GetRevenueCategories', error);
 
       return response
         .status(500)
-        .json({ message: "There was an error. The system administrator was notified and working to solve this." });
+        .json({ message: 'There was an error. The system administrator was notified and working to solve this.' });
     }
         
   }

@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
-import connection from "../database/connection";
-import getUserId from "../utils/getUserId";
-import Logger from "../utils/Logger";
+import connection from '../database/connection';
+import getUserId from '../utils/getUserId';
+import Logger from '../utils/Logger';
 
 const logger = new Logger();
 
@@ -11,25 +11,25 @@ export default class ProfileController {
     try {
       const user_id = getUserId(String(request.headers.session));
 
-      const profile = await connection("profile")
-        .where({ "user_id": user_id })
+      const profile = await connection('profile')
+        .where({ 'user_id': user_id })
         .select([
-          "first_name",
-          "surname",
-          "url_photo",
-          "birthday",
-          "biography",
-          "facebook_profile",
-          "twitter_profile",
-          "instagram_profile",
-          "personal_site_url",
-          "created_at",
-          "updated_at"
+          'first_name',
+          'surname',
+          'url_photo',
+          'birthday',
+          'biography',
+          'facebook_profile',
+          'twitter_profile',
+          'instagram_profile',
+          'personal_site_url',
+          'created_at',
+          'updated_at'
         ]);
 
       if (!profile) {
 
-        throw "Error on get this profile.";    
+        throw 'Error on get this profile.';    
       }
 
       return response
@@ -38,11 +38,11 @@ export default class ProfileController {
 
     } catch (error) {
 
-      logger.makeLog("GetProfile", error);
+      logger.makeLog('GetProfile', error);
 
       return response
         .status(500)
-        .json({ error: "There was an error. The system administrator was notified and working to solve this." });
+        .json({ error: 'There was an error. The system administrator was notified and working to solve this.' });
     }
   }
 
@@ -53,7 +53,7 @@ export default class ProfileController {
       const created_at = new Date();
       const updated_at = new Date();
 
-      const profile_added = await connection("profile")
+      const profile_added = await connection('profile')
         .insert({
           first_name,
           surname,
@@ -71,20 +71,20 @@ export default class ProfileController {
 
       if (!profile_added) {
 
-        throw "Error on create this profile";
+        throw 'Error on create this profile';
       }
 
       return response
         .status(201)
-        .json({ message: "Profile created successfully."});
+        .json({ message: 'Profile created successfully.'});
 
     } catch (error) {
 
-      logger.makeLog("CreateProfile", error);
+      logger.makeLog('CreateProfile', error);
 
       return response
         .status(500)
-        .json({ error: "There was an error. The system administrator was notified and working to solve this." });
+        .json({ error: 'There was an error. The system administrator was notified and working to solve this.' });
     }
   }
 
@@ -94,7 +94,7 @@ export default class ProfileController {
       const user_id = getUserId(String(request.headers.session));
       const updated_at = new Date();
 
-      const update = await connection("profile")
+      const update = await connection('profile')
         .where({ user_id })
         .update({
           first_name,
@@ -111,20 +111,20 @@ export default class ProfileController {
 
       if (update !== 1) {
 
-        throw "Error on update this profile.";
+        throw 'Error on update this profile.';
       }
 
       return response
         .status(200)
-        .json({ message: "Profile updated successfully."});
+        .json({ message: 'Profile updated successfully.'});
 
     } catch (error) {
 
-      logger.makeLog("UpdateProfile", error);
+      logger.makeLog('UpdateProfile', error);
 
       return response
         .status(500)
-        .json({ error: "There was an error. The system administrator was notified and working to solve this." });
+        .json({ error: 'There was an error. The system administrator was notified and working to solve this.' });
     }
   }
 }

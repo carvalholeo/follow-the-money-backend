@@ -1,13 +1,13 @@
-import * as Knex from "knex";
+import * as Knex from 'knex';
 
 export function seed(knex: Knex): Promise<void> {
   // Inserts seed entries
   const dateTime = new Date();
 
-  return knex("permissions")
+  return knex('permissions')
     .insert([
-      { 
-        name: "Customer",
+      {
+        name: 'Customer',
 
         create_own_records: true,
         create_roles_permissions: false,
@@ -50,7 +50,7 @@ export function seed(knex: Knex): Promise<void> {
         updated_at: dateTime
       },
       { 
-        name: "Technical Support",
+        name: 'Technical Support',
 
         create_own_records: true,
         create_roles_permissions: false,
@@ -93,7 +93,7 @@ export function seed(knex: Knex): Promise<void> {
         updated_at: dateTime
       },
       { 
-        name: "System Analyst",
+        name: 'System Analyst',
 
         create_own_records: true,
         create_roles_permissions: false,
@@ -136,7 +136,7 @@ export function seed(knex: Knex): Promise<void> {
         updated_at: dateTime
       },
       { 
-        name: "Developer",
+        name: 'Developer',
 
         create_own_records: true,
         create_roles_permissions: false,
@@ -179,7 +179,7 @@ export function seed(knex: Knex): Promise<void> {
         updated_at: dateTime
       },
       { 
-        name: "HR",
+        name: 'HR',
 
         create_own_records: true,
         create_roles_permissions: false,
@@ -222,7 +222,7 @@ export function seed(knex: Knex): Promise<void> {
         updated_at: dateTime
       },
       { 
-        name: "Legal",
+        name: 'Legal',
 
         create_own_records: true,
         create_roles_permissions: false,
@@ -265,7 +265,7 @@ export function seed(knex: Knex): Promise<void> {
         updated_at: dateTime
       },
       { 
-        name: "Root",
+        name: 'Root',
 
         create_own_records: true,
         create_roles_permissions: true,

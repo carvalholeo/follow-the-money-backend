@@ -1,10 +1,10 @@
-import { body, param, query } from "express-validator";
-import TokenValidator from "./TokenValidator";
+import { body, param, query } from 'express-validator';
+import TokenValidator from './TokenValidator';
 
 export default {
   getExpense: [
     ...TokenValidator,
-    query("page")
+    query('page')
       .isInt({ min: 1 })
       .optional()
       .trim(),
@@ -12,43 +12,43 @@ export default {
 
   postExpense: [
     ...TokenValidator,
-    body("source")
+    body('source')
       .isString()
       .isLength({ max: 50 })
       .notEmpty({ ignore_whitespace: true })
       .trim(),
 
-    body("expense_type_id")
+    body('expense_type_id')
       .isInt({ min: 1 })
       .notEmpty({ ignore_whitespace: true })
       .trim(),
 
-    body("expense_category_id")
+    body('expense_category_id')
       .isInt({ min: 1 })
       .notEmpty({ ignore_whitespace: true })
       .trim(),
 
-    body("expected_amount")
-      .isFloat({ locale: "pt-BR" })
+    body('expected_amount')
+      .isFloat({ locale: 'pt-BR' })
       .notEmpty({ ignore_whitespace: true })
       .trim(),
 
-    body("paid_amount")
-      .isFloat({ locale: "pt-BR" })
+    body('paid_amount')
+      .isFloat({ locale: 'pt-BR' })
       .optional()
       .trim(),
 
-    body("due_date")
+    body('due_date')
       .isDate()
       .notEmpty({ ignore_whitespace: true })
       .trim(),
 
-    body("payday")
+    body('payday')
       .isDate()
       .optional()
       .trim(),
 
-    body("is_paid")
+    body('is_paid')
       .isBoolean()
       .notEmpty({ ignore_whitespace: true })
       .trim()
@@ -56,48 +56,48 @@ export default {
 
   putExpense: [
     ...TokenValidator,
-    body("source")
+    body('source')
       .isString()
       .isLength({ max: 50 })
       .notEmpty({ ignore_whitespace: true })
       .trim(),
 
-    body("expense_type_id")
+    body('expense_type_id')
       .isInt({ min: 1 })
       .notEmpty({ ignore_whitespace: true })
       .trim(),
 
-    body("expense_category_id")
+    body('expense_category_id')
       .isInt({ min: 1 })
       .notEmpty({ ignore_whitespace: true })
       .trim(),
 
-    body("expected_amount")
-      .isFloat({ locale: "pt-BR" })
+    body('expected_amount')
+      .isFloat({ locale: 'pt-BR' })
       .notEmpty({ ignore_whitespace: true })
       .trim(),
 
-    body("paid_amount")
-      .isFloat({ locale: "pt-BR" })
+    body('paid_amount')
+      .isFloat({ locale: 'pt-BR' })
       .optional()
       .trim(),
 
-    body("due_date")
+    body('due_date')
       .isDate()
       .notEmpty({ ignore_whitespace: true })
       .trim(),
 
-    body("payday")
+    body('payday')
       .isDate()
       .optional()
       .trim(),
 
-    body("is_paid")
+    body('is_paid')
       .isBoolean()
       .notEmpty({ ignore_whitespace: true })
       .trim(),
 
-    param("id")
+    param('id')
       .isInt({ min: 1 })
       .notEmpty({ ignore_whitespace: true })
       .trim()
@@ -105,9 +105,9 @@ export default {
 
   deleteExpense: [
     ...TokenValidator,
-    param("id")
+    param('id')
       .isInt({ min: 1 })
       .notEmpty({ ignore_whitespace: true })
       .trim()
   ]
-}
+};

@@ -1,6 +1,6 @@
-import * as Knex from "knex";
-import bcrypt from "bcrypt";
-import dotenv from "dotenv";
+import * as Knex from 'knex';
+import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -9,14 +9,14 @@ export function seed(knex: Knex): Promise<void> {
   const env = process.env.NODE_ENV;
   const dateTime = new Date();
 
-  if (env !== "production") {
-    return bcrypt.hash("password", salt)
+  if (env !== 'production') {
+    return bcrypt.hash('password', salt)
       .then(hash => {
-        return knex("users")
+        return knex('users')
           .insert([
             {
-              email: "admin@admin",
-              username: "admin",
+              email: 'admin@admin',
+              username: 'admin',
               password: hash,
               is_active: true,
               permission_id: 7,
@@ -27,8 +27,8 @@ export function seed(knex: Knex): Promise<void> {
               updated_at: dateTime
             },
             {
-              email: "root@root",
-              username: "root",
+              email: 'root@root',
+              username: 'root',
               password: hash,
               is_active: true,
               permission_id: 7,
@@ -39,8 +39,8 @@ export function seed(knex: Knex): Promise<void> {
               updated_at: dateTime
             },
             {
-              email: "customer@customer",
-              username: "customer",
+              email: 'customer@customer',
+              username: 'customer',
               password: hash,
               is_active: true,
               permission_id: 1,
@@ -51,8 +51,8 @@ export function seed(knex: Knex): Promise<void> {
               updated_at: dateTime
             },
             {
-              email: "support@support",
-              username: "support",
+              email: 'support@support',
+              username: 'support',
               password: hash,
               is_active: true,
               permission_id: 2,
@@ -63,8 +63,8 @@ export function seed(knex: Knex): Promise<void> {
               updated_at: dateTime
             },
             {
-              email: "analyst@analyst",
-              username: "analyst",
+              email: 'analyst@analyst',
+              username: 'analyst',
               password: hash,
               is_active: true,
               permission_id: 3,
@@ -75,8 +75,8 @@ export function seed(knex: Knex): Promise<void> {
               updated_at: dateTime
             },
             {
-              email: "dev@dev",
-              username: "dev",
+              email: 'dev@dev',
+              username: 'dev',
               password: hash,
               is_active: true,
               permission_id: 4,
@@ -87,8 +87,8 @@ export function seed(knex: Knex): Promise<void> {
               updated_at: dateTime
             },
             {
-              email: "hr@hr",
-              username: "hr",
+              email: 'hr@hr',
+              username: 'hr',
               password: hash,
               is_active: true,
               permission_id: 5,
@@ -99,8 +99,8 @@ export function seed(knex: Knex): Promise<void> {
               updated_at: dateTime
             },
             {
-              email: "legal@legal",
-              username: "legal",
+              email: 'legal@legal',
+              username: 'legal',
               password: hash,
               is_active: true,
               permission_id: 6,

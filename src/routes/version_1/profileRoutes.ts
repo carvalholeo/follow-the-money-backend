@@ -1,17 +1,17 @@
-import { Router } from "express";
+import { Router } from 'express';
 
-import activatedUser from "../../middlewares/Activated";
-import authenticatedUser from "../../middlewares/Auth";
-import validSession from "../../middlewares/ValidSessionToken";
+import activatedUser from '../../middlewares/Activated';
+import authenticatedUser from '../../middlewares/Auth';
+import validSession from '../../middlewares/ValidSessionToken';
 
-import ProfileValidator from "../../validators/ProfileValidator";
-import TokenValidator from "../../validators/TokenValidator";
-import UserValidator from "../../validators/UserValidator";
+import ProfileValidator from '../../validators/ProfileValidator';
+import TokenValidator from '../../validators/TokenValidator';
+import UserValidator from '../../validators/UserValidator';
 
-import ProfileController from "../../controllers/ProfileController";
-import SessionController from "../../controllers/SessionController";
-import UserController from "../../controllers/UserController";
-import ErrorValidation from "../../middlewares/ErrorValidation";
+import ProfileController from '../../controllers/ProfileController';
+import SessionController from '../../controllers/SessionController';
+import UserController from '../../controllers/UserController';
+import ErrorValidation from '../../middlewares/ErrorValidation';
 
 
 const profileController = new ProfileController();
@@ -25,31 +25,31 @@ profileRoutes.use(validSession);
 profileRoutes.use(activatedUser);
 
 profileRoutes
-  .delete("/",
+  .delete('/',
     TokenValidator,
     ErrorValidation,
     userController.delete)
 
-  .put("/block",
+  .put('/block',
     TokenValidator,
     ErrorValidation,
     userController.block,
     sessionController.destroyAll)
 
-  .put("/user-data",
+  .put('/user-data',
     UserValidator.createAndUpdateUser,
     ErrorValidation,
     userController.update)
 
-  .put("/",
+  .put('/',
     ProfileValidator.profile,
     ErrorValidation,
     profileController.update)
-  .post("/",
+  .post('/',
     ProfileValidator.profile,
     ErrorValidation,
     profileController.create)
-  .get("/",
+  .get('/',
     TokenValidator,
     ErrorValidation,
     profileController.index);

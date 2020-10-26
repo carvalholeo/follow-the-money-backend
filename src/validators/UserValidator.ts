@@ -1,24 +1,24 @@
-import { body } from "express-validator"
+import { body } from 'express-validator';
 
-import TokenValidator from "./TokenValidator";
+import TokenValidator from './TokenValidator';
 
 export default {
   createAndUpdateUser: [
-    body("email")
+    body('email')
       .isEmail()
       .normalizeEmail()
       .notEmpty({ ignore_whitespace: true })
       .trim()
       .exists(),
 
-    body("username")
+    body('username')
       .isString()
       .notEmpty({ ignore_whitespace: true })
       .isLength({ min: 3, max: 50 })
       .trim()
       .exists(),
 
-    body("password")
+    body('password')
       .isString()
       .notEmpty({ ignore_whitespace: true })
       .isLength({ min: 8, max: 254 })
@@ -28,18 +28,18 @@ export default {
 
   loginUser: [
     ...TokenValidator,
-    body("username")
+    body('username')
       .isString()
       .notEmpty({ ignore_whitespace: true })
       .isLength({ min: 3, max: 50 })
       .trim()
       .exists(),
 
-    body("password")
+    body('password')
       .isString()
       .notEmpty({ ignore_whitespace: true })
       .isLength({ min: 8, max: 254 })
       .trim()
       .exists()
   ]
-}
+};

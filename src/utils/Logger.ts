@@ -1,9 +1,9 @@
-import { configure, getLogger } from "log4js";
-import path from "path";
+import { configure, getLogger } from 'log4js';
+import path from 'path';
 
 class Logger {
   makeLog(category: string, message: string): void {
-    const errorFile = path.resolve(__dirname, "logs", "error", "error.log");
+    const errorFile = path.resolve(__dirname, 'logs', 'error', 'error.log');
     const logger = getLogger(category.toString());
     
     logger.error(message);
@@ -11,23 +11,23 @@ class Logger {
     configure({
       appenders: { 
         error: {
-          type: "file", 
+          type: 'file', 
           filename: errorFile,
           maxLogSize: 100000,
           backups: 10,
-          encoding: "utf-8",
+          encoding: 'utf-8',
           compress: true,
           keepFileExt: true,
           layout: {
-            type: "pattern", 
-            pattern: "%d %p %c %f:%l %m%n"
+            type: 'pattern', 
+            pattern: '%d %p %c %f:%l %m%n'
           }
         }
       },
       categories: { 
         default: { 
-          appenders: ["error"], 
-          level: "error",
+          appenders: ['error'], 
+          level: 'error',
           enableCallStack: true
         } 
       }

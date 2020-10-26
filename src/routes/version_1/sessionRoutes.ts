@@ -1,30 +1,30 @@
-import { Router } from "express";
+import { Router } from 'express';
 
-import activatedUser from "../../middlewares/Activated";
-import authenticatedUser from "../../middlewares/Auth";
-import validSession from "../../middlewares/ValidSessionToken";
+import activatedUser from '../../middlewares/Activated';
+import authenticatedUser from '../../middlewares/Auth';
+import validSession from '../../middlewares/ValidSessionToken';
 
-import MFAValidator from "../../validators/MFAValidator";
-import TokenValidator from "../../validators/TokenValidator";
-import UserValidator from "../../validators/UserValidator";
+import MFAValidator from '../../validators/MFAValidator';
+import TokenValidator from '../../validators/TokenValidator';
+import UserValidator from '../../validators/UserValidator';
 
-import SessionController from "../../controllers/SessionController";
-import ErrorValidation from "../../middlewares/ErrorValidation";
+import SessionController from '../../controllers/SessionController';
+import ErrorValidation from '../../middlewares/ErrorValidation';
 
 const sessionController = new SessionController();
 
 const sessionRoutes = Router();
 
 sessionRoutes
-  .get("/mfa",
+  .get('/mfa',
     MFAValidator.token,
     ErrorValidation,
     sessionController.showMFA)
-  .post("/",
+  .post('/',
     UserValidator.loginUser,
     ErrorValidation,
     sessionController.create)
-  .post("/mfa",
+  .post('/mfa',
     MFAValidator.mfaRequired,
     ErrorValidation,
     sessionController.validateMFA);
@@ -34,11 +34,11 @@ sessionRoutes.use(validSession);
 sessionRoutes.use(activatedUser);
 
 sessionRoutes
-  .delete("/",
+  .delete('/',
     TokenValidator,
     ErrorValidation,
     sessionController.destroy)
-  .delete("/all",
+  .delete('/all',
     TokenValidator,
     ErrorValidation,
     sessionController.destroyAll);

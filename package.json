@@ -15,7 +15,8 @@
     "key:generate": "node ./bin/keyGenerate",
     "knex:latest": "knex --knexfile knexfile.ts migrate:latest",
     "knex:rollback": "knex --knexfile knexfile.ts migrate:rollback",
-    "knex:seed": "knex --knexfile knexfile.ts seed:run"
+    "knex:seed": "knex --knexfile knexfile.ts seed:run",
+    "lint": "npx eslint ./src"
   },
   "keywords": [
     "financial control",

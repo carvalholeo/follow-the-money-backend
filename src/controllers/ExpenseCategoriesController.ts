@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
-import connection from "../database/connection";
-import Logger from "../utils/Logger";
+import connection from '../database/connection';
+import Logger from '../utils/Logger';
 
 const logger = new Logger();
 
@@ -12,7 +12,7 @@ export default class ExpenseCategoriesController {
       const created_at = new Date();
       const updated_at = new Date();
 
-      const expense_added = await connection("expense_categories")
+      const expense_added = await connection('expense_categories')
         .insert({
           name,
           created_at,
@@ -21,20 +21,20 @@ export default class ExpenseCategoriesController {
 
       if (!expense_added) {
 
-        throw "Error on create a new expense category."
+        throw 'Error on create a new expense category.';
       }
 
       return response
         .status(201)
-        .json({ message: "Expense category created successfully."});
+        .json({ message: 'Expense category created successfully.'});
 
     } catch (error) {
 
-      logger.makeLog("CreateExpenseCategory", error);
+      logger.makeLog('CreateExpenseCategory', error);
 
       return response
         .status(500)
-        .json({ error: "There was an error. The system administrator was notified and working to solve this." });
+        .json({ error: 'There was an error. The system administrator was notified and working to solve this.' });
     }
   }
     
@@ -42,28 +42,28 @@ export default class ExpenseCategoriesController {
     try {
       const { id } = request.params;
 
-      const delete_expense_category = await connection("expense_categories")
-        .where("id", "=", id)
-        .del("*");
+      const delete_expense_category = await connection('expense_categories')
+        .where('id', '=', id)
+        .del('*');
 
       if (delete_expense_category) {
 
         return response
           .status(200)
-          .json({ message: "Expense category deleted successfully."});
+          .json({ message: 'Expense category deleted successfully.'});
       }
 
       return response
         .status(406)
-        .json({ message: "Expense category previously deleted." });
+        .json({ message: 'Expense category previously deleted.' });
             
     } catch (error) {
 
-      logger.makeLog("DeleteExpenseCategory", error);
+      logger.makeLog('DeleteExpenseCategory', error);
 
       return response
         .status(400)
-        .json({ error: "There was an error. Probably, this expense category was deleted previously. Ask support to the system administrator." });
+        .json({ error: 'There was an error. Probably, this expense category was deleted previously. Ask support to the system administrator.' });
     }
   }
 
@@ -73,35 +73,35 @@ export default class ExpenseCategoriesController {
       const { id } = request.params;
       const updated_at = new Date();
 
-      const update = await connection("expense_categories")
-        .where("id", "=", id)
+      const update = await connection('expense_categories')
+        .where('id', '=', id)
         .update({ name, updated_at });
 
       if(update === 1) {
 
         return response
           .status(200)
-          .json({ message: "Expense category updated successfully." });
+          .json({ message: 'Expense category updated successfully.' });
       }
 
       return response
         .status(400)
-        .json({ message: "ID passed doesn't exist. Try again with a valid ID." });
+        .json({ message: 'ID passed doesn\'t exist. Try again with a valid ID.' });
 
     } catch (error) {
 
-      logger.makeLog("UpdateExpenseCategory", error);
+      logger.makeLog('UpdateExpenseCategory', error);
 
       return response
         .status(500)
-        .json({ message: "There was an error. The system administrator was notified and working to solve this." });
+        .json({ message: 'There was an error. The system administrator was notified and working to solve this.' });
     } 
   }
 
   async index(request: Request, response: Response): Promise<Response> {
     try {
-      const categories = await connection("expense_categories")
-        .select("*");
+      const categories = await connection('expense_categories')
+        .select('*');
 
       return response
         .status(200)
@@ -109,11 +109,11 @@ export default class ExpenseCategoriesController {
 
     } catch (error) {
 
-      logger.makeLog("GetExpenseCategories", error);
+      logger.makeLog('GetExpenseCategories', error);
 
       return response
         .status(500)
-        .json({ message: "There was an error. The system administrator was notified and working to solve this." });
+        .json({ message: 'There was an error. The system administrator was notified and working to solve this.' });
     }
         
   }

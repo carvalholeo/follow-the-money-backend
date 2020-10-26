@@ -1,13 +1,13 @@
-import { header } from "express-validator"
+import { header } from 'express-validator';
 
 const TokenValidator = [
-  header("Authentication")
+  header('Authentication')
     .isJWT()
     .isLength({ min: 1 })
     .trim()
     .notEmpty(),
 
-  header("Session")
+  header('Session')
     .isString()
     .isLength({ min: 1, max: 32 })
     .trim()
