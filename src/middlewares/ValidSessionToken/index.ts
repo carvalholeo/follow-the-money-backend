@@ -8,11 +8,11 @@ const logger = new Logger();
 export default async (request: Request, response: Response, next: NextFunction) => {
   try {
     const token = String(request.headers.session);
-    
+
     const [is_valid] = await connection("sessions")
       .where("authorization_id", token)
       .select("*");
-    
+
     if(!is_valid) {
       return response
         .status(401)

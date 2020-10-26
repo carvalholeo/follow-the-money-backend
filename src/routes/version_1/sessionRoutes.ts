@@ -1,5 +1,4 @@
-import { celebrate } from "celebrate";
-import express from "express";
+import { Router } from "express";
 
 import activatedUser from "../../middlewares/Activated";
 import authenticatedUser from "../../middlewares/Auth";
@@ -10,22 +9,38 @@ import TokenValidator from "../../validators/TokenValidator";
 import UserValidator from "../../validators/UserValidator";
 
 import SessionController from "../../controllers/SessionController";
+import ErrorValidation from "../../middlewares/ErrorValidation";
 
 const sessionController = new SessionController();
 
-const sessionRoutes = express.Router();
+const sessionRoutes = Router();
 
 sessionRoutes
-  .get("/mfa", celebrate(MFAValidator.token()), sessionController.showMFA)
-  .post("/", celebrate(UserValidator.loginUser()), sessionController.create)
-  .post("/mfa", celebrate(MFAValidator.mfaRequired()), sessionController.validateMFA);
+  .get("/mfa",
+    MFAValidator.token,
+    ErrorValidation,
+    sessionController.showMFA)
+  .post("/",
+    UserValidator.loginUser,
+    ErrorValidation,
+    sessionController.create)
+  .post("/mfa",
+    MFAValidator.mfaRequired,
+    ErrorValidation,
+    sessionController.validateMFA);
 
 sessionRoutes.use(authenticatedUser);
 sessionRoutes.use(validSession);
 sessionRoutes.use(activatedUser);
 
 sessionRoutes
-  .delete("/", celebrate(TokenValidator), sessionController.destroy)
-  .delete("/all", celebrate(TokenValidator), sessionController.destroyAll);
+  .delete("/",
+    TokenValidator,
+    ErrorValidation,
+    sessionController.destroy)
+  .delete("/all",
+    TokenValidator,
+    ErrorValidation,
+    sessionController.destroyAll);
 
 export default sessionRoutes;

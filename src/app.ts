@@ -1,5 +1,4 @@
 import express from "express";
-import { errors } from "celebrate";
 import cors from "cors";
 import compression from "compression";
 import helmet from "helmet";
@@ -18,7 +17,5 @@ app.use(compression());
 app.use(helmet());
 app.use(cors());
 app.use("/api", routes);
-
-app.use(errors());
 
 export default app;

@@ -1,5 +1,4 @@
-import { celebrate } from "celebrate";
-import express from "express";
+import { Router } from "express";
 
 import activatedUser from "../../middlewares/Activated";
 import authenticatedUser from "../../middlewares/Auth";
@@ -12,25 +11,48 @@ import UserValidator from "../../validators/UserValidator";
 import ProfileController from "../../controllers/ProfileController";
 import SessionController from "../../controllers/SessionController";
 import UserController from "../../controllers/UserController";
+import ErrorValidation from "../../middlewares/ErrorValidation";
 
 
 const profileController = new ProfileController();
 const sessionController = new SessionController();
 const userController = new UserController();
 
-const profileRoutes = express.Router();
+const profileRoutes = Router();
 
 profileRoutes.use(authenticatedUser);
 profileRoutes.use(validSession);
 profileRoutes.use(activatedUser);
 
 profileRoutes
-  .delete("/", celebrate(TokenValidator), userController.delete)
-  .put("/block", celebrate(TokenValidator), userController.block, sessionController.destroyAll)
-  .put("/user-data", celebrate(UserValidator.updateUser()), userController.update)
-  .put("/", celebrate(ProfileValidator), profileController.update)
-  .post("/", celebrate(ProfileValidator), profileController.create)
-  .get("/", celebrate(TokenValidator), profileController.index);
+  .delete("/",
+    TokenValidator,
+    ErrorValidation,
+    userController.delete)
+
+  .put("/block",
+    TokenValidator,
+    ErrorValidation,
+    userController.block,
+    sessionController.destroyAll)
+
+  .put("/user-data",
+    UserValidator.createAndUpdateUser,
+    ErrorValidation,
+    userController.update)
+
+  .put("/",
+    ProfileValidator.profile,
+    ErrorValidation,
+    profileController.update)
+  .post("/",
+    ProfileValidator.profile,
+    ErrorValidation,
+    profileController.create)
+  .get("/",
+    TokenValidator,
+    ErrorValidation,
+    profileController.index);
 
 export default profileRoutes;
 

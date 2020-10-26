@@ -1,22 +1,16 @@
-import { Segments, Joi } from "celebrate";
+import { body } from "express-validator";
+import TokenValidator from "./TokenValidator";
 
 export default {
-  mfaRequired() {
-    return {
-      [Segments.HEADERS]: Joi.object({
-        session: Joi.string().required()
-      }).unknown(),
-      [Segments.BODY]: Joi.object().keys({
-        mfa_code: Joi.string().min(6).max(6).required()
-      })
-    };
-  },
-
-  token() {
-    return {
-      [Segments.HEADERS]: Joi.object({
-        session: Joi.string().required()
-      }).unknown()
-    };
-  }
+  mfaRequired: [
+    TokenValidator[0],
+    body("mfa_code")
+      .isInt()
+      .notEmpty({ ignore_whitespace: true })
+      .isLength({ min: 6, max: 6 })
+      .trim()
+  ],
+  token: [
+    TokenValidator[0]
+  ]
 }

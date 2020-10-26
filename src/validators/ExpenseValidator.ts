@@ -1,59 +1,113 @@
-import { Segments, Joi } from "celebrate";
-import headers from "./TokenValidator";
+import { body, param, query } from "express-validator";
+import TokenValidator from "./TokenValidator";
 
-export default  {
-  getExpense() {
-    return {
-      headers,
-      [Segments.QUERY]: Joi.object().keys({
-        page: Joi.number(),
-      })
-    };
-  },
+export default {
+  getExpense: [
+    ...TokenValidator,
+    query("page")
+      .isInt({ min: 1 })
+      .optional()
+      .trim(),
+  ],
 
-  postExpense() {
-    return {
-      headers,
-      [Segments.BODY]: Joi.object().keys({
-        source: Joi.string().max(50).required(),
-        expense_type_id: Joi.number().required(),
-        expense_category_id: Joi.number().required(),
-        expected_amount: Joi.number().required(),
-        paid_amount: Joi.number(),
-        due_date: Joi.date().required(),
-        payday: Joi.date(),
-        reference_month: Joi.date().required(),
-        is_paid: Joi.bool().required()
-      })
-    }
-  },
+  postExpense: [
+    ...TokenValidator,
+    body("source")
+      .isString()
+      .isLength({ max: 50 })
+      .notEmpty({ ignore_whitespace: true })
+      .trim(),
 
-  putExpense() {
-    return {
-      headers,
-      [Segments.BODY]: Joi.object().keys({
-        source: Joi.string().max(50).required(),
-        expense_type_id: Joi.number().required(),
-        expense_category_id: Joi.number().required(),
-        expected_amount: Joi.number().required(),
-        paid_amount: Joi.number(),
-        due_date: Joi.date().required(),
-        payday: Joi.date(),
-        reference_month: Joi.date().required(),
-        is_paid: Joi.bool().required()
-      }),
-      [Segments.PARAMS]: Joi.object().keys({
-        id: Joi.number().required()
-      })
-    }
-  },
+    body("expense_type_id")
+      .isInt({ min: 1 })
+      .notEmpty({ ignore_whitespace: true })
+      .trim(),
 
-  deleteExpense() {
-    return {
-      headers,
-      [Segments.PARAMS]: Joi.object().keys({
-        id: Joi.number().required()
-      })
-    }
-  }
+    body("expense_category_id")
+      .isInt({ min: 1 })
+      .notEmpty({ ignore_whitespace: true })
+      .trim(),
+
+    body("expected_amount")
+      .isFloat({ locale: "pt-BR" })
+      .notEmpty({ ignore_whitespace: true })
+      .trim(),
+
+    body("paid_amount")
+      .isFloat({ locale: "pt-BR" })
+      .optional()
+      .trim(),
+
+    body("due_date")
+      .isDate()
+      .notEmpty({ ignore_whitespace: true })
+      .trim(),
+
+    body("payday")
+      .isDate()
+      .optional()
+      .trim(),
+
+    body("is_paid")
+      .isBoolean()
+      .notEmpty({ ignore_whitespace: true })
+      .trim()
+  ],
+
+  putExpense: [
+    ...TokenValidator,
+    body("source")
+      .isString()
+      .isLength({ max: 50 })
+      .notEmpty({ ignore_whitespace: true })
+      .trim(),
+
+    body("expense_type_id")
+      .isInt({ min: 1 })
+      .notEmpty({ ignore_whitespace: true })
+      .trim(),
+
+    body("expense_category_id")
+      .isInt({ min: 1 })
+      .notEmpty({ ignore_whitespace: true })
+      .trim(),
+
+    body("expected_amount")
+      .isFloat({ locale: "pt-BR" })
+      .notEmpty({ ignore_whitespace: true })
+      .trim(),
+
+    body("paid_amount")
+      .isFloat({ locale: "pt-BR" })
+      .optional()
+      .trim(),
+
+    body("due_date")
+      .isDate()
+      .notEmpty({ ignore_whitespace: true })
+      .trim(),
+
+    body("payday")
+      .isDate()
+      .optional()
+      .trim(),
+
+    body("is_paid")
+      .isBoolean()
+      .notEmpty({ ignore_whitespace: true })
+      .trim(),
+
+    param("id")
+      .isInt({ min: 1 })
+      .notEmpty({ ignore_whitespace: true })
+      .trim()
+  ],
+
+  deleteExpense: [
+    ...TokenValidator,
+    param("id")
+      .isInt({ min: 1 })
+      .notEmpty({ ignore_whitespace: true })
+      .trim()
+  ]
 }

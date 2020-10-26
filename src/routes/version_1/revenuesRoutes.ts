@@ -1,5 +1,4 @@
-import { celebrate } from "celebrate";
-import express from "express";
+import { Router } from "express";
 
 import activatedUser from "../../middlewares/Activated";
 import authenticatedUser from "../../middlewares/Auth";
@@ -12,28 +11,53 @@ import TypeAndCategoryValidator from "../../validators/TypeAndCategoryValidator"
 
 import RevenuesController from "../../controllers/RevenuesController";
 import RevenueCategoriesController from "../../controllers/RevenueCategoriesController";
+import ErrorValidation from "../../middlewares/ErrorValidation";
 
 const revenuesController = new RevenuesController();
 const revenueCategoriesController = new RevenueCategoriesController();
 
-const revenuesRoutes = express.Router();
+const revenuesRoutes = Router();
 
 revenuesRoutes.use(authenticatedUser);
 revenuesRoutes.use(validSession);
 revenuesRoutes.use(activatedUser);
 
 revenuesRoutes
-  .get("/", celebrate(RevenueValidator.getRevenue()), revenuesController.index)
-  .get("/categories/", celebrate(TokenValidator), revenueCategoriesController.index)
-  .post("/", celebrate(RevenueValidator.createRevenue()), revenuesController.create)
-  .put("/:id/", celebrate(RevenueValidator.updateRevenue()), revenuesController.update)
-  .delete("/:id/", celebrate(RevenueValidator.deleteRevenue()), revenuesController.delete);
+  .get("/",
+    RevenueValidator.getRevenue,
+    ErrorValidation,
+    revenuesController.index)
+  .get("/categories/",
+    TokenValidator,
+    ErrorValidation,
+    revenueCategoriesController.index)
+  .post("/",
+    RevenueValidator.createRevenue,
+    ErrorValidation,
+    revenuesController.create)
+  .put("/:id/",
+    RevenueValidator.updateRevenue,
+    ErrorValidation,
+    revenuesController.update)
+  .delete("/:id/",
+    RevenueValidator.deleteRevenue,
+    ErrorValidation,
+    revenuesController.delete);
 
 revenuesRoutes.use(isAdmin);
 
 revenuesRoutes
-  .post("/categories", celebrate(TypeAndCategoryValidator.createTypeAndCategory()), revenueCategoriesController.create)
-  .put("/categories/:id/", celebrate(TypeAndCategoryValidator.updateTypeAndCategory()), revenueCategoriesController.update)
-  .delete("/categories/:id/", celebrate(TypeAndCategoryValidator.deleteTypeAndCategory()), revenueCategoriesController.delete);
+  .post("/categories",
+    TypeAndCategoryValidator.createTypeAndCategory,
+    ErrorValidation,
+    revenueCategoriesController.create)
+  .put("/categories/:id/",
+    TypeAndCategoryValidator.updateTypeAndCategory,
+    ErrorValidation,
+    revenueCategoriesController.update)
+  .delete("/categories/:id/",
+    TypeAndCategoryValidator.deleteTypeAndCategory,
+    ErrorValidation,
+    revenueCategoriesController.delete);
 
 export default revenuesRoutes;

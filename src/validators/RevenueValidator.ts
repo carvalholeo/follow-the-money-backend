@@ -1,59 +1,101 @@
-import { Segments, Joi } from "celebrate";
-import headers from "./TokenValidator";
+import { query, body, param } from "express-validator"
+import TokenValidator from "./TokenValidator";
 
 export default {
-  getRevenue() {
-    return {
-      headers,
-      [Segments.QUERY]: Joi.object().keys({
-        page: Joi.number(),
-      })
-    };
-  },
+  getRevenue: [
+    ...TokenValidator,
+    query("page")
+      .optional()
+      .isInt({ min: 1 })
+      .trim()
+  ],
 
-  createRevenue() {
-    return {
-      headers,
-      [Segments.BODY]: Joi.object().keys({
-        source: Joi.string().max(50).required(),
-        revenue_category_id: Joi.number().required(),
-        expected_amount: Joi.number().required(),
-        paid_amount: Joi.number(),
-        expected_date: Joi.date().required(),
-        effective_date: Joi.date(),
-        reference_month: Joi.date().required(),
-        is_paid: Joi.bool().required()
-      })
-    };
-  },
+  createRevenue: [
+    ...TokenValidator,
+    body("source")
+      .isString()
+      .isLength({ max: 50 })
+      .notEmpty({ ignore_whitespace: true })
+      .trim(),
 
-  updateRevenue() {
-    return {
-      headers,
-      [Segments.BODY]: Joi.object().keys({
-        source: Joi.string().max(50).required(),
-        revenue_category_id: Joi.number().required(),
-        expected_amount: Joi.number().required(),
-        paid_amount: Joi.number(),
-        expected_date: Joi.date().required(),
-        effective_date: Joi.date(),
-        reference_month: Joi.date().required(),
-        is_paid: Joi.bool().required()
-      }),
-      [Segments.PARAMS]: Joi.object().keys({
-        id: Joi.number()
-          .required()
-      })
-    };
-  },
+    body("revenue_category_id")
+      .isInt({ min: 1 })
+      .notEmpty({ ignore_whitespace: true })
+      .trim(),
 
-  deleteRevenue() {
-    return {
-      headers,
-      [Segments.PARAMS]: Joi.object().keys({
-        id: Joi.number()
-          .required()
-      })
-    };
-  }
+    body("expected_amount")
+      .isFloat({ locale: "pt-BR" })
+      .notEmpty({ ignore_whitespace: true })
+      .trim(),
+
+    body("paid_amount")
+      .isFloat({ locale: "pt-BR" })
+      .optional()
+      .trim(),
+
+    body("expected_date")
+      .isDate()
+      .notEmpty({ ignore_whitespace: true })
+      .trim(),
+
+    body("effective_date")
+      .isDate()
+      .optional()
+      .trim(),
+
+    body("is_paid")
+      .isBoolean()
+      .notEmpty({ ignore_whitespace: true })
+      .trim()
+  ],
+
+  updateRevenue: [
+    ...TokenValidator,
+    body("source")
+      .isString()
+      .isLength({ max: 50 })
+      .notEmpty({ ignore_whitespace: true })
+      .trim(),
+
+    body("revenue_category_id")
+      .isInt({ min: 1 })
+      .notEmpty({ ignore_whitespace: true })
+      .trim(),
+
+    body("expected_amount")
+      .isFloat({ locale: "pt-BR" })
+      .notEmpty({ ignore_whitespace: true })
+      .trim(),
+
+    body("paid_amount")
+      .isFloat({ locale: "pt-BR" })
+      .optional()
+      .trim(),
+
+    body("expected_date")
+      .isDate()
+      .notEmpty({ ignore_whitespace: true })
+      .trim(),
+
+    body("effective_date")
+      .isDate()
+      .optional()
+      .trim(),
+
+    body("is_paid")
+      .isBoolean()
+      .notEmpty({ ignore_whitespace: true })
+      .trim(),
+
+    param("id")
+      .isInt({ min: 1 })
+      .notEmpty({ ignore_whitespace: true })
+  ],
+
+  deleteRevenue: [
+    ...TokenValidator,
+    param("id")
+      .isInt({ min: 1 })
+      .notEmpty({ ignore_whitespace: true }),
+  ]
 }

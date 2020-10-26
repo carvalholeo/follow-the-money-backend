@@ -1,5 +1,4 @@
-import { celebrate } from "celebrate";
-import express from "express";
+import { Router } from "express";
 
 import isAdmin from "../../middlewares/Administration";
 import activatedUser from "../../middlewares/Activated";
@@ -13,35 +12,74 @@ import TypeAndCategoryValidator from "../../validators/TypeAndCategoryValidator"
 
 import ExpenseValidator from "../../validators/ExpenseValidator";
 import TokenValidator from "../../validators/TokenValidator";
+import ErrorValidation from "../../middlewares/ErrorValidation";
 
 const expensesController = new ExpensesController();
 const expenseCategoriesController = new ExpenseCategoriesController();
 const expenseTypesController = new ExpenseTypesController();
 
-const expensesRoutes = express.Router();
+const expensesRoutes = Router();
 
 expensesRoutes.use(authenticatedUser);
 expensesRoutes.use(validSession);
 expensesRoutes.use(activatedUser);
 
 expensesRoutes
-  .get("/", celebrate(ExpenseValidator.getExpense()), expensesController.index)
-  .get("/categories", celebrate(TokenValidator), expenseCategoriesController.index)
-  .get("/types", celebrate(TokenValidator), expenseTypesController.index)
-  .post("/", celebrate(ExpenseValidator.postExpense()), expensesController.create)
-  .put("/:id", celebrate(ExpenseValidator.putExpense()), expensesController.update)
-  .delete("/:id", celebrate(ExpenseValidator.deleteExpense()), expensesController.delete);
+  .get("/",
+    ExpenseValidator.getExpense,
+    ErrorValidation,
+    expensesController.index)
+  .get("/categories",
+    TokenValidator,
+    ErrorValidation,
+    expenseCategoriesController.index)
+
+  .get("/types",
+    TokenValidator,
+    ErrorValidation,
+    expenseTypesController.index)
+
+  .post("/",
+    ExpenseValidator.postExpense,
+    ErrorValidation,
+    expensesController.create)
+  .put("/:id",
+    ExpenseValidator.putExpense,
+    ErrorValidation,
+    expensesController.update)
+  .delete("/:id",
+    ExpenseValidator.deleteExpense,
+    ErrorValidation,
+    expensesController.delete);
 
 
 expensesRoutes.use(isAdmin);
 
 expensesRoutes
-  .post("/categories", celebrate(TypeAndCategoryValidator.createTypeAndCategory()), expenseCategoriesController.create)
-  .post("/types", celebrate(TypeAndCategoryValidator.createTypeAndCategory()), expenseTypesController.create)
-  .put("/categories/:id/", celebrate(TypeAndCategoryValidator.updateTypeAndCategory()), expenseCategoriesController.update)
-  .put("/types/:id/", celebrate(TypeAndCategoryValidator.updateTypeAndCategory()), expenseTypesController.update)
-  .delete("/categories/:id/", celebrate(TypeAndCategoryValidator.deleteTypeAndCategory()), expenseCategoriesController.delete)
-  .delete("/types/:id/", celebrate(TypeAndCategoryValidator.deleteTypeAndCategory()), expenseTypesController.delete);
+  .post("/categories",
+    TypeAndCategoryValidator.createTypeAndCategory,
+    ErrorValidation,
+    expenseCategoriesController.create)
+  .post("/types",
+    TypeAndCategoryValidator.createTypeAndCategory,
+    ErrorValidation,
+    expenseTypesController.create)
+  .put("/categories/:id/",
+    TypeAndCategoryValidator.updateTypeAndCategory,
+    ErrorValidation,
+    expenseCategoriesController.update)
+  .put("/types/:id/",
+    TypeAndCategoryValidator.updateTypeAndCategory,
+    ErrorValidation,
+    expenseTypesController.update)
+  .delete("/categories/:id/",
+    TypeAndCategoryValidator.deleteTypeAndCategory,
+    ErrorValidation,
+    expenseCategoriesController.delete)
+  .delete("/types/:id/",
+    TypeAndCategoryValidator.deleteTypeAndCategory,
+    ErrorValidation,
+    expenseTypesController.delete);
 
 
 export default expensesRoutes;

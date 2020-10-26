@@ -1,8 +1,17 @@
-import { Segments, Joi } from "celebrate";
+import { header } from "express-validator"
 
-export default  {
-  [Segments.HEADERS]: Joi.object({
-    token: Joi.string().required(),
-    session: Joi.string().required(),
-  }).unknown()
-}
+const TokenValidator = [
+  header("Authentication")
+    .isJWT()
+    .isLength({ min: 1 })
+    .trim()
+    .notEmpty(),
+
+  header("Session")
+    .isString()
+    .isLength({ min: 1, max: 32 })
+    .trim()
+    .notEmpty(),
+];
+
+export default TokenValidator;

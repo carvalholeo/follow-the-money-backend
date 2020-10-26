@@ -1,40 +1,45 @@
-import { Segments, Joi } from "celebrate";
-import headers from "./TokenValidator";
+import { body } from "express-validator"
+
+import TokenValidator from "./TokenValidator";
 
 export default {
-  createUser() {
-    return {
-      [Segments.BODY]: Joi.object().keys({
-        email: Joi.string().required().email(),
-        username: Joi.string().min(3).max(50).required(),
-        password: Joi.string().min(8).max(254).required()
-      })
-    };
-  },
+  createAndUpdateUser: [
+    body("email")
+      .isEmail()
+      .normalizeEmail()
+      .notEmpty({ ignore_whitespace: true })
+      .trim()
+      .exists(),
 
-  updateUser() {
-    return {
-      headers,
-      [Segments.BODY]: Joi.object().keys({
-        email: Joi.string().required().email(),
-        username: Joi.string().min(3).max(50).required(),
-        password: Joi.string().min(8).max(254).required()
-      })
-    };
-  },
+    body("username")
+      .isString()
+      .notEmpty({ ignore_whitespace: true })
+      .isLength({ min: 3, max: 50 })
+      .trim()
+      .exists(),
 
-  loginUser() {
-    return {
-      [Segments.BODY]: Joi.object({
-        username: Joi.string()
-          .min(3)
-          .max(50)
-          .required(),
-        password: Joi.string()
-          .min(8)
-          .max(254)
-          .required()
-      })
-    };
-  }
+    body("password")
+      .isString()
+      .notEmpty({ ignore_whitespace: true })
+      .isLength({ min: 8, max: 254 })
+      .trim()
+      .exists()
+  ],
+
+  loginUser: [
+    ...TokenValidator,
+    body("username")
+      .isString()
+      .notEmpty({ ignore_whitespace: true })
+      .isLength({ min: 3, max: 50 })
+      .trim()
+      .exists(),
+
+    body("password")
+      .isString()
+      .notEmpty({ ignore_whitespace: true })
+      .isLength({ min: 8, max: 254 })
+      .trim()
+      .exists()
+  ]
 }

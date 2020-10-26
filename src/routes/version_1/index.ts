@@ -1,4 +1,4 @@
-import express from "express";
+import { Router } from "express";
 
 import investmentsRoutes from "./investmentsRoutes";
 import revenuesRoutes from "./revenuesRoutes";
@@ -7,7 +7,7 @@ import expensesRoutes from "./expensesRoutes";
 import usersRoutes from "./usersRoutes";
 import profileRoutes from "./profileRoutes";
 
-const routes = express.Router();
+const routes = Router();
 
 routes.use("/investments", investmentsRoutes);
 routes.use("/revenues", revenuesRoutes);

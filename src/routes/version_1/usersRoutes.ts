@@ -1,14 +1,16 @@
-import { celebrate } from "celebrate";
-import express from "express";
+import { Router } from "express";
 
 import UserValidator from "../../validators/UserValidator";
-
+import ErrorValidation from "../../middlewares/ErrorValidation";
 import UserController from "../../controllers/UserController";
 
 const userController = new UserController();
 
-const usersRoutes = express.Router();
+const usersRoutes = Router();
 
-usersRoutes.post("/", celebrate(UserValidator.createUser()), userController.create);
+usersRoutes.post("/",
+  UserValidator.createAndUpdateUser,
+  ErrorValidation,
+  userController.create);
 
 export default usersRoutes;

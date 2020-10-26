@@ -1,17 +1,82 @@
-import { Segments, Joi } from "celebrate";
-import headers from "./TokenValidator";
+import { body } from "express-validator";
+import TokenValidator from "./TokenValidator"
 
-export default  {
-  headers,
-  [Segments.BODY]: Joi.object().keys({
-    first_name: Joi.string().max(255),
-    surname: Joi.string().max(255),
-    url_photo: Joi.string().max(255),
-    birthday: Joi.date(),
-    biography: Joi.string().max(600),
-    facebook_profile: Joi.string().max(255),
-    twitter_profile: Joi.string().max(255),
-    instagram_profile: Joi.string().max(255),
-    personal_site_url: Joi.string().max(255),
-  })
+export default {
+  profile: [
+    ...TokenValidator,
+    body("first_name")
+      .isString()
+      .isLength({ max: 255 })
+      .optional()
+      .trim(),
+
+    body("surname")
+      .isString()
+      .isLength({ max: 255 })
+      .optional()
+      .trim(),
+
+    body("url_photo")
+      .isMimeType()
+      .isLength({ max: 255 })
+      .optional()
+      .trim(),
+
+    body("birthday")
+      .isDate()
+      .optional()
+      .trim(),
+
+    body("facebook_profile")
+      .isURL({
+        require_valid_protocol: true,
+        require_protocol: true,
+        require_host: true,
+        require_tld: true,
+        allow_underscores: true,
+        protocols: ["http", "https"]
+      })
+      .isLength({ max: 255 })
+      .optional()
+      .trim(),
+
+    body("twitter_profile")
+      .isURL({
+        require_valid_protocol: true,
+        require_protocol: true,
+        require_host: true,
+        require_tld: true,
+        allow_underscores: true,
+        protocols: ["http", "https"]
+      })
+      .isLength({ max: 255 })
+      .optional()
+      .trim(),
+
+    body("instagram_profile")
+      .isURL({
+        require_valid_protocol: true,
+        require_protocol: true,
+        require_host: true,
+        require_tld: true,
+        allow_underscores: true,
+        protocols: ["http", "https"]
+      })
+      .isLength({ max: 255 })
+      .optional()
+      .trim(),
+
+    body("personal_site_url")
+      .isURL({
+        require_valid_protocol: true,
+        require_protocol: true,
+        require_host: true,
+        require_tld: true,
+        allow_underscores: true,
+        protocols: ["http", "https"]
+      })
+      .isLength({ max: 255 })
+      .optional()
+      .trim(),
+  ]
 }
